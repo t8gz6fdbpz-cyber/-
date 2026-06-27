@@ -1,11 +1,12 @@
 import { AnimatedText } from "../ui/AnimatedText";
 import { ContactButton } from "../ui/ContactButton";
 import { FadeIn } from "../ui/FadeIn";
-import { aboutCopy, contactHref } from "../../utils/portfolioData";
+import { contactHref } from "../../utils/portfolioData";
 
 const aboutParagraphs = [
-  aboutCopy,
-  "My work sits between content strategy, IP growth, business observation, and AI-assisted creation. I care about turning scattered experience into repeatable systems that can support real people, real teams, and real outcomes.",
+  "目前任职于鸣鸣很忙集团，负责 IP 运营、内容策划及账号增长，参与 IP 矩阵搭建、达人孵化、直播运营、短视频策划及数据复盘，具备从内容创意到增长运营的全流程实践经验。",
+  "我关注内容、商业与用户增长，善于通过数据分析、持续复盘与迭代优化，不断提升内容质量，并将实践经验沉淀为可复制的方法，让内容真正服务于业务增长。",
+  "工作之外，我持续学习商业、心理学与 AI，不断拓宽自己的认知边界。我相信，优秀的内容不仅能够吸引用户，更能够创造价值、推动增长，并帮助团队解决真实的问题。",
 ];
 
 const aboutHighlights = [
@@ -33,8 +34,8 @@ export function AboutSection() {
           </div>
         </FadeIn>
 
-        <div className="mt-24 flex w-full max-w-3xl flex-col items-center sm:mt-28 md:mt-32">
-          <div className="flex flex-col items-center gap-9 sm:gap-10 md:gap-11">
+        <div className="mt-24 flex w-full max-w-[800px] flex-col items-center sm:mt-28 md:mt-32">
+          <div className="flex flex-col items-center gap-8 sm:gap-10 md:gap-12">
             {aboutParagraphs.map((paragraph) => (
               <AnimatedText key={paragraph} text={paragraph} />
             ))}

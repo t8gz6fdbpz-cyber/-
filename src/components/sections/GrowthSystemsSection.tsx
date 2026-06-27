@@ -29,8 +29,9 @@ const overviewCards = [
     eyebrow: "Chapter A / Company Overview",
     company: "鸣鸣很忙集团",
     role: "PLACEHOLDER ROLE",
-    period: "20XX — 20XX",
-    copy: "Placeholder introduction for the company context, role scope, business challenge, and the growth systems built during this chapter.",
+    period: "2025年3月 - 在职",
+    logo: "/assets/deco-logo.png",
+    copy: "鸣鸣很忙集团是一家以量贩零食连锁为核心的休闲食品零售集团，旗下业务覆盖零食很忙、赵一鸣零食等品牌。公司被公开资料称为中国领先的零食零售集团之一，门店网络和供应链体系服务于大众消费场景。2025年，公司在香港联交所上市，成为中国首家上市的大众量贩零食零售企业。",
   },
   {
     eyebrow: "Chapter A / Operating Scope",
@@ -106,6 +107,15 @@ function OverviewCard({
           zIndex: index + 1,
         }}
       >
+        {"logo" in card && card.logo ? (
+          <img
+            src={card.logo}
+            alt=""
+            loading="lazy"
+            className="pointer-events-none absolute left-1/2 top-[30%] z-[1] h-auto w-[min(44vw,220px)] -translate-x-1/2 object-contain opacity-95 drop-shadow-[0_24px_50px_rgba(0,0,0,0.24)] md:left-[26%] md:top-[31%] md:w-[min(26vw,240px)]"
+          />
+        ) : null}
+
         <div className="relative z-10 flex items-start justify-between gap-8">
           <p className="text-xs uppercase tracking-[0.28em] text-[#D7E2EA]/60">
             {card.eyebrow}
@@ -117,7 +127,7 @@ function OverviewCard({
 
         <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_0.72fr] md:items-end">
           <div>
-            <p className="mb-5 text-sm uppercase tracking-[0.24em] text-cyan-200/65">
+            <p className="mb-5 text-lg uppercase tracking-[0.24em] text-cyan-200/65 md:text-xl">
               {card.period}
             </p>
             <h4 className="text-[clamp(2.5rem,7vw,92px)] font-black uppercase leading-[0.9] tracking-tight text-white">

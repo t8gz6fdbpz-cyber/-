@@ -18,8 +18,8 @@ function RevealCharacter({
   total: number;
   progress: MotionValue<number>;
 }) {
-  const start = index / total;
-  const end = Math.min(start + 0.22, 1);
+  const start = (index / total) * 0.64;
+  const end = Math.min(start + 0.18, 0.82);
   const opacity = useTransform(progress, [start, end], [0.2, 1]);
   const value = char === " " ? "\u00A0" : char;
 
@@ -46,51 +46,27 @@ export function AnimatedText({ text }: AnimatedTextProps) {
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.8", "end 0.2"],
+    offset: ["start 0.92", "end 0.45"],
   });
   const characters = Array.from(text);
-  const tokens = text.split(/(\s+)/);
-  let characterIndex = 0;
 
   return (
     <p
       ref={ref}
       aria-label={text}
-      className="max-w-[560px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed text-[#D7E2EA]"
+      className="max-w-[760px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-[1.9] text-[#D7E2EA]"
     >
       {shouldReduceMotion
         ? text
-        : tokens.map((token, tokenIndex) => {
-            if (/^\s+$/.test(token)) {
-              characterIndex += token.length;
-              return (
-                <span aria-hidden="true" key={`space-${tokenIndex}`}>
-                  {token}
-                </span>
-              );
-            }
-
+        : characters.map((char, index) => {
             return (
-              <span
-                aria-hidden="true"
-                className="inline-block whitespace-nowrap"
-                key={`${token}-${tokenIndex}`}
-              >
-                {Array.from(token).map((char) => {
-                  const index = characterIndex;
-                  characterIndex += 1;
-
-                  return (
-                    <RevealCharacter
-                      key={`${char}-${index}`}
-                      char={char}
-                      index={index}
-                      total={characters.length}
-                      progress={scrollYProgress}
-                    />
-                  );
-                })}
-              </span>
+              <RevealCharacter
+                key={`${char}-${index}`}
+                char={char}
+                index={index}
+                total={characters.length}
+                progress={scrollYProgress}
+              />
             );
           })}
     </p>
