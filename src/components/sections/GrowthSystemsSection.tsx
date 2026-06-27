@@ -45,21 +45,33 @@ function SectionIntro({
   eyebrow,
   title,
   copy,
+  compact = false,
 }: {
   eyebrow: string;
   title: string;
   copy?: string;
+  compact?: boolean;
 }) {
   return (
     <FadeIn className="mb-12 md:mb-16" y={36}>
       <p className="mb-4 text-xs uppercase tracking-[0.3em] text-[#D7E2EA]/50">
         {eyebrow}
       </p>
-      <h3 className="hero-heading max-w-5xl text-[clamp(2.7rem,8vw,108px)] font-black uppercase leading-[0.88] tracking-tight">
-        {title}
-      </h3>
+      {compact ? (
+        <h3 className="max-w-3xl text-[clamp(1.45rem,3vw,42px)] font-semibold leading-tight tracking-[-0.03em] text-[#D7E2EA]">
+          {title}
+        </h3>
+      ) : (
+        <h3 className="hero-heading max-w-5xl text-[clamp(2.7rem,8vw,108px)] font-black uppercase leading-[0.88] tracking-tight">
+          {title}
+        </h3>
+      )}
       {copy ? (
-        <p className="mt-7 max-w-2xl text-base font-light leading-relaxed text-[#D7E2EA]/55 md:text-lg">
+        <p
+          className={`max-w-2xl text-base font-light leading-relaxed text-[#D7E2EA]/55 md:text-lg ${
+            compact ? "mt-5" : "mt-7"
+          }`}
+        >
           {copy}
         </p>
       ) : null}
@@ -265,7 +277,13 @@ function LiveReviewStory() {
   );
 
   return (
-    <section ref={ref} className="relative h-[320vh]">
+    <section
+      ref={ref}
+      className="relative"
+      style={{
+        height: `calc(100vh + ${liveReviewSteps.length * 360}px)`,
+      }}
+    >
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <motion.div
           className="flex gap-6 px-[8vw]"
@@ -309,12 +327,13 @@ function MirrorChapter() {
   return (
     <div className="pt-20 md:pt-32">
       <SectionIntro
-        eyebrow="Chapter B / 镜前时代"
-        title="A Different Rhythm"
-        copy="Placeholder chapter framing for a second company experience, presented with a more editorial and directional visual rhythm."
+        eyebrow="Chapter B / Creative Operations"
+        title="A quieter chapter focused on content rhythm, delivery quality, and operational clarity."
+        copy="This part opens like a second spread in the same annual report: less repetition, more context, with the company identity reserved for the card itself."
+        compact
       />
 
-      <FadeIn>
+      <FadeIn className="pt-8 md:pt-14">
         <article className="grid overflow-hidden rounded-[38px] border border-white/10 bg-[#D7E2EA] text-[#0C0C0C] md:grid-cols-[0.9fr_1.1fr] md:rounded-[56px]">
           <div className="flex min-h-[420px] flex-col justify-between p-8 md:p-12">
             <div className="flex items-center justify-between">
@@ -410,20 +429,21 @@ export function GrowthSystemsSection() {
       <div className="mx-auto max-w-7xl">
         <FadeIn y={44}>
           <p className="mb-5 text-center text-xs uppercase tracking-[0.34em] text-[#D7E2EA]/45">
-            Career Architecture
+            WORK EXPERIENCE
           </p>
-          <h2 className="hero-heading mb-20 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-[0.86] tracking-tight">
-            Growth Systems
+          <h2 className="hero-heading mb-24 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-[0.86] tracking-tight md:mb-28">
+            工作经历
           </h2>
         </FadeIn>
 
         <SectionIntro
-          eyebrow="Chapter A / 鸣鸣很忙集团"
-          title="Systems That Compound"
-          copy="Placeholder chapter introduction describing the context, responsibilities, and systems explored in this company experience."
+          eyebrow="Chapter A / Growth Operations"
+          title="A chapter about turning scattered work into repeatable operating systems."
+          copy="From creator discovery to training, content operations, paid growth, and live review, this experience is presented as a working system rather than a static job title."
+          compact
         />
 
-        <div className="project-stack relative isolate mb-28">
+        <div className="project-stack relative isolate mb-28 pt-8 md:pt-14">
           {overviewCards.map((card, index) => (
             <OverviewCard key={card.company} card={card} index={index} />
           ))}

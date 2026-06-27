@@ -20,6 +20,12 @@ export type Project = {
   images: [string, string, string];
 };
 
+export type MarqueeAccount = {
+  image: string;
+  likes: string;
+  followers: string;
+};
+
 export const contactHref = "mailto:1489363185@qq.com";
 
 export const navItems: NavItem[] = [
@@ -35,27 +41,56 @@ export const heroPortrait =
 export const aboutCopy =
   "I am building a personal growth system around content, business, and AI creation. Through continuous practice, structured reflection, and collaborative experiments, I turn ideas into repeatable methods and long-term value.";
 
-export const marqueeRowOne = [
-  "/assets/daren-gallery-01.jpg",
-  "/assets/daren-gallery-09.jpg",
-  "/assets/daren-gallery-02.jpg",
-  "/assets/daren-gallery-14.jpg",
-  "/assets/daren-gallery-03.jpg",
-  "/assets/daren-gallery-11.jpg",
-  "/assets/daren-gallery-04.jpg",
-  "/assets/daren-gallery-15.jpg",
+const parseMetric = (value: string) => {
+  const normalized = value.trim().replace(/,/g, "");
+  const numeric = Number.parseFloat(normalized.replace(/[^\d.]/g, ""));
+
+  if (!Number.isFinite(numeric)) {
+    return 0;
+  }
+
+  return normalized.includes("万") ? numeric * 10000 : numeric;
+};
+
+const sortAccountsByReach = (items: MarqueeAccount[]) =>
+  [...items].sort((a, b) => {
+    const followersDelta =
+      parseMetric(b.followers) - parseMetric(a.followers);
+
+    if (followersDelta !== 0) {
+      return followersDelta;
+    }
+
+    return parseMetric(b.likes) - parseMetric(a.likes);
+  });
+
+export const marqueeAccounts: MarqueeAccount[] = [
+  { image: "/assets/daren-gallery-01.jpg", likes: "1128", followers: "1.3万" },
+  { image: "/assets/daren-gallery-02.jpg", likes: "2433", followers: "1.9万" },
+  { image: "/assets/daren-gallery-03.jpg", likes: "773", followers: "1.8万" },
+  { image: "/assets/daren-gallery-04.jpg", likes: "1.1万", followers: "4.6万" },
+  { image: "/assets/daren-gallery-05.jpg", likes: "22.2万", followers: "7.0万" },
+  { image: "/assets/daren-gallery-06.jpg", likes: "816", followers: "5103" },
+  { image: "/assets/daren-gallery-07.jpg", likes: "2409", followers: "6.3万" },
+  { image: "/assets/daren-gallery-08.jpg", likes: "1203", followers: "4.1万" },
+  { image: "/assets/daren-gallery-09.jpg", likes: "1610", followers: "1.6万" },
+  { image: "/assets/daren-gallery-10.jpg", likes: "1.4万", followers: "7.1万" },
+  { image: "/assets/daren-gallery-11.jpg", likes: "6625", followers: "1.4万" },
+  { image: "/assets/daren-gallery-12.jpg", likes: "427", followers: "1.3万" },
+  { image: "/assets/daren-gallery-13.jpg", likes: "5325", followers: "1.9万" },
+  { image: "/assets/daren-gallery-14.jpg", likes: "1.7万", followers: "7228" },
+  { image: "/assets/daren-gallery-15.jpg", likes: "3.9万", followers: "1.9万" },
+  { image: "/assets/daren-gallery-16.jpg", likes: "21.2万", followers: "26.7万" },
 ];
 
-export const marqueeRowTwo = [
-  "/assets/daren-gallery-05.jpg",
-  "/assets/daren-gallery-12.jpg",
-  "/assets/daren-gallery-06.jpg",
-  "/assets/daren-gallery-16.jpg",
-  "/assets/daren-gallery-07.jpg",
-  "/assets/daren-gallery-08.jpg",
-  "/assets/daren-gallery-10.jpg",
-  "/assets/daren-gallery-13.jpg",
-];
+export const sortedMarqueeAccounts = sortAccountsByReach(marqueeAccounts);
+
+export const marqueeRowOne = sortedMarqueeAccounts.filter(
+  (_, index) => index % 2 === 0,
+);
+export const marqueeRowTwo = sortedMarqueeAccounts.filter(
+  (_, index) => index % 2 === 1,
+);
 
 const growthVisualRowOne = [
   "https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif",

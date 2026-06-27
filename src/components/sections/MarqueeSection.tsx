@@ -18,16 +18,17 @@ import { useMarqueeOffset } from "../../hooks/useMarqueeOffset";
 import {
   repeatedMarqueeRowOne,
   repeatedMarqueeRowTwo,
+  type MarqueeAccount,
 } from "../../utils/portfolioData";
 
 function MarqueeRow({
   direction,
-  images,
+  accounts,
   rowRef,
   x,
 }: {
   direction: "left" | "right";
-  images: string[];
+  accounts: MarqueeAccount[];
   rowRef: RefObject<HTMLDivElement>;
   x: MotionValue<number>;
 }) {
@@ -41,10 +42,10 @@ function MarqueeRow({
         willChange: "transform",
       }}
     >
-      {images.map((image, index) => (
+      {accounts.map((account, index) => (
         <MarqueeImage
-          key={`${image}-${index}`}
-          src={image}
+          key={`${account.image}-${index}`}
+          account={account}
         />
       ))}
     </motion.div>
@@ -59,7 +60,7 @@ function wrapSequence(value: number, width: number) {
   return ((value % width) + width) % width - width;
 }
 
-function MarqueeImage({ src }: { src: string }) {
+function MarqueeImage({ account }: { account: MarqueeAccount }) {
   const shellRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -143,6 +144,9 @@ function MarqueeImage({ src }: { src: string }) {
     <div
       ref={shellRef}
       className="marquee-card-shell h-[282px] w-[432px] shrink-0 overflow-visible p-1.5"
+      data-followers={account.followers}
+      data-likes={account.likes}
+      data-src={account.image}
     >
       <div
         ref={cardRef}
@@ -152,8 +156,8 @@ function MarqueeImage({ src }: { src: string }) {
       >
         {shouldLoad ? (
           <img
-            src={src}
-            alt=""
+            src={account.image}
+            alt={`Douyin account card, ${account.followers} followers, ${account.likes} likes`}
             loading="lazy"
             decoding="async"
             draggable={false}
@@ -219,12 +223,12 @@ export function MarqueeSection() {
   const rowOneScrollX = useTransform(
     progress,
     [0, 1],
-    [-rowWidths.one * 0.92, -rowWidths.one * 0.08],
+    [0, -rowWidths.one * 0.72],
   );
   const rowTwoScrollX = useTransform(
     progress,
     [0, 1],
-    [-rowWidths.two * 0.08, -rowWidths.two * 0.92],
+    [0, rowWidths.two * 0.72],
   );
   const rowOneX = useTransform(() =>
     wrapSequence(rowOneScrollX.get() + idleOffset.get(), rowWidths.one),
@@ -234,25 +238,25 @@ export function MarqueeSection() {
   );
   const canvasOpacity = useTransform(
     progress,
-    [0, 0.16, 0.72, 1],
-    [0.72, 1, 1, 0],
+    [0, 0.16, 0.82, 1],
+    [0.72, 1, 1, 0.88],
   );
   const canvasScale = useTransform(
     progress,
-    [0, 0.2, 0.72, 1],
-    [0.97, 1, 1, 0.965],
+    [0, 0.2, 0.82, 1],
+    [0.97, 1, 1, 0.985],
   );
   const canvasY = useTransform(
     progress,
-    [0, 0.72, 1],
-    ["7vh", "-2vh", "-14vh"],
+    [0, 0.82, 1],
+    ["7vh", "-2vh", "-5vh"],
   );
 
   return (
     <section
       ref={sectionRef}
       aria-label="02 Showcase"
-      className="relative h-[calc(220vh+180px)] bg-[#0C0C0C] pb-[180px]"
+      className="relative h-[calc(100vh+480px)] bg-[#0C0C0C] md:h-[calc(100vh+640px)]"
       data-marquee-progress="0.000"
     >
       <div
@@ -271,13 +275,13 @@ export function MarqueeSection() {
         >
           <MarqueeRow
             direction="right"
-            images={repeatedMarqueeRowOne}
+            accounts={repeatedMarqueeRowOne}
             rowRef={rowOneRef}
             x={rowOneX}
           />
           <MarqueeRow
             direction="left"
-            images={repeatedMarqueeRowTwo}
+            accounts={repeatedMarqueeRowTwo}
             rowRef={rowTwoRef}
             x={rowTwoX}
           />

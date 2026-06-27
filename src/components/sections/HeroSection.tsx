@@ -1,13 +1,12 @@
 import { FadeIn } from "../ui/FadeIn";
 import { ContactButton } from "../ui/ContactButton";
-import { Magnet } from "../ui/Magnet";
-import { contactHref, heroPortrait, navItems } from "../../utils/portfolioData";
+import { contactHref, navItems } from "../../utils/portfolioData";
 
 export function HeroSection() {
   return (
     <section
       aria-label="01 Hero"
-      className="relative flex h-screen flex-col overflow-x-clip"
+      className="relative flex min-h-screen flex-col overflow-hidden"
     >
       <FadeIn as="nav" delay={0} y={-20} className="relative z-30">
         <div className="flex items-center justify-between gap-4 px-6 pt-6 text-sm font-medium uppercase tracking-wider text-[#D7E2EA] md:px-10 md:pt-8 md:text-lg lg:text-[1.4rem]">
@@ -36,38 +35,29 @@ export function HeroSection() {
         </div>
       </FadeIn>
 
-      <div className="mt-6 overflow-hidden sm:mt-4 md:-mt-5">
-        <FadeIn delay={0.15} y={40}>
-          <h1 className="hero-heading w-full whitespace-nowrap text-[14vw] font-black uppercase leading-none tracking-tight sm:text-[15vw] md:text-[16vw] lg:text-[17.5vw]">
-            Hi, i&apos;m jack
-          </h1>
-        </FadeIn>
+      <div className="relative z-20 flex flex-1 items-start px-6 pb-48 pt-16 sm:px-8 sm:pb-52 sm:pt-20 md:px-10 md:pb-24 md:pt-24 lg:pt-28">
+        <div className="w-full max-w-[760px]">
+          <FadeIn delay={0.15} y={40}>
+            <p className="hero-heading mb-4 text-[clamp(1.15rem,2.4vw,2.3rem)] font-bold leading-none tracking-[-0.02em] md:mb-6">
+              嗨，我是
+            </p>
+            <h1 className="hero-heading text-[clamp(4.5rem,12vw,10.5rem)] font-black leading-[0.86] tracking-[-0.065em]">
+              吴嘉豪
+            </h1>
+          </FadeIn>
+
+          <FadeIn delay={0.3} y={24}>
+            <p className="mt-6 text-sm font-medium tracking-[0.12em] text-[#D7E2EA] sm:text-base md:mt-8 md:text-xl">
+              内容策略｜IP孵化｜AI创作
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.45} y={20} className="mt-8 md:mt-10">
+            <ContactButton href={contactHref} />
+          </FadeIn>
+        </div>
       </div>
 
-      <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 w-[280px] -translate-x-1/2 -translate-y-1/2 sm:bottom-0 sm:top-auto sm:w-[360px] sm:translate-y-0 md:w-[440px] lg:w-[520px]">
-        <FadeIn delay={0.6} y={30}>
-          <Magnet className="pointer-events-auto">
-            <img
-              src={heroPortrait}
-              alt="Jack portrait"
-              draggable={false}
-              className="w-full drop-shadow-[0_28px_60px_rgba(0,0,0,0.45)]"
-            />
-          </Magnet>
-        </FadeIn>
-      </div>
-
-      <div className="relative z-20 mt-auto flex w-full items-end justify-between gap-6 px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
-        <FadeIn delay={0.35} y={20}>
-          <p className="max-w-[160px] text-[clamp(0.75rem,1.4vw,1.5rem)] font-light uppercase leading-snug tracking-[0.18em] text-[#D7E2EA] sm:max-w-[220px] md:max-w-[260px]">
-            Content Strategy / IP Growth / AI Creation
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={0.5} y={20}>
-          <ContactButton href={contactHref} />
-        </FadeIn>
-      </div>
     </section>
   );
 }
