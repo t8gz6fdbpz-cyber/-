@@ -444,9 +444,11 @@ export function GrowthSystemsSection() {
         />
 
         <div className="project-stack relative isolate mb-28 pt-8 md:pt-14">
-          {overviewCards.map((card, index) => (
-            <OverviewCard key={card.company} card={card} index={index} />
-          ))}
+          {overviewCards
+            .filter((card) => card.company !== "Growth Architecture")
+            .map((card, index) => (
+              <OverviewCard key={card.company} card={card} index={index} />
+            ))}
         </div>
 
         <div className="mb-32">
