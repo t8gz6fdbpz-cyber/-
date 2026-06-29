@@ -1,11 +1,6 @@
+import { Mail } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-
-const metadata = [
-  "广州 / 长沙",
-  "2026 PORTFOLIO",
-  "CONTENT STRATEGY · IP GROWTH · AI CREATION",
-];
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -16,7 +11,10 @@ export function HeroSection() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-3%"]);
+  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
+  const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-2%"]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "5%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
   return (
     <section
@@ -26,92 +24,97 @@ export function HeroSection() {
       style={{ minHeight: "100vh" }}
     >
       <div className="hero-cover-grid">
-        <motion.nav
-          aria-label="Hero navigation"
-          className="hero-cover-nav"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: -18 }}
-          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, ease }}
-        >
-          <a href="#about">简介</a>
-          <a href="#growth-systems">工作经历</a>
-          <a href="#skills">技能</a>
-          <a href="#contact">联系我</a>
-        </motion.nav>
-
-        <motion.a
-          href="#"
-          aria-label="Jack Wu"
-          className="hero-cover-logo"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
-          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.08, duration: 0.75, ease }}
-        >
-          JW
-        </motion.a>
-
-        <motion.div
-          className="hero-cover-copy"
-          style={{
-            y: shouldReduceMotion ? "0%" : textY,
-          }}
-        >
-          <motion.p
-            className="hero-cover-kicker"
+        <div className="hero-cover-left">
+          <motion.a
+            href="#"
+            aria-label="吴嘉豪"
+            className="hero-cover-logo"
             initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ delay: 0.08, duration: 0.78, ease }}
+            transition={{ duration: 0.75, ease }}
           >
-            JACK WU / CONTENT GROWTH PORTFOLIO
-          </motion.p>
-          <motion.h1
-            className="hero-heading hero-cover-title"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 34 }}
+            吴
+          </motion.a>
+
+          <div className="hero-cover-stamps" aria-hidden="true">
+            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
+            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
+            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
+            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
+          </div>
+
+          <motion.div
+            className="hero-cover-title-wrap"
+            style={{
+              y: shouldReduceMotion ? "0%" : titleY,
+            }}
+          >
+            <motion.h1
+              className="hero-cover-title"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 34 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={{ delay: 0.12, duration: 0.95, ease }}
+            >
+              <span>吴</span>
+              <span>嘉豪</span>
+            </motion.h1>
+          </motion.div>
+
+          <motion.p
+            className="hero-cover-intro"
+            style={{
+              y: shouldReduceMotion ? "0%" : introY,
+            }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ delay: 0.22, duration: 0.9, ease }}
+            transition={{ delay: 0.24, duration: 0.82, ease }}
           >
-            <span className="hero-cover-title-line hero-cover-title-line-short">
-              JACK
-            </span>
-            <span className="hero-cover-title-line hero-cover-title-line-long">
-              WU
-            </span>
-          </motion.h1>
-        </motion.div>
+            内容策略、IP 增长与 AI 创作实践，把商业目标转化为可复制的内容系统。
+          </motion.p>
 
-        <motion.p
-          className="hero-cover-intro"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
-          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.32, duration: 0.8, ease }}
-        >
-          内容、商业与 AI 之间的持续实践者，关注 IP 增长、内容策略与可复制的方法系统。
-        </motion.p>
+          <motion.div
+            className="hero-cover-meta"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ delay: 0.42, duration: 0.8, ease }}
+          >
+            <p>
+              广州 / 长沙
+            </p>
+            <p>
+              2026年6月29日
+            </p>
+            <p>
+              凌晨4:49
+            </p>
+          </motion.div>
+        </div>
 
-        <motion.div
-          className="hero-cover-actions"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
-          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.42, duration: 0.8, ease }}
-        >
-          <a href="#projects" className="hero-cover-primary-link">
-            查看作品
-          </a>
-          <a href="#contact" className="hero-cover-contact-link">
-            Contact Me ↗
-          </a>
-        </motion.div>
-
-        <motion.div
-          className="hero-cover-meta"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
-          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ delay: 0.52, duration: 0.8, ease }}
-        >
-          {metadata.map((item) => (
-            <p key={item}>{item}</p>
-          ))}
-        </motion.div>
+        <div className="hero-cover-right">
+          <motion.img
+            src="/assets/hero-portrait-crop.png"
+            alt="吴嘉豪个人照片"
+            className="hero-cover-image"
+            style={{
+              y: shouldReduceMotion ? "0%" : imageY,
+              scale: shouldReduceMotion ? 1 : imageScale,
+            }}
+            initial={shouldReduceMotion ? false : { opacity: 0 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1 }}
+            transition={{ delay: 0.08, duration: 1.05, ease }}
+          />
+          <div aria-hidden="true" className="hero-cover-image-overlay" />
+          <motion.a
+            href="#contact"
+            aria-label="联系吴嘉豪"
+            className="hero-cover-email"
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.86 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.75, ease }}
+          >
+            <Mail className="h-8 w-8" strokeWidth={2.6} />
+          </motion.a>
+        </div>
       </div>
     </section>
   );
