@@ -1,63 +1,118 @@
-import { FadeIn } from "../ui/FadeIn";
-import { ContactButton } from "../ui/ContactButton";
-import { contactHref, navItems } from "../../utils/portfolioData";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+
+const metadata = [
+  "广州 / 长沙",
+  "2026 PORTFOLIO",
+  "CONTENT STRATEGY · IP GROWTH · AI CREATION",
+];
+
+const ease = [0.25, 0.1, 0.25, 1] as const;
 
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-3%"]);
+
   return (
     <section
+      ref={sectionRef}
       aria-label="01 Hero"
-      className="relative flex min-h-screen flex-col overflow-hidden"
+      className="relative isolate min-h-screen overflow-hidden bg-[#0C0C0C]"
+      style={{ minHeight: "100vh" }}
     >
-      <FadeIn as="nav" delay={0} y={-20} className="relative z-30">
-        <div className="flex items-center justify-between gap-4 px-6 pt-6 text-sm font-medium uppercase tracking-wider text-[#D7E2EA] md:px-10 md:pt-8 md:text-lg lg:text-[1.4rem]">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(event) => {
-                const target = document.querySelector(item.href);
-                if (!target) return;
+      <div className="hero-cover-grid">
+        <motion.nav
+          aria-label="Hero navigation"
+          className="hero-cover-nav"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: -18 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, ease }}
+        >
+          <a href="#about">简介</a>
+          <a href="#growth-systems">工作经历</a>
+          <a href="#skills">技能</a>
+          <a href="#contact">联系我</a>
+        </motion.nav>
 
-                event.preventDefault();
-                const root = document.documentElement;
-                root.style.scrollBehavior = "auto";
-                target.scrollIntoView({ block: "start" });
-                window.history.replaceState(null, "", item.href);
-                window.requestAnimationFrame(() => {
-                  root.style.removeProperty("scroll-behavior");
-                });
-              }}
-              className="transition-opacity duration-200 hover:opacity-70 focus-visible:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D7E2EA]"
-            >
-              {item.label}
-            </a>
+        <motion.a
+          href="#"
+          aria-label="Jack Wu"
+          className="hero-cover-logo"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ delay: 0.08, duration: 0.75, ease }}
+        >
+          JW
+        </motion.a>
+
+        <motion.div
+          className="hero-cover-copy"
+          style={{
+            y: shouldReduceMotion ? "0%" : textY,
+          }}
+        >
+          <motion.p
+            className="hero-cover-kicker"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ delay: 0.08, duration: 0.78, ease }}
+          >
+            JACK WU / CONTENT GROWTH PORTFOLIO
+          </motion.p>
+          <motion.h1
+            className="hero-heading hero-cover-title"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 34 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ delay: 0.22, duration: 0.9, ease }}
+          >
+            <span className="hero-cover-title-line hero-cover-title-line-short">
+              JACK
+            </span>
+            <span className="hero-cover-title-line hero-cover-title-line-long">
+              WU
+            </span>
+          </motion.h1>
+        </motion.div>
+
+        <motion.p
+          className="hero-cover-intro"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ delay: 0.32, duration: 0.8, ease }}
+        >
+          内容、商业与 AI 之间的持续实践者，关注 IP 增长、内容策略与可复制的方法系统。
+        </motion.p>
+
+        <motion.div
+          className="hero-cover-actions"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ delay: 0.42, duration: 0.8, ease }}
+        >
+          <a href="#projects" className="hero-cover-primary-link">
+            查看作品
+          </a>
+          <a href="#contact" className="hero-cover-contact-link">
+            Contact Me ↗
+          </a>
+        </motion.div>
+
+        <motion.div
+          className="hero-cover-meta"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ delay: 0.52, duration: 0.8, ease }}
+        >
+          {metadata.map((item) => (
+            <p key={item}>{item}</p>
           ))}
-        </div>
-      </FadeIn>
-
-      <div className="relative z-20 flex flex-1 items-start px-6 pb-48 pt-16 sm:px-8 sm:pb-52 sm:pt-20 md:px-10 md:pb-24 md:pt-24 lg:pt-28">
-        <div className="w-full max-w-[760px]">
-          <FadeIn delay={0.15} y={40}>
-            <p className="hero-heading mb-4 text-[clamp(1.15rem,2.4vw,2.3rem)] font-bold leading-none tracking-[-0.02em] md:mb-6">
-              嗨，我是
-            </p>
-            <h1 className="hero-heading text-[clamp(4.5rem,12vw,10.5rem)] font-black leading-[0.86] tracking-[-0.065em]">
-              吴嘉豪
-            </h1>
-          </FadeIn>
-
-          <FadeIn delay={0.3} y={24}>
-            <p className="mt-6 text-sm font-medium tracking-[0.12em] text-[#D7E2EA] sm:text-base md:mt-8 md:text-xl">
-              内容策略｜IP孵化｜AI创作
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.45} y={20} className="mt-8 md:mt-10">
-            <ContactButton href={contactHref} />
-          </FadeIn>
-        </div>
+        </motion.div>
       </div>
-
     </section>
   );
 }
