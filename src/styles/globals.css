@@ -61,8 +61,9 @@ img {
   position: relative;
   display: flex;
   min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
-  background: #ffd173;
+  background: #0c0c0c;
 }
 
 .hero-cover-left,
@@ -74,8 +75,7 @@ img {
 
 .hero-cover-left {
   width: 48%;
-  background: #ffd173;
-  color: #050505;
+  background: #0c0c0c;
 }
 
 .hero-cover-right {
@@ -86,108 +86,94 @@ img {
 .hero-cover-logo {
   position: absolute;
   z-index: 20;
-  left: clamp(24px, 1.65vw, 32px);
-  top: clamp(24px, 1.65vw, 32px);
+  left: clamp(20px, 1.4vw, 24px);
+  top: clamp(20px, 1.4vw, 24px);
   display: grid;
-  width: clamp(72px, 5.2vw, 100px);
-  height: clamp(72px, 5.2vw, 100px);
+  width: clamp(76px, 5.55vw, 84px);
+  height: clamp(76px, 5.55vw, 84px);
   place-items: center;
-  border: 0;
+  border: 1px solid rgba(215, 226, 234, 0.12);
   border-radius: 10px;
   background: #050505;
-  color: #ffd173;
-  font-family:
-    "Microsoft YaHei UI",
-    "PingFang SC",
-    "Noto Sans CJK SC",
-    sans-serif;
-  font-size: clamp(34px, 2.7vw, 52px);
+  color: #bbccd7;
+  font-size: clamp(17px, 1.22vw, 22px);
   font-weight: 900;
+  letter-spacing: -0.1em;
   line-height: 1;
-  letter-spacing: -0.12em;
 }
 
 .hero-cover-intro {
   position: absolute;
   z-index: 20;
-  top: clamp(150px, 18.2vh, 190px);
-  left: 63%;
-  width: clamp(150px, 11vw, 214px);
-  color: rgba(5, 5, 5, 0.92);
-  font-family:
-    "Microsoft YaHei UI",
-    "PingFang SC",
-    "Noto Sans CJK SC",
-    sans-serif;
-  font-size: clamp(16px, 1.05vw, 20px);
+  top: clamp(124px, 15.2vh, 142px);
+  left: 82.5%;
+  width: clamp(104px, 8.5vw, 122px);
+  color: rgba(215, 226, 234, 0.9);
+  font-size: clamp(13px, 1.02vw, 15px);
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.4;
   text-wrap: pretty;
 }
 
 .hero-cover-title-wrap {
   position: absolute;
   z-index: 10;
-  left: 14.1%;
-  top: clamp(132px, 16.8vh, 168px);
+  left: 14.6%;
+  top: clamp(106px, 13.4vh, 128px);
   transform-origin: left top;
 }
 
 .hero-cover-title {
   display: block;
   margin: 0;
-  color: #050505;
+  color: #aebcc7;
   font-family:
+    Impact,
+    Haettenschweiler,
+    "Arial Narrow Bold",
     "Arial Black",
-    "Microsoft YaHei UI",
-    "PingFang SC",
-    "Noto Sans CJK SC",
+    "Kanit",
     sans-serif;
-  font-size: clamp(10.8rem, 21vw, 25.5rem);
+  font-size: clamp(18rem, 28.2vw, 25.35rem);
   font-weight: 900;
   line-height: 0.82;
-  letter-spacing: -0.1em;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
   transform-origin: left top;
-  text-wrap: nowrap;
 }
 
 .hero-cover-title span {
   display: block;
   width: max-content;
-  color: #050505;
-  transform: scaleX(1.03);
+  color: #aebcc7;
+  transform: scaleX(0.82);
   transform-origin: left top;
 }
 
 .hero-cover-title span:first-child {
-  transform: scaleX(1.06);
+  transform: scaleX(0.82);
 }
 
 .hero-cover-title span:last-child {
-  margin-top: -0.02em;
-  transform: scaleX(1);
+  margin-top: -0.015em;
+  transform: scaleX(0.58);
 }
 
 .hero-cover-meta {
   position: absolute;
   z-index: 10;
-  left: 14.1%;
-  right: 17%;
-  bottom: clamp(12px, 1.25vw, 24px);
+  left: 14.6%;
+  right: 17.2%;
+  bottom: clamp(18px, 2.45vh, 26px);
   display: grid;
-  grid-template-columns: 1fr 1fr 0.7fr;
-  gap: clamp(30px, 4.6vw, 88px);
-  color: #050505;
-  font-family:
-    "Microsoft YaHei UI",
-    "PingFang SC",
-    "Noto Sans CJK SC",
-    sans-serif;
-  font-size: clamp(12px, 0.9vw, 16px);
+  grid-template-columns: 0.88fr 0.78fr 1fr;
+  gap: clamp(24px, 4.3vw, 70px);
+  color: rgba(215, 226, 234, 0.9);
+  font-size: clamp(10px, 0.83vw, 12px);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: 0;
-  white-space: nowrap;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .hero-cover-image {
@@ -197,9 +183,10 @@ img {
   width: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: 53% 38%;
-  filter: sepia(0.34) saturate(0.86) contrast(1.15) brightness(0.72);
+  object-position: 50% 34%;
+  filter: grayscale(1) saturate(0.05) contrast(1.12) brightness(0.66);
   transform-origin: center;
+  will-change: transform;
 }
 
 .hero-cover-image-overlay {
@@ -208,26 +195,25 @@ img {
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.12), transparent 24%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.06), transparent 38%),
-    radial-gradient(circle at 64% 45%, transparent 0%, rgba(0, 0, 0, 0.08) 46%, rgba(0, 0, 0, 0.26) 100%);
+    linear-gradient(90deg, rgba(12, 12, 12, 0.16), transparent 22%),
+    radial-gradient(circle at 58% 34%, transparent 0%, rgba(12, 12, 12, 0.06) 42%, rgba(12, 12, 12, 0.32) 100%);
 }
 
 .hero-cover-email {
   position: absolute;
   z-index: 5;
-  right: clamp(26px, 3vw, 56px);
-  bottom: clamp(28px, 3vw, 58px);
+  right: clamp(28px, 3vw, 52px);
+  bottom: clamp(28px, 3vw, 52px);
   display: grid;
-  width: clamp(78px, 5.2vw, 100px);
-  height: clamp(78px, 5.2vw, 100px);
+  width: clamp(78px, 5.55vw, 88px);
+  height: clamp(78px, 5.55vw, 88px);
   place-items: center;
   border-radius: 999px;
-  color: #ffd173;
+  color: #d7e2ea;
   background: #050505;
   box-shadow:
     0 24px 58px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition:
     transform 260ms ease,
     color 260ms ease;
@@ -235,107 +221,112 @@ img {
 
 .hero-cover-email:hover,
 .hero-cover-email:focus-visible {
-  color: #ffe29b;
+  color: #ffffff;
   transform: translateY(-3px) scale(1.03);
 }
 
-.hero-cover-stamps {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
-  pointer-events: none;
-  color: rgba(5, 5, 5, 0.07);
-  font-size: clamp(19px, 1.5vw, 30px);
-  font-weight: 500;
-  line-height: 1.25;
-}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .hero-cover-logo {
+    width: clamp(76px, 10vw, 84px);
+    height: clamp(76px, 10vw, 84px);
+  }
 
-.hero-cover-stamps span {
-  position: absolute;
-  display: block;
-  width: 260px;
-  transform: rotate(-18deg);
-}
+  .hero-cover-title-wrap {
+    left: 9%;
+    top: clamp(118px, 14vh, 132px);
+  }
 
-.hero-cover-stamps span:nth-child(1) {
-  left: 20%;
-  top: 3%;
-}
+  .hero-cover-title {
+    font-size: clamp(16.8rem, 28vw, 19.5rem);
+  }
 
-.hero-cover-stamps span:nth-child(2) {
-  right: 1%;
-  top: 2%;
-}
+  .hero-cover-title span,
+  .hero-cover-title span:first-child {
+    transform: scaleX(0.72);
+  }
 
-.hero-cover-stamps span:nth-child(3) {
-  left: 21%;
-  bottom: 42%;
-}
+  .hero-cover-title span:last-child {
+    transform: scaleX(0.45);
+  }
 
-.hero-cover-stamps span:nth-child(4) {
-  right: 0;
-  bottom: 38%;
+  .hero-cover-intro {
+    top: clamp(132px, 15vh, 150px);
+    left: 73.5%;
+    width: clamp(82px, 10.5vw, 112px);
+    font-size: clamp(11px, 1.45vw, 13px);
+    line-height: 1.36;
+  }
+
+  .hero-cover-meta {
+    left: 9%;
+    right: 7.5%;
+    grid-template-columns: 0.78fr 0.72fr 1fr;
+    gap: clamp(14px, 3.2vw, 28px);
+    font-size: clamp(8px, 1.18vw, 10px);
+    letter-spacing: 0.08em;
+  }
+
+  .hero-cover-email {
+    right: clamp(18px, 2.8vw, 30px);
+    bottom: clamp(20px, 2.8vw, 32px);
+    width: clamp(68px, 8.8vw, 78px);
+    height: clamp(68px, 8.8vw, 78px);
+  }
 }
 
 @media (max-width: 767px) {
   .hero-cover-grid {
-    display: grid;
-    grid-template-rows: minmax(58svh, auto) 42svh;
+    display: block;
     min-height: 100svh;
   }
 
   .hero-cover-left,
   .hero-cover-right {
     width: 100%;
-    min-height: 0;
+    min-height: 100svh;
   }
 
   .hero-cover-right {
-    min-height: 42svh;
+    min-height: 72svh;
   }
 
   .hero-cover-logo {
     left: 20px;
     top: 20px;
-    width: 64px;
-    height: 64px;
+    width: 62px;
+    height: 62px;
     margin-top: 0;
     border-radius: 10px;
-    font-size: 31px;
   }
 
   .hero-cover-title-wrap {
-    left: 24px;
-    top: 130px;
+    left: 28px;
+    top: 19%;
   }
 
   .hero-cover-title {
-    font-size: clamp(5.2rem, 28vw, 8.8rem);
-    line-height: 0.88;
-    letter-spacing: -0.08em;
+    font-size: clamp(5.5rem, 24vw, 8.4rem);
+    line-height: 0.86;
   }
 
   .hero-cover-intro {
-    top: 130px;
-    left: auto;
-    right: 22px;
-    width: min(37vw, 160px);
+    top: 13%;
+    left: 48%;
+    width: 44%;
     font-size: 14px;
-    line-height: 1.5;
   }
 
   .hero-cover-meta {
-    left: 24px;
-    right: 24px;
-    bottom: 14px;
-    grid-template-columns: 1fr;
-    gap: 6px;
-    font-size: 10px;
+    left: 28px;
+    right: 28px;
+    bottom: 16px;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 12px;
+    font-size: 9px;
   }
 
   .hero-cover-image {
-    object-position: 52% 36%;
+    object-position: 50% 28%;
   }
 
   .hero-cover-email {

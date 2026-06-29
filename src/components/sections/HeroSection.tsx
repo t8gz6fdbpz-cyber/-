@@ -12,9 +12,10 @@ export function HeroSection() {
     offset: ["start start", "end start"],
   });
   const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
-  const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-2%"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "5%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);
+  const metaY = useTransform(scrollYProgress, [0, 1], ["0%", "3%"]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-1.5%", "5.5%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.025, 1.09]);
 
   return (
     <section
@@ -27,21 +28,14 @@ export function HeroSection() {
         <div className="hero-cover-left">
           <motion.a
             href="#"
-            aria-label="吴嘉豪"
+            aria-label="Jack Wu"
             className="hero-cover-logo"
             initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease }}
           >
-            吴
+            JW
           </motion.a>
-
-          <div className="hero-cover-stamps" aria-hidden="true">
-            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
-            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
-            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
-            <span>2026-06-29 / 吴嘉豪 / mmhm</span>
-          </div>
 
           <motion.div
             className="hero-cover-title-wrap"
@@ -55,8 +49,8 @@ export function HeroSection() {
               animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ delay: 0.12, duration: 0.95, ease }}
             >
-              <span>吴</span>
-              <span>嘉豪</span>
+              <span>WU</span>
+              <span>JIAHAO</span>
             </motion.h1>
           </motion.div>
 
@@ -69,23 +63,34 @@ export function HeroSection() {
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.24, duration: 0.82, ease }}
           >
-            内容策略、IP 增长与 AI 创作实践，把商业目标转化为可复制的内容系统。
+            内容、商业与 AI 之间的持续实践者，关注 IP 增长、内容策略与可复制的方法系统。
           </motion.p>
 
           <motion.div
             className="hero-cover-meta"
+            style={{
+              y: shouldReduceMotion ? "0%" : metaY,
+            }}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.42, duration: 0.8, ease }}
           >
             <p>
-              广州 / 长沙
+              GUANGZHOU /
+              <br />
+              CHANGSHA
             </p>
             <p>
-              2026年6月29日
+              2026
+              <br />
+              PORTFOLIO
             </p>
             <p>
-              凌晨4:49
+              CONTENT STRATEGY
+              <br />
+              IP GROWTH
+              <br />
+              AI CREATION
             </p>
           </motion.div>
         </div>
@@ -93,7 +98,7 @@ export function HeroSection() {
         <div className="hero-cover-right">
           <motion.img
             src="/assets/hero-portrait-crop.png"
-            alt="吴嘉豪个人照片"
+            alt="Jack Wu portrait"
             className="hero-cover-image"
             style={{
               y: shouldReduceMotion ? "0%" : imageY,
@@ -106,7 +111,7 @@ export function HeroSection() {
           <div aria-hidden="true" className="hero-cover-image-overlay" />
           <motion.a
             href="#contact"
-            aria-label="联系吴嘉豪"
+            aria-label="Contact Jack Wu"
             className="hero-cover-email"
             initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.86 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
