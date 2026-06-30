@@ -237,16 +237,16 @@ img {
   }
 
   .hero-cover-title {
-    font-size: clamp(16.8rem, 28vw, 19.5rem);
+    font-size: clamp(20rem, 32vw, 22rem);
   }
 
   .hero-cover-title span,
   .hero-cover-title span:first-child {
-    transform: scaleX(0.72);
+    transform: scaleX(0.64);
   }
 
   .hero-cover-title span:last-child {
-    transform: scaleX(0.45);
+    transform: scaleX(0.42);
   }
 
   .hero-cover-intro {
