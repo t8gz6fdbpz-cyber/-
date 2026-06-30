@@ -1,42 +1,35 @@
-# Toolbox Enhancement Design QA
+**Source Visual Truth**
+- URL: https://www.billchien.net/
+- Desktop source screenshot: `artifacts/reference-billchien-same-viewport.png`
+- Mobile source screenshot: `artifacts/reference-mobile-390x844.png`
 
-- Source visual truth: Browser Comment 2 in the current thread at `http://localhost:4175/#skills`.
-- Implementation URL: `http://localhost:4175/#skills`.
-- Intended viewport: 1280 x 720 desktop, with mobile behavior retained from the previous passed Toolbox QA.
-- State: default ecosystem, orbit focus mode, tooltip, and final statement.
-- Implementation screenshot: blocked because the in-app Browser webview stopped attaching and screenshot capture timed out after the implementation was loaded.
+**Implementation**
+- URL: http://127.0.0.1:4174/
+- Desktop implementation screenshot: `artifacts/local-final-1440x900.png`
+- Mobile implementation screenshot: `artifacts/local-mobile-390x844.png`
+- Full-view comparison evidence: `artifacts/hero-comparison-reference-local.png`
+- Viewport: desktop capture normalized against the reference `1440 x 900`; mobile smoke check captured at `390 x 844` requested viewport, browser reported `434 x 938`.
+- State: initial top-of-page Hero.
 
-## Full-View Comparison Evidence
+**Findings**
+- No actionable P0/P1/P2 issues remain for the requested scope.
 
-The source annotation was opened and the existing Toolbox layout was preserved. Before the browser connection failed, DOM inspection confirmed three orbit elements, 18 particles, and the final heading text `Thanks for watching`. A new post-build screenshot could not be captured, so visual comparison cannot be completed honestly.
+**Required Fidelity Surfaces**
+- Fonts and typography: Reference uses Manuka/National/Faktum; implementation uses available local/web font fallbacks with Impact/Kanit. The Hero title now matches the oversized condensed hierarchy, line-height, and left-column visual weight closely enough for handoff, but the exact Manuka glyph geometry remains a P3 limitation unless that font is licensed and added.
+- Spacing and layout rhythm: Desktop split, logo position, title origin, intro block, metadata baseline, and right-bottom email button now follow the measured reference proportions. Desktop Hero remains full viewport height.
+- Colors and visual tokens: Intentional deviation preserved. Reference beige/yellow was not copied; implementation keeps black/gray identity and white portrait field.
+- Image quality and asset fidelity: User portrait remains the original full-color image with clean white background, no grayscale, vignette, grain, blur, shadow, gradient, or overlay. Crop/scale stays aligned to the right panel.
+- Copy and content: User-specific title, description, metadata, and portrait are retained while matching the reference composition.
 
-## Focused Region Comparison Evidence
+**Patches Made Since Previous QA**
+- Changed the top-left logo into a tighter `80px` square mark aligned at `20px / 20px`.
+- Moved the large title block upward to match the reference title origin more closely.
+- Raised bottom metadata to match the reference bottom margin.
+- Tuned the contact button to the reference-like `80px` circle and right-bottom spacing.
+- Preserved the current portrait crop and original color treatment.
 
-Code and production-bundle checks confirm:
+**Follow-up Polish**
+- [P3] Add a licensed Manuka-equivalent display font if exact glyph fidelity is required.
+- [P3] Replace the textual `JW` logo with a real monochrome mark asset if you want the logo density to match the reference symbol more closely.
 
-- Three labeled layers: AI Tools, Creative Tools, Platform Tools.
-- Independent slow clockwise and counter-clockwise orbit animations.
-- Staggered icon breathing and floating motion.
-- Related-orbit highlighting and unrelated-orbit fading through `data-focus-state`.
-- Tooltip content uses tool name and two related skills.
-- Nebula and particle background layers.
-- Reduced-motion fallbacks.
-- English final title: `Thanks for watching`.
-
-## Findings
-
-- [P2] Final visual capture unavailable.
-  - Location: Toolbox section and final statement.
-  - Evidence: browser screenshot commands timed out after the in-app webview stopped attaching.
-  - Impact: layout and polish cannot receive a final image-based comparison in this run.
-  - Fix: reload the in-app Browser and capture the default and hover states.
-
-## Patches Made
-
-- Added three orbital layers and labels.
-- Added orbital, breathing, floating, particle, and nebula motion.
-- Added category-aware hover/focus mode.
-- Updated tooltip copy to show related skills.
-- Replaced the Chinese final heading with `Thanks for watching`.
-
-final result: blocked
+final result: passed

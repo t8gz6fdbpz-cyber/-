@@ -14,8 +14,8 @@ export function HeroSection() {
   const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
   const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);
   const metaY = useTransform(scrollYProgress, [0, 1], ["0%", "3%"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-1.5%", "5.5%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.025, 1.09]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "3%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.36, 1.44]);
 
   return (
     <section
@@ -34,7 +34,7 @@ export function HeroSection() {
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease }}
           >
-            JW
+            <span>JW</span>
           </motion.a>
 
           <motion.div
@@ -75,29 +75,15 @@ export function HeroSection() {
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.42, duration: 0.8, ease }}
           >
-            <p>
-              GUANGZHOU /
-              <br />
-              CHANGSHA
-            </p>
-            <p>
-              2026
-              <br />
-              PORTFOLIO
-            </p>
-            <p>
-              CONTENT STRATEGY
-              <br />
-              IP GROWTH
-              <br />
-              AI CREATION
-            </p>
+            <p>GUANGZHOU, CHANGSHA</p>
+            <p>2026 PORTFOLIO</p>
+            <p>CONTENT STRATEGY</p>
           </motion.div>
         </div>
 
         <div className="hero-cover-right">
           <motion.img
-            src="/assets/hero-portrait-crop.png"
+            src="/assets/hero-portrait.png"
             alt="Jack Wu portrait"
             className="hero-cover-image"
             style={{

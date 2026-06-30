@@ -74,43 +74,49 @@ img {
 }
 
 .hero-cover-left {
-  width: 48%;
+  width: 59.4%;
   background: #0c0c0c;
 }
 
 .hero-cover-right {
-  width: 52%;
-  background: #111;
+  width: 40.6%;
+  background: #fff;
 }
 
 .hero-cover-logo {
   position: absolute;
   z-index: 20;
-  left: clamp(20px, 1.4vw, 24px);
-  top: clamp(20px, 1.4vw, 24px);
+  left: 20px;
+  top: 20px;
   display: grid;
-  width: clamp(76px, 5.55vw, 84px);
-  height: clamp(76px, 5.55vw, 84px);
-  place-items: center;
+  width: 80px;
+  height: 80px;
+  align-items: center;
+  justify-items: center;
   border: 1px solid rgba(215, 226, 234, 0.12);
-  border-radius: 10px;
+  border-radius: 8px;
   background: #050505;
   color: #bbccd7;
-  font-size: clamp(17px, 1.22vw, 22px);
+  font-size: 17px;
   font-weight: 900;
-  letter-spacing: -0.1em;
+  letter-spacing: -0.12em;
   line-height: 1;
+}
+
+.hero-cover-logo span {
+  transform: translateX(-0.03em) scaleX(0.86);
+  transform-origin: center;
 }
 
 .hero-cover-intro {
   position: absolute;
   z-index: 20;
-  top: clamp(124px, 15.2vh, 142px);
-  left: 82.5%;
-  width: clamp(104px, 8.5vw, 122px);
+  top: clamp(132px, 15.2vh, 142px);
+  left: 68.4%;
+  width: clamp(142px, 10.4vw, 154px);
   color: rgba(215, 226, 234, 0.9);
-  font-size: clamp(13px, 1.02vw, 15px);
-  font-weight: 500;
+  font-size: clamp(13px, 1.08vw, 15.5px);
+  font-weight: 400;
   line-height: 1.4;
   text-wrap: pretty;
 }
@@ -118,8 +124,8 @@ img {
 .hero-cover-title-wrap {
   position: absolute;
   z-index: 10;
-  left: 14.6%;
-  top: clamp(106px, 13.4vh, 128px);
+  left: 14%;
+  top: clamp(110px, 13.4vh, 120px);
   transform-origin: left top;
 }
 
@@ -134,7 +140,7 @@ img {
     "Arial Black",
     "Kanit",
     sans-serif;
-  font-size: clamp(18rem, 28.2vw, 25.35rem);
+  font-size: clamp(21rem, 28.125vw, 25.35rem);
   font-weight: 900;
   line-height: 0.82;
   letter-spacing: -0.055em;
@@ -162,18 +168,19 @@ img {
 .hero-cover-meta {
   position: absolute;
   z-index: 10;
-  left: 14.6%;
-  right: 17.2%;
-  bottom: clamp(18px, 2.45vh, 26px);
+  left: 14%;
+  right: 4%;
+  bottom: clamp(30px, 3.45vh, 36px);
   display: grid;
-  grid-template-columns: 0.88fr 0.78fr 1fr;
-  gap: clamp(24px, 4.3vw, 70px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4.2vw, 62px);
   color: rgba(215, 226, 234, 0.9);
-  font-size: clamp(10px, 0.83vw, 12px);
+  font-size: clamp(10px, 0.84vw, 12px);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .hero-cover-image {
@@ -183,9 +190,9 @@ img {
   width: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: 50% 34%;
-  filter: grayscale(1) saturate(0.05) contrast(1.12) brightness(0.66);
-  transform-origin: center;
+  object-position: 50% 0%;
+  filter: none;
+  transform-origin: center top;
   will-change: transform;
 }
 
@@ -194,19 +201,18 @@ img {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(12, 12, 12, 0.16), transparent 22%),
-    radial-gradient(circle at 58% 34%, transparent 0%, rgba(12, 12, 12, 0.06) 42%, rgba(12, 12, 12, 0.32) 100%);
+  display: none;
+  background: none;
 }
 
 .hero-cover-email {
   position: absolute;
   z-index: 5;
-  right: clamp(28px, 3vw, 52px);
-  bottom: clamp(28px, 3vw, 52px);
+  right: clamp(28px, 2.45vw, 36px);
+  bottom: clamp(28px, 2.45vw, 36px);
   display: grid;
-  width: clamp(78px, 5.55vw, 88px);
-  height: clamp(78px, 5.55vw, 88px);
+  width: 80px;
+  height: 80px;
   place-items: center;
   border-radius: 999px;
   color: #d7e2ea;
