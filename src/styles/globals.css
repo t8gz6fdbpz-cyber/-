@@ -74,12 +74,14 @@ img {
 }
 
 .hero-cover-left {
-  width: 59.4%;
+  width: 45.6%;
+  overflow: visible;
   background: #0c0c0c;
 }
 
 .hero-cover-right {
-  width: 40.6%;
+  z-index: 15;
+  width: 54.4%;
   background: #fff;
 }
 
@@ -111,9 +113,9 @@ img {
 .hero-cover-intro {
   position: absolute;
   z-index: 20;
-  top: clamp(132px, 15.2vh, 142px);
-  left: 68.4%;
-  width: clamp(142px, 10.4vw, 154px);
+  top: clamp(136px, 14.85vh, 152px);
+  left: 68.8%;
+  width: clamp(138px, 7.9vw, 154px);
   color: rgba(215, 226, 234, 0.9);
   font-size: clamp(13px, 1.08vw, 15.5px);
   font-weight: 400;
@@ -124,8 +126,8 @@ img {
 .hero-cover-title-wrap {
   position: absolute;
   z-index: 10;
-  left: 14%;
-  top: clamp(110px, 13.4vh, 120px);
+  left: clamp(52px, 6.32vw, 120px);
+  top: clamp(112px, 13.1vh, 120px);
   transform-origin: left top;
 }
 
@@ -140,10 +142,10 @@ img {
     "Arial Black",
     "Kanit",
     sans-serif;
-  font-size: clamp(21rem, 28.125vw, 25.35rem);
+  font-size: clamp(25.35rem, 21.7vw, 28.85rem);
   font-weight: 900;
-  line-height: 0.82;
-  letter-spacing: -0.055em;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
   text-transform: uppercase;
   transform-origin: left top;
 }
@@ -152,28 +154,28 @@ img {
   display: block;
   width: max-content;
   color: #aebcc7;
-  transform: scaleX(0.82);
+  transform: scaleX(0.78);
   transform-origin: left top;
 }
 
 .hero-cover-title span:first-child {
-  transform: scaleX(0.82);
+  transform: scaleX(0.78);
 }
 
 .hero-cover-title span:last-child {
-  margin-top: -0.015em;
-  transform: scaleX(0.58);
+  margin-top: 0;
+  transform: scaleX(0.56);
 }
 
 .hero-cover-meta {
   position: absolute;
   z-index: 10;
-  left: 14%;
-  right: 4%;
-  bottom: clamp(30px, 3.45vh, 36px);
+  left: clamp(52px, 6.32vw, 120px);
+  bottom: clamp(20px, 2.18vh, 22px);
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(24px, 4.2vw, 62px);
+  width: clamp(480px, 33vw, 696px);
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0;
   color: rgba(215, 226, 234, 0.9);
   font-size: clamp(10px, 0.84vw, 12px);
   font-weight: 900;
@@ -243,16 +245,16 @@ img {
   }
 
   .hero-cover-title {
-    font-size: clamp(20rem, 32vw, 22rem);
+    font-size: clamp(20rem, 36.7vw, 23rem);
   }
 
   .hero-cover-title span,
   .hero-cover-title span:first-child {
-    transform: scaleX(0.64);
+    transform: scaleX(0.57);
   }
 
   .hero-cover-title span:last-child {
-    transform: scaleX(0.42);
+    transform: scaleX(0.37);
   }
 
   .hero-cover-intro {
@@ -266,6 +268,7 @@ img {
   .hero-cover-meta {
     left: 9%;
     right: 7.5%;
+    width: auto;
     grid-template-columns: 0.78fr 0.72fr 1fr;
     gap: clamp(14px, 3.2vw, 28px);
     font-size: clamp(8px, 1.18vw, 10px);
@@ -290,6 +293,7 @@ img {
   .hero-cover-right {
     width: 100%;
     min-height: 100svh;
+    overflow: hidden;
   }
 
   .hero-cover-right {

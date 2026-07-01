@@ -11,11 +11,12 @@ export function HeroSection() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-4%"]);
-  const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);
+  const logoY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
+  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-9%"]);
+  const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-14%"]);
   const metaY = useTransform(scrollYProgress, [0, 1], ["0%", "3%"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "3%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.36, 1.44]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "2%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.36, 1.42]);
 
   return (
     <section
@@ -29,9 +30,13 @@ export function HeroSection() {
           <motion.a
             href="#"
             aria-label="Jack Wu"
-            className="hero-cover-logo"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 26 }}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            className="hero-cover-logo notranslate"
+            translate="no"
+            style={{
+              y: shouldReduceMotion ? "0%" : logoY,
+            }}
+            initial={shouldReduceMotion ? false : { opacity: 0 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1 }}
             transition={{ duration: 0.75, ease }}
           >
             <span>JW</span>
@@ -44,13 +49,14 @@ export function HeroSection() {
             }}
           >
             <motion.h1
-              className="hero-cover-title"
+              className="hero-cover-title notranslate"
+              translate="no"
               initial={shouldReduceMotion ? false : { opacity: 0, y: 34 }}
               animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ delay: 0.12, duration: 0.95, ease }}
             >
+              <span>JACK</span>
               <span>WU</span>
-              <span>JIAHAO</span>
             </motion.h1>
           </motion.div>
 
@@ -63,11 +69,12 @@ export function HeroSection() {
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.24, duration: 0.82, ease }}
           >
-            内容、商业与 AI 之间的持续实践者，关注 IP 增长、内容策略与可复制的方法系统。
+            Building content systems where business, AI, and creator growth become repeatable practice.
           </motion.p>
 
           <motion.div
-            className="hero-cover-meta"
+            className="hero-cover-meta notranslate"
+            translate="no"
             style={{
               y: shouldReduceMotion ? "0%" : metaY,
             }}
@@ -75,9 +82,9 @@ export function HeroSection() {
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.42, duration: 0.8, ease }}
           >
-            <p>GUANGZHOU, CHANGSHA</p>
+            <p>GUANGZHOU, CHINA</p>
             <p>2026 PORTFOLIO</p>
-            <p>CONTENT STRATEGY</p>
+            <p>CONTENT SYSTEMS</p>
           </motion.div>
         </div>
 

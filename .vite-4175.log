@@ -1,14 +1,15 @@
 Forced re-optimization of dependencies
 
-  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m618[22m[2m[0m ms[22m
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m663[22m[2m[0m ms[22m
 
-  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4174[22m/[39m
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4175[22m/[39m
 [2m22:47:01[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
-[2m22:47:36[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/HeroSection.tsx, /src/index.css[22m
-[2m22:48:02[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/HeroSection.tsx, /src/index.css[22m
+[2m22:47:36[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/HeroSection.tsx, /src/index.css, /src/components/sections/HeroSection.tsx?rawdebug=1[22m
+[2m22:48:02[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/HeroSection.tsx, /src/index.css, /src/components/sections/HeroSection.tsx?rawdebug=1[22m
 [2m22:48:50[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
 [2m22:49:37[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
 [2m22:50:14[22m [36m[1m[vite][22m[39m [32mvite.config.js changed, restarting server...[39m
 Forced re-optimization of dependencies
 [2m22:50:14[22m [36m[1m[vite][22m[39m server restarted.
+[2m22:52:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
 [2m16:02:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/HeroSection.tsx, /src/index.css[22m
