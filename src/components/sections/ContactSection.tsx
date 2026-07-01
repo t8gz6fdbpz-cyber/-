@@ -9,7 +9,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden rounded-t-[40px] bg-[#111827] px-5 py-24 sm:rounded-t-[50px] sm:px-8 md:rounded-t-[60px] md:px-10 md:py-36"
+      className="portfolio-scroll-panel relative overflow-hidden rounded-t-[40px] bg-[#111827] px-5 py-24 sm:rounded-t-[50px] sm:px-8 md:rounded-t-[60px] md:px-10 md:py-36"
     >
       <div className="contact-glow pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[rgba(7,6,4,0.12)] blur-[120px]" />
       <div className="relative z-10 mx-auto max-w-7xl">

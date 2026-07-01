@@ -282,7 +282,7 @@ export function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative z-10 -mt-10 scroll-mt-8 rounded-t-[40px] bg-[#0C0C0C] px-5 pb-24 pt-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-28"
+      className="portfolio-scroll-panel relative z-10 -mt-10 scroll-mt-8 rounded-t-[40px] bg-[#0C0C0C] px-5 pb-24 pt-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-28"
     >
       <div className="mx-auto max-w-6xl">
         <FadeIn delay={0} y={40}>

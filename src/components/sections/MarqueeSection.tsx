@@ -256,7 +256,7 @@ export function MarqueeSection() {
     <section
       ref={sectionRef}
       aria-label="02 Showcase"
-      className="relative h-[calc(100vh+480px)] bg-[#0C0C0C] md:h-[calc(100vh+640px)]"
+      className="portfolio-scroll-panel relative h-[calc(100vh+480px)] bg-[#0C0C0C] md:h-[calc(100vh+640px)]"
       data-marquee-progress="0.000"
     >
       <div

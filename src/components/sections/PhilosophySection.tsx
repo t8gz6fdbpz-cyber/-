@@ -11,7 +11,7 @@ export function PhilosophySection() {
   return (
     <section
       id="philosophy"
-      className="bg-[#0C0C0C] px-5 py-24 sm:px-8 md:px-10 md:py-40"
+      className="portfolio-scroll-panel bg-[#0C0C0C] px-5 py-24 sm:px-8 md:px-10 md:py-40"
     >
       <div className="mx-auto max-w-7xl">
         <FadeIn>

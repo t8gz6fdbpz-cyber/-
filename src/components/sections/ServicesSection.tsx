@@ -245,7 +245,7 @@ export function SkillsMatrixSection() {
   return (
     <section
       id="skills"
-      className="toolbox-section scroll-mt-8 bg-[#090a0d] px-5 py-20 text-white sm:px-8 md:px-10 md:py-28"
+      className="portfolio-scroll-panel toolbox-section scroll-mt-8 bg-[#090a0d] px-5 py-20 text-white sm:px-8 md:px-10 md:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

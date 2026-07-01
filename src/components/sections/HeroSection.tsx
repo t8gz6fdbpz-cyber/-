@@ -54,18 +54,6 @@ export function HeroSection() {
     >
       <div className="hero-cover-grid">
         <div className="hero-cover-left">
-          <motion.a
-            href="#"
-            aria-label="Jack Wu"
-            className="hero-cover-logo notranslate"
-            translate="no"
-            initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={shouldReduceMotion ? undefined : { opacity: 1 }}
-            transition={{ duration: 0.75, ease }}
-          >
-            <span>JW</span>
-          </motion.a>
-
           <motion.div
             className="hero-cover-title-wrap"
             style={{

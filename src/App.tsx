@@ -7,10 +7,14 @@ import { MarqueeSection } from "./components/sections/MarqueeSection";
 import { PhilosophySection } from "./components/sections/PhilosophySection";
 import { ProjectsSection } from "./components/sections/ProjectsSection";
 import { SkillsMatrixSection } from "./components/sections/ServicesSection";
+import { FloatingLogoNav } from "./components/ui/FloatingLogoNav";
+import { ScrollExperience } from "./components/ui/ScrollExperience";
 
 export default function App() {
   return (
     <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[var(--color-bg)]">
+      <ScrollExperience />
+      <FloatingLogoNav />
       <HeroSection />
       <MarqueeSection />
       <AboutSection />

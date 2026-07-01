@@ -20,7 +20,7 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="relative flex min-h-[150vh] scroll-mt-8 justify-center overflow-hidden px-5 pb-36 pt-20 sm:px-8 sm:pb-40 md:px-10 md:pb-44 md:pt-24"
+      className="portfolio-scroll-panel relative flex min-h-[150vh] scroll-mt-8 justify-center overflow-hidden px-5 pb-36 pt-20 sm:px-8 sm:pb-40 md:px-10 md:pb-44 md:pt-24"
     >
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center">
         <FadeIn delay={0} y={40}>

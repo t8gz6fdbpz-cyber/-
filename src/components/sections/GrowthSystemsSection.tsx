@@ -434,7 +434,7 @@ export function GrowthSystemsSection() {
   return (
     <section
       id="growth-systems"
-      className="relative scroll-mt-8 overflow-clip bg-[#0C0C0C] px-5 pb-24 pt-20 sm:px-8 md:px-10 md:pb-36 md:pt-32"
+      className="portfolio-scroll-panel relative scroll-mt-8 overflow-clip bg-[#0C0C0C] px-5 pb-24 pt-20 sm:px-8 md:px-10 md:pb-36 md:pt-32"
     >
       <div className="mx-auto max-w-7xl">
         <FadeIn y={44}>
