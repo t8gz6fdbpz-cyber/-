@@ -142,9 +142,9 @@ img {
     "Arial Black",
     "Kanit",
     sans-serif;
-  font-size: clamp(25.35rem, 21.7vw, 28.85rem);
+  font-size: clamp(20.5rem, 19.8vw, 25rem);
   font-weight: 900;
-  line-height: 0.8;
+  line-height: 0.88;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   transform-origin: left top;
@@ -154,17 +154,17 @@ img {
   display: block;
   width: max-content;
   color: #aebcc7;
-  transform: scaleX(0.78);
+  transform: scaleX(0.68);
   transform-origin: left top;
 }
 
 .hero-cover-title span:first-child {
-  transform: scaleX(0.78);
+  transform: scaleX(0.68);
 }
 
 .hero-cover-title span:last-child {
-  margin-top: 0;
-  transform: scaleX(0.56);
+  margin-top: -0.03em;
+  transform: scaleX(1.12);
 }
 
 .hero-cover-meta {
@@ -254,7 +254,7 @@ img {
   }
 
   .hero-cover-title span:last-child {
-    transform: scaleX(0.37);
+    transform: scaleX(0.82);
   }
 
   .hero-cover-intro {
