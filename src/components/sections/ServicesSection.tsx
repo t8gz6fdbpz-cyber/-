@@ -18,9 +18,9 @@ const categoryMeta: Array<{
   english: string;
   accent: string;
 }> = [
-  { name: "AI 工具", english: "AI CREATION", accent: "#8fa8ff" },
-  { name: "内容制作", english: "CONTENT PRODUCTION", accent: "#c49cff" },
-  { name: "平台运营", english: "PLATFORM OPERATION", accent: "#78d9f2" },
+  { name: "AI 工具", english: "AI CREATION", accent: "#ffd175" },
+  { name: "内容制作", english: "CONTENT PRODUCTION", accent: "#c28a2e" },
+  { name: "平台运营", english: "PLATFORM OPERATION", accent: "#8a5a18" },
 ];
 
 const tools: Tool[] = [

@@ -127,7 +127,7 @@ function OverviewCard({
 
         <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_0.72fr] md:items-end">
           <div>
-            <p className="mb-5 text-lg uppercase tracking-[0.24em] text-cyan-200/65 md:text-xl">
+            <p className="mb-5 text-lg uppercase tracking-[0.24em] text-[rgba(255,209,117,0.65)] md:text-xl">
               {card.period}
             </p>
             <h4 className="text-[clamp(2.5rem,7vw,92px)] font-black uppercase leading-[0.9] tracking-tight text-white">
@@ -189,7 +189,7 @@ function IpMarqueeWall() {
 function TrainingTimeline() {
   return (
     <div className="relative mx-auto max-w-5xl">
-      <div className="absolute bottom-0 left-[21px] top-0 w-px bg-gradient-to-b from-cyan-300/60 via-violet-400/40 to-transparent md:left-1/2" />
+      <div className="absolute bottom-0 left-[21px] top-0 w-px bg-gradient-to-b from-[rgba(255,209,117,0.6)] via-[rgba(138,90,24,0.4)] to-transparent md:left-1/2" />
       {trainingSteps.map((step, index) => (
         <FadeIn
           key={step.number}
@@ -202,9 +202,9 @@ function TrainingTimeline() {
               : "md:ml-auto md:pl-14"
           }`}
         >
-          <span className="absolute left-[15px] top-8 h-3.5 w-3.5 rounded-full border-2 border-cyan-200 bg-[#0C0C0C] md:left-auto md:right-[-7px]">
+          <span className="absolute left-[15px] top-8 h-3.5 w-3.5 rounded-full border-2 border-[rgba(255,209,117,0.72)] bg-[#0C0C0C] md:left-auto md:right-[-7px]">
             {index % 2 !== 0 ? (
-              <span className="absolute hidden md:block md:left-[-1px] md:top-[-2px] md:h-3.5 md:w-3.5 md:rounded-full md:border-2 md:border-violet-300 md:bg-[#0C0C0C]" />
+              <span className="absolute hidden md:block md:left-[-1px] md:top-[-2px] md:h-3.5 md:w-3.5 md:rounded-full md:border-2 md:border-[rgba(138,90,24,0.7)] md:bg-[#0C0C0C]" />
             ) : null}
           </span>
           <article className="ml-12 w-full rounded-[28px] border border-white/10 bg-white/[0.035] p-6 md:ml-0 md:p-8">
@@ -242,7 +242,7 @@ function MetricsBento() {
           <FadeIn key={metric.label} delay={index * 0.07} className={sizeClass}>
             <article className="bento-metric-card group flex h-full flex-col justify-between overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.04] p-7">
               <div className="flex items-center justify-between">
-                <Icon className="h-6 w-6 text-cyan-200/70" />
+                <Icon className="h-6 w-6 text-[rgba(255,209,117,0.7)]" />
                 <span className="text-xs uppercase tracking-[0.2em] text-white/30">
                   Placeholder
                 </span>
@@ -313,7 +313,7 @@ function LiveReviewStory() {
                 </span>
               </div>
               <div className="max-w-3xl">
-                <p className="mb-5 text-sm uppercase tracking-[0.25em] text-violet-300/65">
+                <p className="mb-5 text-sm uppercase tracking-[0.25em] text-[rgba(255,209,117,0.65)]">
                   {index === liveReviewSteps.length - 1
                     ? "Outcome"
                     : "Iteration"}
@@ -418,7 +418,7 @@ function MirrorChapter() {
           {["内容是入口", "运营是放大器", "增长是结果"].map(
             (statement, index) => (
               <FadeIn key={statement} delay={index * 0.08} x={-30} y={0}>
-                <p className="py-8 text-[clamp(2.6rem,9vw,126px)] font-black leading-none text-white transition-colors duration-500 hover:text-cyan-200 md:py-12">
+                <p className="py-8 text-[clamp(2.6rem,9vw,126px)] font-black leading-none text-white transition-colors duration-500 hover:text-[var(--color-accent-warm)] md:py-12">
                   {statement}
                 </p>
               </FadeIn>

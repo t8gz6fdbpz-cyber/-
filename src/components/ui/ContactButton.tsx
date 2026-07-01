@@ -14,10 +14,9 @@ export function ContactButton({
       href={href}
       className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-white/95 px-8 py-3 text-xs font-medium uppercase tracking-widest text-white outline outline-2 outline-offset-[-3px] outline-white/95 focus-visible:outline-white sm:px-10 sm:py-3.5 sm:text-sm md:px-12 md:py-4 md:text-base"
       style={{
-        background:
-          "linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)",
+        background: "linear-gradient(123deg, #050505 0%, #17120c 58%, #8a5a18 100%)",
         boxShadow:
-          "0px 4px 4px rgba(181, 1, 167, 0.25), inset 4px 4px 12px #7721B1",
+          "0px 4px 4px rgba(7, 6, 4, 0.22), inset 4px 4px 12px rgba(255, 209, 117, 0.16)",
       }}
     >
       <span>{label}</span>

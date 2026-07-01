@@ -10,7 +10,7 @@ import { SkillsMatrixSection } from "./components/sections/ServicesSection";
 
 export default function App() {
   return (
-    <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[#0C0C0C]">
+    <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[var(--color-bg)]">
       <HeroSection />
       <MarqueeSection />
       <AboutSection />

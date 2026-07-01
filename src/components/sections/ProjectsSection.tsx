@@ -29,7 +29,7 @@ const particles = [
   { left: "92%", top: "43%", size: 2, delay: "-6.5s", duration: "9s" },
 ];
 
-const sceneAccents = ["128 211 255", "181 132 255", "255 183 104"];
+const sceneAccents = ["255 209 117", "138 90 24", "7 6 4"];
 
 function ProjectCard({
   index,
@@ -75,7 +75,7 @@ function ProjectCard({
   const midgroundY = useTransform(rotateX, [-4, 4], [-5, 5]);
   const foregroundX = useTransform(rotateY, [-6, 6], [-13, 13]);
   const foregroundY = useTransform(rotateX, [-4, 4], [-9, 9]);
-  const specularHighlight = useMotionTemplate`radial-gradient(circle at ${lightX}% ${lightY}%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 16%, rgba(255,255,255,0) 44%)`;
+  const specularHighlight = useMotionTemplate`radial-gradient(circle at ${lightX}% ${lightY}%, rgba(255,209,117,0.28) 0%, rgba(255,209,117,0.1) 16%, rgba(255,209,117,0) 44%)`;
   const stackStyle = {
     "--stack-offset": `${index * 28}px`,
     "--scene-accent": sceneAccents[index % sceneAccents.length],
