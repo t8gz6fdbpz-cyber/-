@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import {
   useEffect,
+  memo,
   useRef,
   useState,
   type RefObject,
@@ -35,15 +36,16 @@ function MarqueeRow({
   return (
     <motion.div
       ref={rowRef}
-      className="flex gap-8"
+      className="marquee-row-track flex gap-8"
       data-marquee-row={direction}
+      transformTemplate={({ x }) => `translate3d(${x ?? 0}, 0, 0)`}
       style={{
         x,
         willChange: "transform",
       }}
     >
       {accounts.map((account, index) => (
-        <MarqueeImage
+        <MemoizedMarqueeImage
           key={`${account.image}-${index}`}
           account={account}
         />
@@ -71,32 +73,35 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
       return;
     }
 
+    let visibilityFrame = 0;
     const loadObserver = new IntersectionObserver(
       ([entry]) => {
-        setShouldLoad(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          loadObserver.disconnect();
+        }
       },
-      { rootMargin: "40px 80px" },
+      { rootMargin: "900px 80px" },
     );
     const thresholds = Array.from({ length: 21 }, (_, index) => index / 20);
     const visibilityObserver = new IntersectionObserver(
       ([entry]) => {
         const visibility = Math.min(entry.intersectionRatio / 0.72, 1);
-        node.style.setProperty(
-          "--card-opacity",
-          `${0.42 + visibility * 0.58}`,
-        );
-        node.style.setProperty(
-          "--card-scale",
-          `${0.88 + visibility * 0.12}`,
-        );
-        node.style.setProperty(
-          "--card-blur",
-          entry.isIntersecting ? `${(1 - visibility) * 5}px` : "0px",
-        );
-        node.style.setProperty(
-          "--card-depth",
-          `${-32 + visibility * 32}px`,
-        );
+        cancelAnimationFrame(visibilityFrame);
+        visibilityFrame = requestAnimationFrame(() => {
+          node.style.setProperty(
+            "--card-opacity",
+            `${0.42 + visibility * 0.58}`,
+          );
+          node.style.setProperty(
+            "--card-scale",
+            `${0.88 + visibility * 0.12}`,
+          );
+          node.style.setProperty(
+            "--card-depth",
+            `${-32 + visibility * 32}px`,
+          );
+        });
       },
       {
         threshold: thresholds,
@@ -107,6 +112,7 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
     visibilityObserver.observe(node);
 
     return () => {
+      cancelAnimationFrame(visibilityFrame);
       loadObserver.disconnect();
       visibilityObserver.disconnect();
     };
@@ -158,6 +164,8 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
           <img
             src={account.image}
             alt={`Douyin account card, ${account.followers} followers, ${account.likes} likes`}
+            width={432}
+            height={282}
             loading="lazy"
             decoding="async"
             draggable={false}
@@ -168,6 +176,8 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
     </div>
   );
 }
+
+const MemoizedMarqueeImage = memo(MarqueeImage);
 
 export function MarqueeSection() {
   const sectionRef = useRef<HTMLElement | null>(null);

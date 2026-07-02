@@ -664,18 +664,34 @@ img {
 .marquee-card-shell {
   --card-opacity: 0.58;
   --card-scale: 0.94;
-  --card-blur: 3px;
   --card-depth: -24px;
+  height: 282px;
+  width: 432px;
   opacity: var(--card-opacity);
   overflow: visible;
   perspective: 1000px;
-  filter: blur(var(--card-blur));
   transform: scale(var(--card-scale)) translateZ(var(--card-depth));
+  backface-visibility: hidden;
   transform-style: preserve-3d;
+  will-change: opacity, transform;
   transition:
     opacity 420ms cubic-bezier(0.25, 0.1, 0.25, 1),
-    filter 420ms cubic-bezier(0.25, 0.1, 0.25, 1),
     transform 520ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+[data-marquee-sticky] {
+  overflow: hidden;
+}
+
+[data-marquee-canvas],
+.marquee-row-track {
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.marquee-row-track {
+  contain: layout style;
 }
 
 .marquee-card {
@@ -696,7 +712,9 @@ img {
     inset 0 -14px 28px rgba(0, 0, 0, 0.16);
   transform: translateZ(18px) rotateX(var(--tilt-x))
     rotateY(var(--tilt-y)) scale(var(--hover-scale));
+  backface-visibility: hidden;
   transform-style: preserve-3d;
+  will-change: transform;
   transition:
     transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 360ms ease;
@@ -859,9 +877,13 @@ img {
 }
 
 .marquee-card-image {
+  display: block;
+  height: 100%;
+  width: 100%;
   border-radius: inherit;
   filter: brightness(1);
   transform: scale(1.002);
+  backface-visibility: hidden;
   transition:
     filter 360ms ease,
     transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -2308,4 +2330,35 @@ img {
     0 16px 36px rgba(111, 73, 20, 0.15),
     0 3px 12px rgba(255, 221, 150, 0.14),
     inset 0 1px 0 rgba(255, 252, 238, 0.34) !important;
+}
+
+/* Background and layer continuity pass: sections share one warm canvas. */
+main {
+  isolation: isolate;
+  background: var(--color-bg) !important;
+}
+
+main > section {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.work-experience-section::before {
+  display: none !important;
+}
+
+.toolbox-section,
+[aria-label="08 Final Statement"] {
+  box-shadow: none !important;
+}
+
+.contact-glow,
+[aria-label="08 Final Statement"] > .pointer-events-none.absolute,
+[aria-label="08 Final Statement"] > .absolute.inset-0 {
+  display: none !important;
+}
+
+.hero-cover-grid,
+.hero-cover-left {
+  background: var(--color-bg) !important;
 }
