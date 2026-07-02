@@ -11,11 +11,11 @@ export function PhilosophySection() {
   return (
     <section
       id="philosophy"
-      className="portfolio-scroll-panel bg-[#0C0C0C] px-5 py-24 sm:px-8 md:px-10 md:py-40"
+      className="bg-[var(--color-bg)] px-5 py-24 sm:px-8 md:px-10 md:py-40"
     >
       <div className="mx-auto max-w-7xl">
         <FadeIn>
-          <p className="mb-5 text-xs uppercase tracking-[0.32em] text-white/40">
+          <p className="mb-5 text-xs uppercase tracking-[0.32em] text-[var(--color-text-muted)]">
             Philosophy
           </p>
           <h2 className="hero-heading max-w-5xl text-[clamp(3.5rem,11vw,150px)] font-black uppercase leading-[0.86] tracking-tight">
@@ -23,17 +23,17 @@ export function PhilosophySection() {
           </h2>
         </FadeIn>
 
-        <div className="mt-20 border-t border-white/10">
+        <div className="mt-20">
           {principles.map(([number, title, copy], index) => (
             <FadeIn key={number} delay={index * 0.08}>
-              <article className="group grid gap-5 border-b border-white/10 py-8 md:grid-cols-[100px_1fr_1fr] md:items-center md:py-11">
-                <span className="text-sm tracking-[0.25em] text-white/30">
+              <article className="group grid gap-5 py-8 md:grid-cols-[100px_1fr_1fr] md:items-center md:py-11">
+                <span className="text-sm tracking-[0.25em] text-[var(--color-on-dark-soft)]">
                   {number}
                 </span>
-                <h3 className="text-2xl font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-500 group-hover:translate-x-3 md:text-4xl">
+                <h3 className="text-2xl font-semibold uppercase tracking-[0.08em] text-[var(--color-on-dark)] transition-transform duration-500 group-hover:translate-x-3 md:text-4xl">
                   {title}
                 </h3>
-                <p className="max-w-lg font-light leading-relaxed text-white/45">
+                <p className="max-w-lg font-light leading-relaxed text-[var(--color-on-dark-muted)]">
                   {copy}
                 </p>
               </article>

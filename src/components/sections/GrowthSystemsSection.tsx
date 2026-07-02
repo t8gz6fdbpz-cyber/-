@@ -99,7 +99,7 @@ function OverviewCard({
   return (
     <div ref={ref} className="relative h-[85vh]">
       <motion.article
-        className="growth-overview-card sticky top-24 flex min-h-[64vh] flex-col justify-between overflow-hidden rounded-[36px] border border-white/[0.14] bg-[#102a40] p-7 md:top-32 md:min-h-[68vh] md:rounded-[56px] md:p-12"
+        className="growth-overview-card sticky top-24 flex min-h-[64vh] flex-col justify-between overflow-hidden rounded-[36px] bg-[#102a40] p-7 md:top-32 md:min-h-[68vh] md:rounded-[56px] md:p-12"
         style={{
           scale: shouldReduceMotion ? 1 : scale,
           rotateX: shouldReduceMotion ? 0 : rotateX,
@@ -179,7 +179,7 @@ function IpMarqueeWall() {
   );
 
   return (
-    <div className="rounded-[36px] border border-white/10 bg-white/[0.025] py-7 md:rounded-[48px] md:py-10">
+    <div className="ip-marquee-wall rounded-[36px] bg-white/[0.025] py-7 md:rounded-[48px] md:py-10">
       {renderRow(repeatedItems, "forward")}
       {renderRow(reversedItems, "reverse")}
     </div>
@@ -202,12 +202,12 @@ function TrainingTimeline() {
               : "md:ml-auto md:pl-14"
           }`}
         >
-          <span className="absolute left-[15px] top-8 h-3.5 w-3.5 rounded-full border-2 border-[rgba(255,209,117,0.72)] bg-[#0C0C0C] md:left-auto md:right-[-7px]">
+          <span className="absolute left-[15px] top-8 h-3.5 w-3.5 rounded-full bg-[#0C0C0C] shadow-[0_0_0_5px_rgba(255,209,117,0.08),0_10px_24px_rgba(7,6,4,0.2)] md:left-auto md:right-[-7px]">
             {index % 2 !== 0 ? (
-              <span className="absolute hidden md:block md:left-[-1px] md:top-[-2px] md:h-3.5 md:w-3.5 md:rounded-full md:border-2 md:border-[rgba(138,90,24,0.7)] md:bg-[#0C0C0C]" />
+              <span className="absolute hidden md:block md:left-[-1px] md:top-[-2px] md:h-3.5 md:w-3.5 md:rounded-full md:bg-[#0C0C0C] md:shadow-[0_0_0_5px_rgba(255,209,117,0.08),0_10px_24px_rgba(7,6,4,0.2)]" />
             ) : null}
           </span>
-          <article className="ml-12 w-full rounded-[28px] border border-white/10 bg-white/[0.035] p-6 md:ml-0 md:p-8">
+          <article className="training-step-card ml-12 w-full rounded-[28px] bg-white/[0.035] p-6 md:ml-0 md:p-8">
             <span className="text-xs tracking-[0.28em] text-[#D7E2EA]/35">
               STEP {step.number}
             </span>
@@ -240,7 +240,7 @@ function MetricsBento() {
 
         return (
           <FadeIn key={metric.label} delay={index * 0.07} className={sizeClass}>
-            <article className="bento-metric-card group flex h-full flex-col justify-between overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.04] p-7">
+            <article className="bento-metric-card group flex h-full flex-col justify-between overflow-hidden rounded-[30px] bg-white/[0.04] p-7">
               <div className="flex items-center justify-between">
                 <Icon className="h-6 w-6 text-[rgba(255,209,117,0.7)]" />
                 <span className="text-xs uppercase tracking-[0.2em] text-white/30">
@@ -302,7 +302,7 @@ function LiveReviewStory() {
           {liveReviewSteps.map((step, index) => (
             <article
               key={step.number}
-              className="live-story-card relative flex h-[62vh] w-[76vw] shrink-0 flex-col justify-between overflow-hidden rounded-[36px] border border-white/10 bg-[#111827] p-7 md:w-[70vw] md:rounded-[52px] md:p-12"
+              className="live-story-card relative flex h-[62vh] w-[76vw] shrink-0 flex-col justify-between overflow-hidden rounded-[36px] bg-[#111827] p-7 md:w-[70vw] md:rounded-[52px] md:p-12"
             >
               <div className="flex items-start justify-between">
                 <span className="text-xs uppercase tracking-[0.28em] text-white/45">
@@ -344,7 +344,7 @@ function MirrorChapter() {
       />
 
       <FadeIn className="pt-8 md:pt-14">
-        <article className="grid overflow-hidden rounded-[38px] border border-white/10 bg-[#D7E2EA] text-[#0C0C0C] md:grid-cols-[0.9fr_1.1fr] md:rounded-[56px]">
+        <article className="mirror-overview-card grid overflow-hidden rounded-[38px] bg-[#D7E2EA] text-[#0C0C0C] md:grid-cols-[0.9fr_1.1fr] md:rounded-[56px]">
           <div className="flex min-h-[420px] flex-col justify-between p-8 md:p-12">
             <div className="flex items-center justify-between">
               <span className="text-xs uppercase tracking-[0.28em] opacity-50">
@@ -382,7 +382,7 @@ function MirrorChapter() {
           {mirrorCases.map((item, index) => (
             <motion.article
               key={item.number}
-              className="group relative h-[470px] w-[82vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[34px] border border-white/10 md:w-[52vw]"
+              className="mirror-case-card group relative h-[470px] w-[82vw] max-w-[620px] shrink-0 snap-center overflow-hidden rounded-[34px] md:w-[52vw]"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -414,7 +414,7 @@ function MirrorChapter() {
 
       <div className="py-28 md:py-40">
         <SectionIntro eyebrow="Key Learnings" title="What Stayed With Me" />
-        <div className="divide-y divide-white/10 border-y border-white/10">
+        <div className="learning-strip">
           {["内容是入口", "运营是放大器", "增长是结果"].map(
             (statement, index) => (
               <FadeIn key={statement} delay={index * 0.08} x={-30} y={0}>
@@ -434,7 +434,7 @@ export function GrowthSystemsSection() {
   return (
     <section
       id="growth-systems"
-      className="portfolio-scroll-panel relative scroll-mt-8 overflow-clip bg-[#0C0C0C] px-5 pb-24 pt-20 sm:px-8 md:px-10 md:pb-36 md:pt-32"
+      className="work-experience-section relative scroll-mt-8 overflow-visible bg-[#0C0C0C] px-5 pb-24 pt-20 sm:px-8 md:px-10 md:pb-36 md:pt-32"
     >
       <div className="mx-auto max-w-7xl">
         <FadeIn y={44}>

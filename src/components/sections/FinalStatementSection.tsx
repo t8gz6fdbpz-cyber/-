@@ -6,9 +6,9 @@ export function FinalStatementSection() {
   return (
     <section
       aria-label="08 Final Statement"
-      className="portfolio-scroll-panel relative z-20 -mt-[100px] flex min-h-screen items-center justify-center overflow-hidden rounded-t-[64px] bg-[#0C0C0C] px-5 py-20 text-center shadow-[0_-28px_80px_rgba(0,0,0,0.34)] sm:rounded-t-[72px] md:rounded-t-[80px]"
+      className="relative z-20 -mt-[100px] flex min-h-screen items-center justify-center overflow-hidden rounded-t-[64px] bg-[var(--color-bg)] px-5 py-20 text-center shadow-[0_-18px_52px_rgba(7,6,4,0.12)] sm:rounded-t-[72px] md:rounded-t-[80px]"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-border)] to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,209,117,0.12),transparent_55%)]" />
       <motion.div
         className="relative z-10"
@@ -20,7 +20,7 @@ export function FinalStatementSection() {
           ease: [0.2, 0.8, 0.2, 1],
         }}
       >
-        <p className="mb-8 text-xs uppercase tracking-[0.32em] text-white/35">
+        <p className="mb-8 text-xs uppercase tracking-[0.32em] text-[var(--color-text-muted)]">
           08 / Keep Becoming
         </p>
         <h2 className="hero-heading text-[clamp(3.5rem,11vw,150px)] font-black uppercase leading-[0.88] tracking-tight">

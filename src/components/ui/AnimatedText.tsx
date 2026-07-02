@@ -54,7 +54,7 @@ export function AnimatedText({ text }: AnimatedTextProps) {
     <p
       ref={ref}
       aria-label={text}
-      className="max-w-[760px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-[1.9] text-[#D7E2EA]"
+      className="animated-text-copy max-w-[760px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-[1.9]"
     >
       {shouldReduceMotion
         ? text

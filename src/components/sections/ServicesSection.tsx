@@ -245,12 +245,12 @@ export function SkillsMatrixSection() {
   return (
     <section
       id="skills"
-      className="portfolio-scroll-panel toolbox-section scroll-mt-8 bg-[#090a0d] px-5 py-20 text-white sm:px-8 md:px-10 md:py-28"
+      className="toolbox-section scroll-mt-8 bg-[var(--color-bg)] px-5 py-20 text-[var(--color-text)] sm:px-8 md:px-10 md:py-28"
     >
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-3 text-xs uppercase tracking-[0.32em] text-white/50">
+            <p className="mb-3 text-xs uppercase tracking-[0.32em] text-[var(--color-text-muted)]">
               My Skills
             </p>
             <h2 className="text-[clamp(3.5rem,10vw,9rem)] font-black uppercase leading-[0.82] tracking-[-0.05em]">
@@ -258,10 +258,10 @@ export function SkillsMatrixSection() {
             </h2>
           </div>
           <div className="max-w-md md:text-right">
-            <h3 className="text-2xl font-semibold text-white md:text-3xl">
+            <h3 className="text-2xl font-semibold text-[var(--color-text)] md:text-3xl">
               我的工具栈
             </h3>
-            <p className="mt-2 text-sm tracking-[0.08em] text-white/65">
+            <p className="mt-2 text-sm tracking-[0.08em] text-[var(--color-text-muted)]">
               AI创作 / 内容制作 / 平台运营
             </p>
           </div>

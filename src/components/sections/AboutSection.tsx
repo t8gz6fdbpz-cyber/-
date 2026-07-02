@@ -20,12 +20,12 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="portfolio-scroll-panel relative flex min-h-[150vh] scroll-mt-8 justify-center overflow-hidden px-5 pb-36 pt-20 sm:px-8 sm:pb-40 md:px-10 md:pb-44 md:pt-24"
+      className="relative flex min-h-[150vh] scroll-mt-8 justify-center overflow-hidden px-5 pb-36 pt-20 sm:px-8 sm:pb-40 md:px-10 md:pb-44 md:pt-24"
     >
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center">
         <FadeIn delay={0} y={40}>
           <div>
-            <p className="mb-5 text-center text-xs uppercase tracking-[0.32em] text-[#D7E2EA]/40">
+            <p className="mb-5 text-center text-xs uppercase tracking-[0.32em] text-[var(--color-text-soft)]">
               03 / Self Introduction
             </p>
             <h2 className="hero-heading text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight">
@@ -49,7 +49,7 @@ export function AboutSection() {
             {aboutHighlights.map((highlight) => (
               <span
                 key={highlight}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[10px] font-medium uppercase tracking-[0.24em] text-[#D7E2EA]/60 sm:px-5 sm:text-xs"
+                className="about-highlight-pill rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] sm:px-5 sm:text-xs"
               >
                 {highlight}
               </span>

@@ -6,24 +6,32 @@
 
 :root {
   --color-bg: #ffd175;
-  --color-bg-soft: #f6c66b;
-  --color-bg-muted: #e2ad52;
+  --color-bg-soft: #f8c666;
+  --color-bg-muted: #e5ae4e;
   --color-text: #070604;
   --color-text-muted: rgba(7, 6, 4, 0.64);
   --color-text-soft: rgba(7, 6, 4, 0.42);
-  --color-card: #090807;
-  --color-card-soft: #17120c;
+  --color-card: #070604;
+  --color-card-soft: #14100a;
+  --color-card-elevated: #1d160e;
+  --color-panel: #f0bd5b;
+  --color-panel-soft: rgba(7, 6, 4, 0.055);
   --color-on-dark: #ffd175;
   --color-on-dark-muted: rgba(255, 209, 117, 0.72);
   --color-on-dark-soft: rgba(255, 209, 117, 0.42);
   --color-accent: #050505;
   --color-accent-warm: #8a5a18;
-  --color-border: rgba(7, 6, 4, 0.16);
-  --color-border-strong: rgba(7, 6, 4, 0.28);
-  --color-border-on-dark: rgba(255, 209, 117, 0.22);
+  --color-border: rgba(7, 6, 4, 0.075);
+  --color-border-strong: rgba(7, 6, 4, 0.12);
+  --color-border-on-dark: rgba(255, 209, 117, 0.075);
+  --color-border-on-dark-strong: rgba(255, 209, 117, 0.14);
   --color-hover: rgba(7, 6, 4, 0.08);
   --color-hover-on-dark: rgba(255, 209, 117, 0.12);
   --color-offwhite: #f8ead0;
+  --shadow-surface:
+    0 34px 90px rgba(7, 6, 4, 0.18),
+    0 12px 30px rgba(7, 6, 4, 0.11),
+    inset 0 1px 0 rgba(255, 209, 117, 0.055);
 }
 
 *,
@@ -72,19 +80,17 @@ img {
 }
 
 .hero-heading {
-  background: linear-gradient(180deg, #5c3d14 0%, #080604 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-text);
+  -webkit-text-fill-color: currentColor;
+  text-wrap: balance;
 }
 
 [class*="bg-[#111827]"],
 [class*="bg-[#102a40]"],
 [class*="bg-[#0C0C0C]"],
 [class*="bg-[#090a0d]"] {
-  background-color: var(--color-card) !important;
-  color: var(--color-on-dark) !important;
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
 }
 
 [class*="bg-[#D7E2EA]"] {
@@ -125,7 +131,7 @@ img {
 .growth-overview-card [class*="text-white"],
 .live-story-card [class*="text-white"],
 .toolbox-section [class*="text-white"] {
-  color: var(--color-on-dark) !important;
+  color: var(--color-text) !important;
 }
 
 [class*="border-white"],
@@ -139,10 +145,13 @@ img {
 [class*="bg-[#0C0C0C]"] [class*="border-white"],
 [class*="bg-[#090a0d]"] [class*="border-white"],
 .project-card-surface [class*="border-white"],
+.project-card-surface [class*="border-[#D7E2EA]"],
 .growth-overview-card [class*="border-white"],
+.growth-overview-card [class*="border-[#D7E2EA]"],
 .live-story-card[class*="border-white"],
+.live-story-card[class*="border-[#D7E2EA]"],
 .toolbox-section [class*="border-white"] {
-  border-color: var(--color-border-on-dark) !important;
+  border-color: var(--color-border) !important;
 }
 
 [class*="bg-white/"],
@@ -158,7 +167,7 @@ img {
 [class*="bg-[#0C0C0C]"] [class*="bg-white["],
 [class*="bg-[#090a0d]"] [class*="bg-white/"],
 [class*="bg-[#090a0d]"] [class*="bg-white["] {
-  background-color: rgba(255, 209, 117, 0.08) !important;
+  background-color: rgba(7, 6, 4, 0.05) !important;
 }
 
 [class*="bg-fuchsia"] {
@@ -190,9 +199,8 @@ img {
 [class*="bg-[#102a40]"] .hero-heading,
 [class*="bg-[#0C0C0C]"] .hero-heading,
 [class*="bg-[#090a0d]"] .hero-heading {
-  background: linear-gradient(180deg, #ffd175 0%, rgba(255, 209, 117, 0.64) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: var(--color-text);
+  -webkit-text-fill-color: currentColor;
 }
 
 .hero-cover-grid {
@@ -694,6 +702,132 @@ img {
     box-shadow 360ms ease;
 }
 
+.marquee-card,
+.system-marquee-card,
+.tool-planet-stage,
+.tool-info-panel {
+  color: var(--color-on-dark) !important;
+  background-color: var(--color-card) !important;
+  border-color: var(--color-border-on-dark) !important;
+}
+
+.premium-dark-surface,
+.project-card-surface,
+.growth-overview-card,
+.live-story-card,
+.bento-metric-card,
+.training-step-card,
+.mirror-overview-card,
+.mirror-case-card,
+.learning-strip {
+  color: var(--color-on-dark) !important;
+  border-color: var(--color-border-on-dark) !important;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(255, 209, 117, 0.1), transparent 30%),
+    linear-gradient(145deg, rgba(255, 209, 117, 0.08), rgba(255, 209, 117, 0.015) 42%),
+    var(--color-card) !important;
+  box-shadow: var(--shadow-surface) !important;
+}
+
+.marquee-card [class*="text-white"],
+.marquee-card [class*="text-[#D7E2EA]"],
+.system-marquee-card [class*="text-white"],
+.system-marquee-card [class*="text-[#D7E2EA]"],
+.tool-planet-stage [class*="text-white"],
+.tool-planet-stage [class*="text-[#D7E2EA]"],
+.tool-info-panel [class*="text-white"],
+.tool-info-panel [class*="text-[#D7E2EA]"],
+.premium-dark-surface [class*="text-white"],
+.premium-dark-surface [class*="text-[#D7E2EA]"],
+.project-card-surface [class*="text-white"],
+.project-card-surface [class*="text-[#D7E2EA]"],
+.growth-overview-card [class*="text-white"],
+.growth-overview-card [class*="text-[#D7E2EA]"],
+.live-story-card [class*="text-white"],
+.live-story-card [class*="text-[#D7E2EA]"],
+.bento-metric-card [class*="text-white"],
+.bento-metric-card [class*="text-[#D7E2EA]"],
+.training-step-card [class*="text-white"],
+.training-step-card [class*="text-[#D7E2EA]"],
+.mirror-overview-card [class*="text-white"],
+.mirror-overview-card [class*="text-[#D7E2EA]"],
+.mirror-case-card [class*="text-white"],
+.mirror-case-card [class*="text-[#D7E2EA]"],
+.learning-strip [class*="text-white"],
+.learning-strip [class*="text-[#D7E2EA]"] {
+  color: var(--color-on-dark) !important;
+}
+
+:is(
+    .premium-dark-surface,
+    .project-card-surface,
+    .growth-overview-card,
+    .live-story-card,
+    .bento-metric-card,
+    .training-step-card,
+    .mirror-overview-card,
+    .mirror-case-card,
+    .learning-strip,
+    .tool-planet-stage,
+    .tool-info-panel,
+    .system-marquee-card
+  )
+  :is([class*="/25"], [class*="/30"], [class*="/35"], [class*="/40"]) {
+  color: var(--color-on-dark-soft) !important;
+}
+
+:is(
+    .premium-dark-surface,
+    .project-card-surface,
+    .growth-overview-card,
+    .live-story-card,
+    .bento-metric-card,
+    .training-step-card,
+    .mirror-overview-card,
+    .mirror-case-card,
+    .learning-strip,
+    .tool-planet-stage,
+    .tool-info-panel,
+    .system-marquee-card
+  )
+  :is([class*="/45"], [class*="/50"], [class*="/55"], [class*="/58"], [class*="/60"], [class*="/65"], [class*="/70"]) {
+  color: var(--color-on-dark-muted) !important;
+}
+
+.tool-planet-stage [class*="border-white"],
+.tool-info-panel [class*="border-white"],
+.premium-dark-surface [class*="border-white"],
+.project-card-surface [class*="border-white"],
+.growth-overview-card [class*="border-white"],
+.live-story-card [class*="border-white"],
+.bento-metric-card [class*="border-white"],
+.training-step-card [class*="border-white"],
+.mirror-overview-card [class*="border-white"],
+.mirror-case-card [class*="border-white"],
+.learning-strip [class*="border-white"] {
+  border-color: var(--color-border-on-dark) !important;
+}
+
+.bento-metric-card,
+.tool-category-item,
+.tool-mobile-grid button {
+  color: var(--color-on-dark);
+  background:
+    linear-gradient(145deg, rgba(255, 209, 117, 0.08), rgba(255, 209, 117, 0.02)),
+    var(--color-card) !important;
+  border-color: var(--color-border-on-dark) !important;
+  box-shadow: 0 18px 42px rgba(7, 6, 4, 0.16);
+}
+
+.bento-metric-card:hover,
+.tool-mobile-grid button[data-active="true"] {
+  color: var(--color-on-dark);
+  background:
+    linear-gradient(145deg, rgba(255, 209, 117, 0.13), rgba(255, 209, 117, 0.04)),
+    var(--color-card-soft) !important;
+  border-color: var(--color-border-on-dark-strong) !important;
+}
+
 .marquee-card::before,
 .marquee-card::after {
   position: absolute;
@@ -747,6 +881,31 @@ img {
 .marquee-card[data-hovered="true"] .marquee-card-image {
   filter: brightness(1.08);
   transform: scale(1.02);
+}
+
+.work-experience-section {
+  isolation: isolate;
+  background: var(--color-bg) !important;
+}
+
+.work-experience-section::before {
+  position: absolute;
+  z-index: 0;
+  top: -80px;
+  right: 0;
+  left: 0;
+  height: 120px;
+  border-top-left-radius: 48px;
+  border-top-right-radius: 48px;
+  background: var(--color-bg);
+  box-shadow: 0 -12px 40px rgba(7, 6, 4, 0.08);
+  content: "";
+  pointer-events: none;
+}
+
+.work-experience-section > * {
+  position: relative;
+  z-index: 1;
 }
 
 .project-card-stage {
@@ -1151,12 +1310,142 @@ img {
   z-index: 1;
 }
 
+.project-card-surface,
+.growth-overview-card,
+.live-story-card {
+  color: var(--color-on-dark) !important;
+  border-color: var(--color-border-on-dark) !important;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(255, 209, 117, 0.1), transparent 30%),
+    linear-gradient(145deg, rgba(255, 209, 117, 0.08), rgba(255, 209, 117, 0.015) 42%),
+    var(--color-card) !important;
+  box-shadow: var(--shadow-surface) !important;
+}
+
+.project-card-surface [class*="text-white"],
+.project-card-surface [class*="text-[#D7E2EA]"],
+.growth-overview-card [class*="text-white"],
+.growth-overview-card [class*="text-[#D7E2EA]"],
+.live-story-card [class*="text-white"],
+.live-story-card [class*="text-[#D7E2EA]"] {
+  color: var(--color-on-dark) !important;
+}
+
+.project-card-surface [class*="border-white"],
+.project-card-surface [class*="border-[#D7E2EA]"],
+.growth-overview-card [class*="border-white"],
+.growth-overview-card [class*="border-[#D7E2EA]"],
+.live-story-card [class*="border-white"],
+.live-story-card [class*="border-[#D7E2EA]"] {
+  border-color: var(--color-border-on-dark) !important;
+}
+
+.project-card-surface::before,
+.growth-overview-card::before,
+.live-story-card::before {
+  opacity: 0.78;
+  mix-blend-mode: screen;
+}
+
 .hide-scrollbar {
   scrollbar-width: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.section-surface-panel,
+.ip-marquee-wall,
+#philosophy .mt-20,
+#contact > .relative.z-10 {
+  border: 1px solid var(--color-border-on-dark);
+  border-radius: clamp(32px, 4.2vw, 60px);
+  color: var(--color-on-dark);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255, 209, 117, 0.1), transparent 30%),
+    linear-gradient(145deg, rgba(255, 209, 117, 0.08), rgba(255, 209, 117, 0.02) 44%),
+    var(--color-card);
+  box-shadow: var(--shadow-surface);
+}
+
+.section-surface-panel [class*="text-white"],
+.section-surface-panel [class*="text-[#D7E2EA]"],
+.ip-marquee-wall [class*="text-white"],
+.ip-marquee-wall [class*="text-[#D7E2EA]"],
+#philosophy .mt-20 [class*="text-white"],
+#philosophy .mt-20 [class*="text-[#D7E2EA]"],
+#contact > .relative.z-10 [class*="text-white"],
+#contact > .relative.z-10 [class*="text-[#D7E2EA]"] {
+  color: var(--color-on-dark) !important;
+}
+
+.section-surface-panel [class*="border-white"],
+.section-surface-panel [class*="divide-white"] > :not([hidden]) ~ :not([hidden]),
+.ip-marquee-wall [class*="border-white"],
+.ip-marquee-wall [class*="divide-white"] > :not([hidden]) ~ :not([hidden]),
+#philosophy .mt-20 [class*="border-white"],
+#contact > .relative.z-10 [class*="border-white"],
+#contact > .relative.z-10 [class*="divide-white"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--color-border-on-dark) !important;
+}
+
+#philosophy .mt-20 {
+  padding: clamp(18px, 2.8vw, 36px);
+}
+
+#philosophy article {
+  border-color: var(--color-border-on-dark) !important;
+}
+
+#philosophy article p,
+#contact > .relative.z-10 p {
+  color: var(--color-on-dark-muted) !important;
+}
+
+#philosophy article span {
+  color: var(--color-on-dark-soft) !important;
+}
+
+#contact > .relative.z-10 {
+  padding: clamp(44px, 7vw, 96px) clamp(24px, 5vw, 72px);
+}
+
+#contact .hero-heading {
+  color: var(--color-on-dark) !important;
+}
+
+#philosophy article h3,
+#contact .contact-row p:last-child {
+  color: var(--color-on-dark) !important;
+}
+
+#contact .contact-row p:first-child {
+  color: var(--color-on-dark-soft) !important;
+}
+
+#contact .contact-glow {
+  background: rgba(7, 6, 4, 0.18) !important;
+}
+
+.contact-row {
+  border-color: var(--color-border-on-dark) !important;
+}
+
+.contact-row:hover {
+  background: rgba(255, 209, 117, 0.055);
+}
+
+.project-card-surface,
+.growth-overview-card,
+.live-story-card,
+.bento-metric-card,
+.training-step-card,
+.mirror-overview-card,
+.mirror-case-card,
+.learning-strip,
+.ip-marquee-wall {
+  border: 1px solid var(--color-border-on-dark) !important;
 }
 
 @keyframes system-marquee-forward {
@@ -1198,7 +1487,7 @@ img {
 .toolbox-section {
   isolation: isolate;
   border-radius: 40px 40px 0 0;
-  box-shadow: 0 -40px 100px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 -18px 52px rgba(7, 6, 4, 0.12);
 }
 
 .tool-desktop-layout {
@@ -1230,7 +1519,7 @@ img {
 
 .tool-category-index > p {
   margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.32);
+  color: var(--color-text-soft);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.28em;
@@ -1240,10 +1529,10 @@ img {
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 18px;
   padding: 14px;
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--color-panel-soft);
 }
 
 .tool-category-item > span {
@@ -1260,14 +1549,14 @@ img {
 }
 
 .tool-category-index strong {
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--color-on-dark);
   font-size: 14px;
   font-weight: 600;
 }
 
 .tool-category-index small {
   margin-top: 3px;
-  color: rgba(255, 255, 255, 0.34);
+  color: var(--color-on-dark-soft);
   font-size: 8px;
   letter-spacing: 0.12em;
 }
@@ -1423,7 +1712,7 @@ img {
 
 .tool-info-panel h3 {
   margin-top: 10px;
-  color: white;
+  color: var(--color-on-dark);
   font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 700;
   line-height: 1;
@@ -1448,7 +1737,7 @@ img {
 }
 
 .tool-info-description {
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--color-on-dark-muted);
   font-size: 15px;
   font-weight: 300;
   line-height: 1.8;
@@ -1456,7 +1745,7 @@ img {
 
 .tool-info-panel small {
   margin-top: 28px;
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--color-on-dark-soft);
   font-size: 10px;
   letter-spacing: 0.08em;
 }
@@ -1625,16 +1914,16 @@ img {
     gap: 10px;
   }
 
-  .tool-mobile-grid button {
+.tool-mobile-grid button {
     display: grid;
     grid-template-columns: 48px 1fr;
     column-gap: 12px;
     align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    border: 1px solid var(--color-border);
     border-radius: 20px;
     padding: 13px;
-    color: white;
-    background: rgba(255, 255, 255, 0.035);
+    color: var(--color-text);
+    background: var(--color-panel-soft);
     text-align: left;
     transition:
       border-color 240ms ease,
@@ -1643,8 +1932,9 @@ img {
   }
 
   .tool-mobile-grid button[data-active="true"] {
-    border-color: rgba(255, 209, 117, 0.38);
-    background: rgba(138, 90, 24, 0.16);
+    border-color: var(--color-card);
+    color: var(--color-on-dark);
+    background: var(--color-card);
     transform: translateY(-2px);
   }
 
@@ -1659,7 +1949,7 @@ img {
 
   .tool-mobile-grid span {
     overflow: hidden;
-    color: rgba(255, 255, 255, 0.9);
+    color: inherit;
     font-size: 13px;
     font-weight: 600;
     text-overflow: ellipsis;
@@ -1668,7 +1958,7 @@ img {
 
   .tool-mobile-grid small {
     overflow: hidden;
-    color: rgba(255, 255, 255, 0.42);
+    color: var(--color-text-soft);
     font-size: 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1700,4 +1990,322 @@ img {
     width: 290px;
     border-radius: 24px;
   }
+}
+
+/* Final visual-system pass: canvas is yellow, UI surfaces are charcoal, components are deliberate. */
+.animated-text-copy {
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+.about-highlight-pill {
+  border-color: var(--color-border-on-dark);
+  color: var(--color-on-dark);
+  background:
+    linear-gradient(145deg, rgba(255, 209, 117, 0.09), rgba(255, 209, 117, 0.02)),
+    var(--color-card);
+  box-shadow:
+    0 14px 30px rgba(7, 6, 4, 0.14),
+    inset 0 1px 0 rgba(255, 209, 117, 0.12);
+}
+
+.primary-action {
+  border: none;
+  color: var(--color-on-dark);
+  background: var(--color-card);
+  box-shadow:
+    0 18px 42px rgba(7, 6, 4, 0.2),
+    inset 0 1px 0 rgba(255, 209, 117, 0.14);
+  outline: none;
+  outline-width: 0;
+  outline-style: none;
+}
+
+.primary-action:hover,
+.primary-action:focus-visible {
+  color: var(--color-on-dark);
+  background: var(--color-card-soft);
+  box-shadow:
+    0 24px 54px rgba(7, 6, 4, 0.24),
+    inset 0 1px 0 rgba(255, 209, 117, 0.2);
+  transform: translateY(-2px);
+}
+
+:is(.project-card-surface, .growth-overview-card, .live-story-card, #contact > .relative.z-10)
+  .primary-action {
+  color: var(--color-text);
+  background: var(--color-on-dark);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+:is(.project-card-surface, .growth-overview-card, .live-story-card, #contact > .relative.z-10)
+  .primary-action:hover,
+:is(.project-card-surface, .growth-overview-card, .live-story-card, #contact > .relative.z-10)
+  .primary-action:focus-visible {
+  color: var(--color-text);
+  background: var(--color-bg-soft);
+}
+
+:is(
+    .ip-marquee-wall,
+    .training-step-card,
+    .bento-metric-card,
+    .learning-strip,
+    #philosophy .mt-20,
+    #contact > .relative.z-10
+  ) {
+  border: none !important;
+  color: var(--color-on-dark) !important;
+  background:
+    radial-gradient(circle at 86% 16%, rgba(255, 209, 117, 0.1), transparent 32%),
+    linear-gradient(145deg, rgba(255, 209, 117, 0.075), rgba(255, 209, 117, 0.018) 46%),
+    var(--color-card) !important;
+  box-shadow: var(--shadow-surface) !important;
+}
+
+:is(.project-card-surface, .growth-overview-card, .live-story-card, .mirror-overview-card, .mirror-case-card) {
+  border: none !important;
+}
+
+:is(.project-image-frame, .tool-info-logo, .tool-planet-icon) {
+  border: none !important;
+  background:
+    linear-gradient(145deg, rgba(255, 209, 117, 0.1), rgba(255, 209, 117, 0.025)),
+    var(--color-card-elevated) !important;
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 209, 117, 0.14) !important;
+}
+
+.project-image-frame {
+  border-radius: clamp(28px, 4vw, 54px) !important;
+}
+
+.tool-info-panel > span {
+  border: none !important;
+  color: var(--color-on-dark-muted) !important;
+  background: rgba(255, 209, 117, 0.08) !important;
+}
+
+.tool-info-divider {
+  background: linear-gradient(90deg, var(--color-border-on-dark), transparent) !important;
+}
+
+.tool-particle-field > span {
+  background: var(--color-on-dark);
+  box-shadow: 0 0 10px rgba(255, 209, 117, 0.42);
+}
+
+.tool-mobile-category-heading h3 {
+  color: var(--color-text) !important;
+}
+
+.tool-mobile-category-heading p {
+  color: var(--color-text-soft) !important;
+}
+
+.tool-mobile-grid button {
+  border: none !important;
+  color: var(--color-on-dark) !important;
+  background:
+    linear-gradient(145deg, rgba(255, 209, 117, 0.08), rgba(255, 209, 117, 0.02)),
+    var(--color-card) !important;
+  box-shadow: 0 14px 30px rgba(7, 6, 4, 0.14);
+}
+
+.tool-mobile-grid button small {
+  color: var(--color-on-dark-soft) !important;
+}
+
+.contact-row {
+  border-radius: 22px;
+  padding-inline: clamp(16px, 2vw, 24px);
+  transition:
+    background-color 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-row:hover,
+.contact-row:focus-visible {
+  background: rgba(255, 209, 117, 0.07);
+  transform: translateY(-2px);
+}
+
+[aria-label="08 Final Statement"] {
+  background: var(--color-bg) !important;
+  color: var(--color-text);
+  box-shadow: 0 -18px 52px rgba(7, 6, 4, 0.12) !important;
+}
+
+[aria-label="08 Final Statement"] .hero-heading,
+#philosophy .hero-heading,
+#projects > div > div > .hero-heading {
+  color: var(--color-text) !important;
+}
+
+:is(
+    .growth-overview-card,
+    .live-story-card,
+    .mirror-overview-card,
+    .mirror-case-card,
+    .project-card-surface,
+    .ip-marquee-wall,
+    .training-step-card,
+    .bento-metric-card,
+    .learning-strip,
+    .tool-planet-stage,
+    .tool-info-panel,
+    #philosophy .mt-20,
+    #contact > .relative.z-10
+  ) {
+  border: none !important;
+}
+
+:is(.tool-planet-stage, .tool-info-panel) {
+  box-shadow:
+    0 30px 82px rgba(7, 6, 4, 0.28),
+    inset 0 1px 0 rgba(255, 209, 117, 0.12) !important;
+}
+
+/* Soft-edge pass: cards should float through depth, not read as outlined boxes. */
+:is(
+    .marquee-card,
+    .system-marquee-card,
+    .premium-dark-surface,
+    .project-card-surface,
+    .growth-overview-card,
+    .live-story-card,
+    .bento-metric-card,
+    .training-step-card,
+    .mirror-overview-card,
+    .mirror-case-card,
+    .learning-strip,
+    .ip-marquee-wall,
+    .tool-planet-stage,
+    .tool-info-panel,
+    .tool-category-item,
+    .tool-mobile-grid button,
+    .about-highlight-pill,
+    .section-surface-panel,
+    #philosophy .mt-20,
+    #contact > .relative.z-10
+  ) {
+  border: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  box-shadow:
+    0 34px 92px rgba(7, 6, 4, 0.18),
+    0 12px 30px rgba(7, 6, 4, 0.1),
+    inset 0 1px 0 rgba(255, 209, 117, 0.045) !important;
+}
+
+:is(.marquee-card, .system-marquee-card) {
+  border: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  box-shadow:
+    0 26px 70px rgba(7, 6, 4, 0.18),
+    0 8px 22px rgba(7, 6, 4, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+:is(.project-image-frame, .tool-info-logo, .tool-planet-icon, .project-card-header, .tool-info-panel > span) {
+  border: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  box-shadow:
+    0 18px 46px rgba(7, 6, 4, 0.18),
+    inset 0 1px 0 rgba(255, 209, 117, 0.05) !important;
+}
+
+:is(#philosophy article, .contact-row) {
+  border: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+}
+
+:is(.project-card-surface, .growth-overview-card, .live-story-card)::before,
+:is(.project-card-surface, .growth-overview-card, .live-story-card)::after {
+  border: none !important;
+  opacity: 0.5;
+}
+
+:is(
+    .marquee-card,
+    .system-marquee-card,
+    .project-card-surface,
+    .growth-overview-card,
+    .live-story-card,
+    .bento-metric-card,
+    .training-step-card,
+    .mirror-overview-card,
+    .mirror-case-card,
+    .tool-category-item,
+    .tool-mobile-grid button
+  ):hover {
+  border: none !important;
+}
+
+/* Warm frosted material for the account showcase cards only. */
+[aria-label="02 Showcase"] .marquee-card:not(#frosted-card-material) {
+  overflow: hidden;
+  border: 1px solid rgba(255, 244, 218, 0.18) !important;
+  background: rgba(255, 235, 190, 0.08) !important;
+  box-shadow:
+    0 32px 86px rgba(111, 73, 20, 0.23),
+    0 12px 28px rgba(111, 73, 20, 0.13),
+    0 2px 10px rgba(255, 221, 150, 0.13),
+    inset 0 1px 0 rgba(255, 252, 238, 0.28) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[aria-label="02 Showcase"] .marquee-card:not(#frosted-card-material)::before {
+  inset: 0;
+  z-index: 3;
+  padding: 1px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 246, 0.42) 0%,
+      rgba(255, 239, 200, 0.16) 32%,
+      rgba(139, 91, 24, 0.05) 72%,
+      rgba(92, 58, 14, 0.08) 100%
+    ),
+    rgba(255, 238, 196, 0.04);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+[aria-label="02 Showcase"] .marquee-card:not(#frosted-card-material)::after {
+  inset: 1px;
+  z-index: 3;
+  background: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 246, 0.34),
+    inset 0 -1px 0 rgba(111, 73, 20, 0.06),
+    inset 0 0 22px rgba(255, 232, 178, 0.08);
+}
+
+[aria-label="02 Showcase"] .marquee-card:not(#frosted-card-material):hover,
+[aria-label="02 Showcase"] .marquee-card:not(#frosted-card-material)[data-hovered="true"] {
+  box-shadow:
+    0 40px 96px rgba(111, 73, 20, 0.27),
+    0 16px 36px rgba(111, 73, 20, 0.15),
+    0 3px 12px rgba(255, 221, 150, 0.14),
+    inset 0 1px 0 rgba(255, 252, 238, 0.34) !important;
 }
