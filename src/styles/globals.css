@@ -662,9 +662,9 @@ img {
 }
 
 .marquee-card-shell {
-  --card-opacity: 0.58;
-  --card-scale: 0.94;
-  --card-depth: -24px;
+  --card-opacity: 1;
+  --card-scale: 1;
+  --card-depth: 0px;
   height: 282px;
   width: 432px;
   opacity: var(--card-opacity);
@@ -673,9 +673,8 @@ img {
   transform: scale(var(--card-scale)) translateZ(var(--card-depth));
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  will-change: opacity, transform;
+  will-change: transform;
   transition:
-    opacity 420ms cubic-bezier(0.25, 0.1, 0.25, 1),
     transform 520ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 

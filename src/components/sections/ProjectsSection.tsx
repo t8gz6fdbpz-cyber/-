@@ -53,6 +53,11 @@ function ProjectCard({
     [0, 1],
     [1, targetScale],
   );
+  const revealOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.08, 0.16],
+    [0, 0.6, 1],
+  );
   const tiltX = useMotionValue(0);
   const tiltY = useMotionValue(0);
   const hoverScale = useMotionValue(1);
@@ -124,6 +129,7 @@ function ProjectCard({
       <motion.article
         data-project-card={project.number}
         style={{
+          opacity: shouldReduceMotion ? 1 : revealOpacity,
           scale: shouldReduceMotion ? 1 : animatedScale,
           transformOrigin: "top center",
           ...stackStyle,

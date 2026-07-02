@@ -2,7 +2,6 @@ import {
   motion,
   useAnimationFrame,
   useMotionValue,
-  useMotionValueEvent,
   useReducedMotion,
   useTransform,
   type MotionValue,
@@ -17,6 +16,7 @@ import {
 
 import { useMarqueeOffset } from "../../hooks/useMarqueeOffset";
 import {
+  marqueeAccounts,
   repeatedMarqueeRowOne,
   repeatedMarqueeRowTwo,
   type MarqueeAccount,
@@ -63,60 +63,7 @@ function wrapSequence(value: number, width: number) {
 }
 
 function MarqueeImage({ account }: { account: MarqueeAccount }) {
-  const shellRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const [shouldLoad, setShouldLoad] = useState(false);
-
-  useEffect(() => {
-    const node = shellRef.current;
-    if (!node) {
-      return;
-    }
-
-    let visibilityFrame = 0;
-    const loadObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true);
-          loadObserver.disconnect();
-        }
-      },
-      { rootMargin: "900px 80px" },
-    );
-    const thresholds = Array.from({ length: 21 }, (_, index) => index / 20);
-    const visibilityObserver = new IntersectionObserver(
-      ([entry]) => {
-        const visibility = Math.min(entry.intersectionRatio / 0.72, 1);
-        cancelAnimationFrame(visibilityFrame);
-        visibilityFrame = requestAnimationFrame(() => {
-          node.style.setProperty(
-            "--card-opacity",
-            `${0.42 + visibility * 0.58}`,
-          );
-          node.style.setProperty(
-            "--card-scale",
-            `${0.88 + visibility * 0.12}`,
-          );
-          node.style.setProperty(
-            "--card-depth",
-            `${-32 + visibility * 32}px`,
-          );
-        });
-      },
-      {
-        threshold: thresholds,
-      },
-    );
-
-    loadObserver.observe(node);
-    visibilityObserver.observe(node);
-
-    return () => {
-      cancelAnimationFrame(visibilityFrame);
-      loadObserver.disconnect();
-      visibilityObserver.disconnect();
-    };
-  }, []);
 
   const handlePointerMove = (
     event: React.PointerEvent<HTMLDivElement>,
@@ -148,7 +95,6 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
 
   return (
     <div
-      ref={shellRef}
       className="marquee-card-shell h-[282px] w-[432px] shrink-0 overflow-visible p-1.5"
       data-followers={account.followers}
       data-likes={account.likes}
@@ -160,24 +106,24 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
         onPointerMove={handlePointerMove}
         onPointerLeave={resetTilt}
       >
-        {shouldLoad ? (
-          <img
-            src={account.image}
-            alt={`Douyin account card, ${account.followers} followers, ${account.likes} likes`}
-            width={432}
-            height={282}
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-            className="marquee-card-image h-full w-full object-cover object-[center_18%]"
-          />
-        ) : null}
+        <img
+          src={account.image}
+          alt={`Douyin account card, ${account.followers} followers, ${account.likes} likes`}
+          width={432}
+          height={282}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="marquee-card-image h-full w-full object-cover object-[center_18%]"
+        />
       </div>
     </div>
   );
 }
 
 const MemoizedMarqueeImage = memo(MarqueeImage);
+
+const prewarmedImages = new Set<string>();
 
 export function MarqueeSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -187,6 +133,38 @@ export function MarqueeSection() {
   const progress = useMarqueeOffset(sectionRef);
   const shouldReduceMotion = useReducedMotion();
   const idleOffset = useMotionValue(0);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    const preloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        marqueeAccounts.forEach(({ image }) => {
+          if (prewarmedImages.has(image)) {
+            return;
+          }
+
+          prewarmedImages.add(image);
+          const img = new Image();
+          img.decoding = "async";
+          img.src = image;
+          void img.decode?.().catch(() => undefined);
+        });
+        preloadObserver.disconnect();
+      },
+      { rootMargin: "1400px 0px" },
+    );
+
+    preloadObserver.observe(section);
+    return () => preloadObserver.disconnect();
+  }, []);
 
   useAnimationFrame((_, delta) => {
     if (shouldReduceMotion || rowWidths.one === 0 || rowWidths.two === 0) {
@@ -223,13 +201,6 @@ export function MarqueeSection() {
     return () => window.removeEventListener("resize", measureRows);
   }, []);
 
-  useMotionValueEvent(progress, "change", (value) => {
-    sectionRef.current?.setAttribute(
-      "data-marquee-progress",
-      value.toFixed(3),
-    );
-  });
-
   const rowOneScrollX = useTransform(
     progress,
     [0, 1],
@@ -248,8 +219,8 @@ export function MarqueeSection() {
   );
   const canvasOpacity = useTransform(
     progress,
-    [0, 0.16, 0.82, 1],
-    [0.72, 1, 1, 0.88],
+    [0, 0.08, 0.16, 0.82, 1],
+    [0, 0.72, 1, 1, 0.88],
   );
   const canvasScale = useTransform(
     progress,
@@ -267,7 +238,6 @@ export function MarqueeSection() {
       ref={sectionRef}
       aria-label="02 Showcase"
       className="relative h-[calc(100vh+480px)] bg-[#0C0C0C] md:h-[calc(100vh+640px)]"
-      data-marquee-progress="0.000"
     >
       <div
         className="sticky top-0 flex h-screen items-center overflow-hidden"
