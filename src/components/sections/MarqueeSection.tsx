@@ -217,11 +217,6 @@ export function MarqueeSection() {
   const rowTwoX = useTransform(() =>
     wrapSequence(rowTwoScrollX.get() - idleOffset.get(), rowWidths.two),
   );
-  const canvasOpacity = useTransform(
-    progress,
-    [0, 0.08, 0.16, 0.82, 1],
-    [0, 0.72, 1, 1, 0.88],
-  );
   const canvasScale = useTransform(
     progress,
     [0, 0.2, 0.82, 1],
@@ -247,10 +242,9 @@ export function MarqueeSection() {
           className="flex w-full flex-col gap-8"
           data-marquee-canvas
           style={{
-            opacity: shouldReduceMotion ? 1 : canvasOpacity,
             scale: shouldReduceMotion ? 1 : canvasScale,
             y: shouldReduceMotion ? 0 : canvasY,
-            willChange: "transform, opacity",
+            willChange: "transform",
           }}
         >
           <MarqueeRow
