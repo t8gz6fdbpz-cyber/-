@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Component, lazy, Suspense, useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import type { ToolCategory, ToolGalaxyTool } from "./ToolGalaxy3D";
 
@@ -228,6 +228,11 @@ const tools: ToolGalaxyTool[] = [
 ];
 
 type GalaxySupportState = "loading" | "supported" | "unsupported";
+type ToolCardTheme = {
+  accent: string;
+  background: string;
+  glow: string;
+};
 
 function canUseWebGL() {
   if (typeof document === "undefined") return false;
@@ -243,18 +248,113 @@ function canUseWebGL() {
   }
 }
 
-function ToolInfoPanel({ tool }: { tool: ToolGalaxyTool }) {
+const toolCardThemes: Record<string, ToolCardTheme> = {
+  capcut: {
+    accent: "#f8f8f2",
+    background: "linear-gradient(145deg, #050505 0%, #171717 58%, #2a2a2a 100%)",
+    glow: "rgba(255, 255, 255, 0.18)",
+  },
+  photoshop: {
+    accent: "#31a8ff",
+    background: "linear-gradient(145deg, #061529 0%, #0b2b58 58%, #123b74 100%)",
+    glow: "rgba(49, 168, 255, 0.32)",
+  },
+  premiere: {
+    accent: "#9999ff",
+    background: "linear-gradient(145deg, #090821 0%, #19125a 54%, #2d2584 100%)",
+    glow: "rgba(153, 153, 255, 0.3)",
+  },
+  xiaohongshu: {
+    accent: "#ff2d3d",
+    background: "linear-gradient(145deg, #210407 0%, #74121b 58%, #be2030 100%)",
+    glow: "rgba(255, 45, 61, 0.32)",
+  },
+  jimeng: {
+    accent: "#8f8cff",
+    background: "linear-gradient(145deg, #0b1028 0%, #24307d 52%, #6865d9 100%)",
+    glow: "rgba(143, 140, 255, 0.3)",
+  },
+  claude: {
+    accent: "#d97745",
+    background: "linear-gradient(145deg, #120907 0%, #4b2417 55%, #b7683f 100%)",
+    glow: "rgba(217, 119, 69, 0.28)",
+  },
+  codex: {
+    accent: "#10a37f",
+    background: "linear-gradient(145deg, #071410 0%, #0f352c 58%, #167a62 100%)",
+    glow: "rgba(16, 163, 127, 0.28)",
+  },
+  chatgpt: {
+    accent: "#74aa9c",
+    background: "linear-gradient(145deg, #08120f 0%, #174136 58%, #4d8d7e 100%)",
+    glow: "rgba(116, 170, 156, 0.28)",
+  },
+  douyin: {
+    accent: "#ff2b55",
+    background: "linear-gradient(145deg, #050507 0%, #1b1220 50%, #0aa7b8 100%)",
+    glow: "rgba(255, 43, 85, 0.28)",
+  },
+  "wechat-channels": {
+    accent: "#22c55e",
+    background: "linear-gradient(145deg, #07140c 0%, #10391d 58%, #2f8f4e 100%)",
+    glow: "rgba(34, 197, 94, 0.26)",
+  },
+  tiktok: {
+    accent: "#25f4ee",
+    background: "linear-gradient(145deg, #050507 0%, #171824 55%, #111f2d 100%)",
+    glow: "rgba(37, 244, 238, 0.26)",
+  },
+  canva: {
+    accent: "#7d6cff",
+    background: "linear-gradient(145deg, #091127 0%, #1f4fb8 54%, #7d6cff 100%)",
+    glow: "rgba(125, 108, 255, 0.3)",
+  },
+};
+
+function getToolCardTheme(tool: ToolGalaxyTool) {
+  return (
+    toolCardThemes[tool.id] ?? {
+      accent: "#ffd175",
+      background: "linear-gradient(145deg, #070604 0%, #21170b 58%, #68451a 100%)",
+      glow: "rgba(255, 209, 117, 0.24)",
+    }
+  );
+}
+
+function ToolInfoPanel({
+  onClose,
+  tool,
+}: {
+  onClose: () => void;
+  tool: ToolGalaxyTool;
+}) {
+  const theme = getToolCardTheme(tool);
+  const style = {
+    "--tool-accent": theme.accent,
+    "--tool-card-bg": theme.background,
+    "--tool-glow": theme.glow,
+  } as CSSProperties;
+
   return (
     <AnimatePresence mode="wait">
       <motion.aside
         key={tool.id}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, x: 28, scale: 0.94 }}
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        exit={{ opacity: 0, x: 22, scale: 0.96 }}
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         className="tool-info-panel"
+        style={style}
         aria-live="polite"
       >
+        <button
+          type="button"
+          className="tool-info-close"
+          aria-label="关闭详情"
+          onClick={onClose}
+        >
+          ×
+        </button>
         <div className="tool-info-logo">
           {tool.icon ? (
             <img src={tool.icon} alt="" draggable={false} />
@@ -274,7 +374,7 @@ function ToolInfoPanel({ tool }: { tool: ToolGalaxyTool }) {
         </div>
         <div className="tool-info-divider" />
         <p className="tool-info-description">{tool.description}</p>
-        <small>点击星球可聚焦到镜头前方；点击空白处恢复轨道运动。</small>
+        <small>点击空白处或关闭按钮，恢复自由轨道。</small>
       </motion.aside>
     </AnimatePresence>
   );
@@ -282,8 +382,8 @@ function ToolInfoPanel({ tool }: { tool: ToolGalaxyTool }) {
 
 export function SkillsMatrixSection() {
   const shouldReduceMotion = useReducedMotion();
-  const [activeCategory, setActiveCategory] = useState<ToolCategory>("AI 创作");
-  const [selectedToolId, setSelectedToolId] = useState("codex");
+  const [activeCategory, setActiveCategory] = useState<ToolCategory | null>(null);
+  const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
   const [galaxySupport, setGalaxySupport] =
     useState<GalaxySupportState>("loading");
@@ -293,7 +393,9 @@ export function SkillsMatrixSection() {
   }, []);
 
   const selectedTool =
-    tools.find((tool) => tool.id === selectedToolId) ?? tools[0];
+    selectedToolId === null
+      ? null
+      : tools.find((tool) => tool.id === selectedToolId) ?? null;
 
   const categoryCounts = useMemo(
     () =>
@@ -306,17 +408,17 @@ export function SkillsMatrixSection() {
 
   const selectTool = (tool: ToolGalaxyTool, focus = true) => {
     setSelectedToolId(tool.id);
-    setActiveCategory(tool.category);
     setFocusedToolId(focus ? tool.id : null);
   };
 
-  const selectCategory = (category: ToolCategory) => {
-    const firstTool = tools.find((tool) => tool.category === category);
-    setActiveCategory(category);
-    if (firstTool) {
-      setSelectedToolId(firstTool.id);
-      setFocusedToolId(null);
-    }
+  const clearFocus = () => {
+    setSelectedToolId(null);
+    setFocusedToolId(null);
+  };
+
+  const selectCategory = (category: ToolCategory | null) => {
+    setActiveCategory((current) => (current === category ? null : category));
+    clearFocus();
   };
 
   return (
@@ -335,9 +437,25 @@ export function SkillsMatrixSection() {
           </span>
         </div>
 
-        <div className="tool-desktop-layout mt-14">
+        <div
+          className={`tool-desktop-layout mt-14 ${
+            focusedToolId ? "is-focused" : ""
+          }`}
+        >
           <div className="tool-category-index" aria-label="工具分类">
-            <p>分类轨道</p>
+            <p>分类</p>
+            <button
+              type="button"
+              className="tool-category-item"
+              data-active={activeCategory === null}
+              onClick={() => selectCategory(null)}
+            >
+              <span style={{ backgroundColor: "#ffd175" }} />
+              <div>
+                <strong>全部</strong>
+                <small>{tools.length} 个工具</small>
+              </div>
+            </button>
             {categoryCounts.map((category) => (
               <button
                 key={category.name}
@@ -367,7 +485,7 @@ export function SkillsMatrixSection() {
             </div>
           ) : (
             <ToolGalaxyErrorBoundary
-              resetKey={`${activeCategory}-${selectedTool.id}`}
+              resetKey={`${activeCategory ?? "all"}-${selectedToolId ?? "free"}`}
             >
               <Suspense
                 fallback={
@@ -383,16 +501,24 @@ export function SkillsMatrixSection() {
                   activeCategory={activeCategory}
                   focusedToolId={focusedToolId}
                   reducedMotion={Boolean(shouldReduceMotion)}
-                  selectedToolId={selectedTool.id}
+                  selectedToolId={selectedToolId}
                   tools={tools}
-                  onClearFocus={() => setFocusedToolId(null)}
+                  onClearFocus={clearFocus}
                   onSelectTool={selectTool}
                 />
               </Suspense>
             </ToolGalaxyErrorBoundary>
           )}
 
-          <ToolInfoPanel tool={selectedTool} />
+          <AnimatePresence mode="wait">
+            {selectedTool && focusedToolId ? (
+              <ToolInfoPanel
+                key={selectedTool.id}
+                tool={selectedTool}
+                onClose={clearFocus}
+              />
+            ) : null}
+          </AnimatePresence>
         </div>
       </div>
     </section>

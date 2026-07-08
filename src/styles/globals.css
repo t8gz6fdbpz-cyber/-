@@ -3944,13 +3944,18 @@ main > section {
 
 /* True 3D tool galaxy: transparent WebGL atomic orbit scene. */
 .tool-desktop-layout {
-  grid-template-columns: minmax(180px, 0.26fr) minmax(420px, 1fr) minmax(280px, 0.34fr);
-  min-height: clamp(560px, 74vh, 760px);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: clamp(720px, 92vh, 940px);
+  align-items: stretch;
+  overflow: visible;
 }
 
 .tool-galaxy-stage {
   position: relative;
-  height: clamp(560px, 70vh, 760px);
+  z-index: 1;
+  height: clamp(680px, 84vh, 900px);
   min-height: 0;
   overflow: visible;
   border: 0;
@@ -4011,17 +4016,42 @@ main > section {
 }
 
 .toolbox-section .tool-category-index {
-  justify-content: center;
+  position: absolute;
+  left: clamp(12px, 2vw, 24px);
+  top: clamp(12px, 2vw, 24px);
+  z-index: 4;
+  display: flex;
+  max-width: min(720px, calc(100% - 24px));
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.toolbox-section .tool-category-index > p {
+  display: grid;
+  height: 34px;
+  margin: 0 4px 0 0;
+  place-items: center;
+  color: var(--color-text-soft);
+  font-size: 10px;
+  letter-spacing: 0.18em;
 }
 
 .toolbox-section .tool-category-item {
-  width: 100%;
+  width: auto;
+  min-width: 0;
   cursor: pointer;
-  border-color: rgba(255, 209, 117, 0.12);
-  color: var(--color-on-dark);
-  background: rgba(7, 6, 4, 0.88);
-  box-shadow: 0 16px 34px rgba(7, 6, 4, 0.14);
+  gap: 8px;
+  border-color: rgba(138, 90, 24, 0.18);
+  border-radius: 999px;
+  padding: 8px 11px;
+  color: var(--color-text);
+  background: rgba(255, 244, 214, 0.52);
+  box-shadow: none;
   text-align: left;
+  backdrop-filter: blur(14px);
   transition:
     background-color 240ms ease,
     border-color 240ms ease,
@@ -4030,20 +4060,23 @@ main > section {
 }
 
 .toolbox-section .tool-category-item strong {
-  color: rgba(255, 221, 148, 0.96);
+  color: var(--color-text);
+  font-size: 12px;
+  line-height: 1;
 }
 
 .toolbox-section .tool-category-item small {
-  color: rgba(255, 240, 205, 0.62);
+  display: none;
 }
 
 .toolbox-section .tool-category-item:hover,
 .toolbox-section .tool-category-item:focus-visible,
 .toolbox-section .tool-category-item[data-active="true"] {
-  border-color: rgba(255, 209, 117, 0.34);
-  background: rgba(7, 6, 4, 0.96);
-  box-shadow: 0 18px 42px rgba(7, 6, 4, 0.2);
-  transform: translateY(-2px);
+  border-color: rgba(7, 6, 4, 0.28);
+  background: rgba(7, 6, 4, 0.92);
+  box-shadow: 0 14px 34px rgba(7, 6, 4, 0.14);
+  color: var(--color-on-dark);
+  transform: translateY(-1px);
 }
 
 .toolbox-section .tool-category-item:focus-visible {
@@ -4056,9 +4089,80 @@ main > section {
 }
 
 .toolbox-section .tool-info-panel {
-  min-height: clamp(520px, 68vh, 720px);
+  position: absolute;
+  right: clamp(10px, 2.2vw, 28px);
+  top: clamp(108px, 14vh, 150px);
+  z-index: 6;
+  width: min(360px, 34vw);
+  min-height: 0;
   justify-content: center;
-  border-radius: 26px;
+  border-color: rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  padding: clamp(22px, 2.4vw, 30px);
+  background: var(--tool-card-bg, #070604);
+  box-shadow:
+    0 28px 90px rgba(7, 6, 4, 0.34),
+    0 0 70px var(--tool-glow, rgba(255, 209, 117, 0.24)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  overflow: visible;
+}
+
+.toolbox-section .tool-info-panel::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 80% 8%, color-mix(in srgb, var(--tool-accent, #ffd175) 36%, transparent), transparent 30%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.1), transparent 46%);
+  pointer-events: none;
+}
+
+.tool-info-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tool-info-close:hover,
+.tool-info-close:focus-visible {
+  border-color: rgba(255, 255, 255, 0.34);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.toolbox-section .tool-info-logo {
+  border-color: color-mix(in srgb, var(--tool-accent, #ffd175) 44%, rgba(255, 255, 255, 0.16));
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.28),
+    0 0 34px var(--tool-glow, rgba(255, 209, 117, 0.2));
+}
+
+.toolbox-section .tool-info-panel > p:first-of-type,
+.toolbox-section .tool-info-panel > span,
+.toolbox-section .tool-tag-list em {
+  border-color: color-mix(in srgb, var(--tool-accent, #ffd175) 30%, rgba(255, 255, 255, 0.12));
+}
+
+.toolbox-section .tool-info-panel h3 {
+  color: #fff7df;
+}
+
+.toolbox-section .tool-info-panel > span,
+.toolbox-section .tool-tag-list em {
+  background: color-mix(in srgb, var(--tool-accent, #ffd175) 16%, transparent);
 }
 
 .tool-tag-list {
@@ -4082,7 +4186,7 @@ main > section {
 @media (max-width: 1100px) {
   .tool-desktop-layout {
     grid-template-columns: 1fr;
-    min-height: 0;
+    min-height: clamp(680px, 86vh, 840px);
   }
 
   .toolbox-section .tool-category-index {
@@ -4100,17 +4204,16 @@ main > section {
 
   .toolbox-section .tool-category-item {
     width: auto;
-    min-width: 210px;
-    flex: 0 0 min(260px, 32vw);
+    min-width: 0;
+    flex: 0 0 auto;
   }
 
   .tool-galaxy-stage {
-    height: clamp(480px, 58vh, 640px);
+    height: clamp(620px, 78vh, 760px);
   }
 
   .toolbox-section .tool-info-panel {
-    grid-column: 1 / -1;
-    min-height: 0;
+    width: min(340px, 42vw);
   }
 }
 
@@ -4122,7 +4225,7 @@ main > section {
   }
 
   .toolbox-section .tool-category-index {
-    gap: 10px;
+    display: none;
   }
 
   .toolbox-section .tool-category-item {
@@ -4131,12 +4234,19 @@ main > section {
   }
 
   .tool-galaxy-stage {
-    height: 460px;
+    height: 620px;
   }
 
   .toolbox-section .tool-info-panel {
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 14px;
+    width: auto;
     min-height: 0;
-    padding: 24px;
+    max-height: 42vh;
+    padding: 20px;
+    overflow-y: auto;
   }
 
   .toolbox-section .tool-info-logo {

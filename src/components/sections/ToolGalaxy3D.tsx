@@ -22,10 +22,10 @@ export type ToolGalaxyTool = {
 };
 
 type ToolGalaxy3DProps = {
-  activeCategory: ToolCategory;
+  activeCategory: ToolCategory | null;
   focusedToolId: string | null;
   reducedMotion: boolean;
-  selectedToolId: string;
+  selectedToolId: string | null;
   tools: ToolGalaxyTool[];
   onClearFocus: () => void;
   onSelectTool: (tool: ToolGalaxyTool, focus?: boolean) => void;
@@ -35,19 +35,47 @@ const twoPi = Math.PI * 2;
 const categoryOrder: ToolCategory[] = ["AI 创作", "内容制作", "平台运营"];
 const tempPosition = new THREE.Vector3();
 const tempEuler = new THREE.Euler();
+const defaultProjectionSpread = { x: 1, y: 1, z: 1 };
 
-const orbitPresets: Array<{
+const layoutPresets: Array<{
+  baseAngle: number;
+  orbitIndex: number;
   radius: number;
   tilt: [number, number, number];
-  direction: 1 | -1;
+  phase: number;
 }> = [
-  { radius: 1.26, tilt: [56, -14, 10], direction: 1 },
-  { radius: 1.48, tilt: [-42, 22, -18], direction: -1 },
-  { radius: 1.68, tilt: [24, 50, 38], direction: 1 },
-  { radius: 1.84, tilt: [-62, -18, 32], direction: -1 },
-  { radius: 1.96, tilt: [34, -58, -26], direction: 1 },
-  { radius: 1.58, tilt: [-22, -38, 62], direction: -1 },
+  { orbitIndex: 0, baseAngle: 158, radius: 3.38, tilt: [-8, -14, 4], phase: 0.1 },
+  { orbitIndex: 1, baseAngle: 24, radius: 3.72, tilt: [-6, 18, -4], phase: 0.8 },
+  { orbitIndex: 2, baseAngle: 96, radius: 3.48, tilt: [-34, 8, -10], phase: 1.6 },
+  { orbitIndex: 3, baseAngle: 284, radius: 3.82, tilt: [-36, -8, 12], phase: 2.4 },
+  { orbitIndex: 4, baseAngle: 212, radius: 3.66, tilt: [18, -32, 16], phase: 0.45 },
+  { orbitIndex: 5, baseAngle: 30, radius: 3.44, tilt: [-18, 32, -16], phase: 1.2 },
+  { orbitIndex: 6, baseAngle: 66, radius: 3.9, tilt: [-42, -4, 20], phase: 2.0 },
+  { orbitIndex: 7, baseAngle: 150, radius: 3.54, tilt: [28, 18, -22], phase: 2.8 },
+  { orbitIndex: 8, baseAngle: 225, radius: 3.78, tilt: [-18, -26, 10], phase: 0.65 },
+  { orbitIndex: 9, baseAngle: 306, radius: 3.58, tilt: [12, 34, -18], phase: 1.45 },
+  { orbitIndex: 10, baseAngle: 44, radius: 3.36, tilt: [-40, 16, 24], phase: 2.25 },
+  { orbitIndex: 11, baseAngle: 226, radius: 3.96, tilt: [34, -18, -16], phase: 3.05 },
 ];
+
+const defaultFocusAvoidAngles = [
+  205, 238, 172, 120, 100, 88, 260, 145, 330, 62, 120, 285,
+].map(THREE.MathUtils.degToRad);
+
+const focusAvoidAngleTable = [
+  [205, 100, 90, 0, 100, 140, 260, 60, 30, 70, 130, 150],
+  [110, 238, 170, 0, 100, 120, 260, 50, 40, 90, 180, 285],
+  [40, 100, 172, 120, 100, 120, 260, 50, 30, 90, 180, 180],
+  [60, 280, 172, 120, 100, 340, 260, 140, 30, 62, 120, 190],
+  [205, 100, 90, 0, 100, 140, 260, 60, 30, 62, 130, 150],
+  [60, 100, 172, 10, 100, 88, 260, 145, 330, 100, 120, 180],
+  [300, 110, 10, 70, 100, 140, 260, 90, 30, 80, 110, 130],
+  [205, 110, 180, 140, 330, 140, 260, 145, 30, 100, 70, 285],
+  [50, 100, 10, 40, 100, 140, 260, 60, 330, 80, 100, 130],
+  [205, 10, 172, 120, 60, 130, 260, 40, 330, 62, 120, 285],
+  [70, 270, 110, 120, 90, 80, 260, 50, 30, 62, 120, 160],
+  [205, 0, 140, 0, 70, 88, 260, 150, 30, 80, 120, 285],
+].map((row) => row.map(THREE.MathUtils.degToRad));
 
 function normalizeAngle(angle: number) {
   return ((angle % twoPi) + twoPi) % twoPi;
@@ -61,10 +89,11 @@ function setOrbitPosition(
   target: THREE.Vector3,
   tool: ToolGalaxyTool,
   angle: number,
+  spread = defaultProjectionSpread,
 ) {
   target.set(
     Math.cos(angle) * tool.orbitRadius,
-    Math.sin(angle * 1.6 + tool.phase) * 0.18,
+    Math.sin(angle * 1.6 + tool.phase) * 0.38,
     Math.sin(angle) * tool.orbitRadius * 0.58,
   );
   tempEuler.set(
@@ -73,11 +102,12 @@ function setOrbitPosition(
     THREE.MathUtils.degToRad(tool.orbitTilt[2]),
   );
   target.applyEuler(tempEuler);
+  target.set(target.x * spread.x, target.y * spread.y, target.z * spread.z);
 
   return target;
 }
 
-function getFrontAngle(tool: ToolGalaxyTool) {
+function getFocusAngle(tool: ToolGalaxyTool) {
   const probe = new THREE.Vector3();
   let bestAngle = tool.baseAngle;
   let bestScore = -Infinity;
@@ -85,7 +115,7 @@ function getFrontAngle(tool: ToolGalaxyTool) {
   for (let index = 0; index < 240; index += 1) {
     const angle = (index / 240) * twoPi;
     setOrbitPosition(probe, tool, angle);
-    const score = probe.z - Math.abs(probe.x) * 0.16;
+    const score = probe.x * 0.95 + probe.z * 0.48 - Math.abs(probe.y) * 0.36;
     if (score > bestScore) {
       bestScore = score;
       bestAngle = angle;
@@ -119,30 +149,33 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
     const group = [...(grouped.get(category) ?? [])].sort((a, b) =>
       a.id.localeCompare(b.id),
     );
-    const categoryOffset = (categoryIndex * twoPi) / Math.max(group.length * 3, 1);
-
     return group.map((tool, toolIndex) => {
-      const orbitIndex = (categoryIndex * 2 + toolIndex) % orbitPresets.length;
-      const preset = orbitPresets[orbitIndex];
-      const evenAngle = (toolIndex / Math.max(group.length, 1)) * twoPi;
-      const seededJitter = (seededUnit(`${tool.id}-angle`) - 0.5) * 0.12;
-      const radiusJitter = (seededUnit(`${tool.id}-radius`) - 0.5) * 0.08;
-      const speedJitter = seededUnit(`${tool.id}-speed`) * 0.012;
+      const presetIndex = (categoryIndex * 4 + toolIndex) % layoutPresets.length;
+      const preset = layoutPresets[presetIndex];
+      const cycle = Math.floor((categoryIndex * 4 + toolIndex) / layoutPresets.length);
+      const cycleOffset =
+        cycle > 0 ? (cycle / Math.max(group.length, 1)) * twoPi : 0;
 
       return {
         ...tool,
-        orbitIndex,
-        orbitRadius: preset.radius + radiusJitter,
+        orbitIndex: preset.orbitIndex,
+        orbitRadius: preset.radius + cycle * 0.18,
         orbitTilt: preset.tilt,
-        baseAngle: normalizeAngle(categoryOffset + evenAngle + seededJitter),
-        speed: preset.direction * (0.038 + speedJitter),
-        phase: seededUnit(`${tool.id}-phase`) * twoPi,
+        baseAngle: normalizeAngle(
+          THREE.MathUtils.degToRad(preset.baseAngle) + cycleOffset,
+        ),
+        speed: 0.026,
+        phase: preset.phase,
       };
     });
   });
 }
 
-function createOrbitPoints(radius: number, tilt: [number, number, number]) {
+function createOrbitPoints(
+  radius: number,
+  tilt: [number, number, number],
+  spread = defaultProjectionSpread,
+) {
   const points: THREE.Vector3[] = [];
   const euler = new THREE.Euler(
     THREE.MathUtils.degToRad(tilt[0]),
@@ -154,11 +187,12 @@ function createOrbitPoints(radius: number, tilt: [number, number, number]) {
     const angle = (index / 192) * Math.PI * 2;
     const point = new THREE.Vector3(
       Math.cos(angle) * radius,
-      Math.sin(angle * 2) * 0.06,
+      Math.sin(angle * 2) * 0.12,
       Math.sin(angle) * radius * 0.58,
     );
 
     point.applyEuler(euler);
+    point.set(point.x * spread.x, point.y * spread.y, point.z * spread.z);
     points.push(point);
   }
 
@@ -168,20 +202,25 @@ function createOrbitPoints(radius: number, tilt: [number, number, number]) {
 function OrbitLine({
   active,
   radius,
+  spread,
   tilt,
 }: {
   active: boolean;
   radius: number;
+  spread: typeof defaultProjectionSpread;
   tilt: [number, number, number];
 }) {
-  const points = useMemo(() => createOrbitPoints(radius, tilt), [radius, tilt]);
+  const points = useMemo(
+    () => createOrbitPoints(radius, tilt, spread),
+    [radius, spread, tilt],
+  );
 
   return (
     <Line
       points={points}
       color={active ? "#ffd175" : "#8a5a18"}
-      lineWidth={active ? 1.05 : 0.65}
-      opacity={active ? 0.58 : 0.22}
+      lineWidth={active ? 0.82 : 0.52}
+      opacity={active ? 0.3 : 0.14}
       transparent
     />
   );
@@ -298,32 +337,53 @@ function InitialsPlane({
 
 function ToolPlanet({
   activeCategory,
+  focusActive,
+  focusedToolIndex,
   focused,
+  projectionSpread,
   reducedMotion,
   selected,
+  toolIndex,
   tool,
   onSelectTool,
 }: {
-  activeCategory: ToolCategory;
+  activeCategory: ToolCategory | null;
+  focusActive: boolean;
+  focusedToolIndex: number;
   focused: boolean;
+  projectionSpread: typeof defaultProjectionSpread;
   reducedMotion: boolean;
   selected: boolean;
+  toolIndex: number;
   tool: ToolGalaxyTool;
   onSelectTool: (tool: ToolGalaxyTool, focus?: boolean) => void;
 }) {
-  const angleRef = useRef(normalizeAngle(tool.baseAngle + tool.phase));
+  const angleRef = useRef(normalizeAngle(tool.baseAngle));
   const groupRef = useRef<THREE.Group>(null);
   const sphereRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
   const hoveredRef = useRef(false);
+  const previousFocusActiveRef = useRef(focusActive);
+  const returningToOrbitRef = useRef(false);
   const { gl } = useThree();
-  const categoryActive = tool.category === activeCategory;
-  const iconOpacity = categoryActive || focused || selected ? 1 : 0.22;
-  const frontAngle = useMemo(
-    () => getFrontAngle(tool),
+  const categoryActive = activeCategory === null || tool.category === activeCategory;
+  const iconOpacity = focusActive
+    ? focused
+      ? 1
+      : 0.42
+    : categoryActive
+      ? 1
+      : 0.48;
+  const focusAngle = useMemo(
+    () => getFocusAngle(tool),
     [tool.baseAngle, tool.orbitRadius, tool.orbitTilt, tool.phase],
   );
-  const renderOrder = focused ? 36 : selected ? 28 : categoryActive ? 16 : 8;
+  const avoidAngle = normalizeAngle(
+    (focusAvoidAngleTable[focusedToolIndex]?.[toolIndex] ??
+      defaultFocusAvoidAngles[toolIndex % defaultFocusAvoidAngles.length]) +
+      toolIndex * 0.018,
+  );
+  const renderOrder = focused ? 48 : selected ? 32 : categoryActive ? 18 : 8;
 
   const setHovered = (value: boolean) => {
     hoveredRef.current = value;
@@ -336,33 +396,63 @@ function ToolPlanet({
     }
   }, [gl]);
 
+  useEffect(() => {
+    if (previousFocusActiveRef.current && !focusActive) {
+      returningToOrbitRef.current = true;
+    }
+    previousFocusActiveRef.current = focusActive;
+  }, [focusActive]);
+
   useFrame((_, delta) => {
     const hovered = hoveredRef.current;
 
     if (focused) {
       angleRef.current = normalizeAngle(
         angleRef.current +
-          shortestAngleDelta(angleRef.current, frontAngle) *
-            (reducedMotion ? 1 : 1 - Math.exp(-delta * 5.8)),
+          shortestAngleDelta(angleRef.current, focusAngle) *
+            (reducedMotion ? 1 : 1 - Math.exp(-delta * 6.8)),
       );
+    } else if (focusActive) {
+      returningToOrbitRef.current = false;
+      angleRef.current = normalizeAngle(
+        angleRef.current +
+          shortestAngleDelta(angleRef.current, avoidAngle) *
+            (reducedMotion ? 1 : 1 - Math.exp(-delta * 4.4)),
+      );
+    } else if (returningToOrbitRef.current) {
+      const returnDelta = shortestAngleDelta(angleRef.current, tool.baseAngle);
+      angleRef.current = normalizeAngle(
+        angleRef.current +
+          returnDelta * (reducedMotion ? 1 : 1 - Math.exp(-delta * 5.6)),
+      );
+      if (Math.abs(returnDelta) < 0.015) {
+        angleRef.current = normalizeAngle(tool.baseAngle);
+        returningToOrbitRef.current = false;
+      }
     } else if (!reducedMotion) {
       angleRef.current = normalizeAngle(
         angleRef.current + tool.speed * delta * 0.72,
       );
     }
 
-    setOrbitPosition(tempPosition, tool, angleRef.current);
+    setOrbitPosition(tempPosition, tool, angleRef.current, projectionSpread);
 
-    const opacity = categoryActive ? (focused || selected ? 1 : 0.82) : 0.16;
+    const opacity = focusActive
+      ? focused
+        ? 1
+        : 0.32
+      : categoryActive
+        ? 0.96
+        : 0.44;
     const scale = focused
-      ? 1.3
+      ? 1.42
       : hovered
         ? 1.08
-        : selected
-          ? 1.04
+        : focusActive
+          ? 0.78
           : categoryActive
-            ? 0.92
-            : 0.54;
+            ? 1
+            : 0.82;
 
     groupRef.current?.position.lerp(
       tempPosition,
@@ -389,7 +479,7 @@ function ToolPlanet({
       );
       sphereMaterial.emissiveIntensity = THREE.MathUtils.lerp(
         sphereMaterial.emissiveIntensity,
-        focused ? 0.68 : hovered ? 0.36 : selected ? 0.26 : 0.08,
+        focused ? 0.82 : hovered ? 0.38 : selected ? 0.28 : 0.12,
         1 - Math.exp(-delta * 4.8),
       );
     }
@@ -400,7 +490,7 @@ function ToolPlanet({
     if (glowMaterial) {
       glowMaterial.opacity = THREE.MathUtils.lerp(
         glowMaterial.opacity,
-        focused ? 0.2 : hovered ? 0.13 : selected ? 0.1 : 0.032,
+        focused ? 0.24 : hovered ? 0.12 : focusActive ? 0.018 : 0.048,
         1 - Math.exp(-delta * 4.8),
       );
     }
@@ -447,7 +537,7 @@ function ToolPlanet({
           emissive="#ffd175"
           emissiveIntensity={0.1}
           metalness={0.36}
-          opacity={categoryActive ? 0.18 : 0.055}
+          opacity={categoryActive ? 0.34 : 0.16}
           roughness={0.28}
           transparent
           depthWrite={false}
@@ -473,7 +563,7 @@ function ToolPlanet({
           className="tool-galaxy-a11y-button"
           aria-label={`${tool.name}，${tool.category}，${tool.tags.join("，")}`}
           aria-pressed={selected}
-          tabIndex={categoryActive ? 0 : -1}
+          tabIndex={0}
           onClick={(event) => {
             event.stopPropagation();
             onSelectTool(tool, true);
@@ -522,6 +612,24 @@ function StarField() {
   );
 }
 
+function ResponsiveCamera() {
+  const { camera, size } = useThree();
+
+  useEffect(() => {
+    if (!(camera instanceof THREE.PerspectiveCamera)) return;
+
+    camera.fov = size.width < 520 ? 60 : 44;
+    camera.position.set(
+      0,
+      size.width < 520 ? 0.18 : 0.24,
+      size.width < 520 ? 10.4 : 6.1,
+    );
+    camera.updateProjectionMatrix();
+  }, [camera, size.width]);
+
+  return null;
+}
+
 function GalaxyScene({
   activeCategory,
   focusedToolId,
@@ -532,7 +640,14 @@ function GalaxyScene({
   onSelectTool,
 }: ToolGalaxy3DProps) {
   const { size } = useThree();
-  const sceneScale = size.width < 520 ? 0.74 : size.width < 900 ? 0.84 : 1;
+  const projectionSpread = useMemo(
+    () => (size.width < 520 ? { x: 0.78, y: 1.86, z: 1 } : defaultProjectionSpread),
+    [size.width],
+  );
+  const focusedToolIndex = useMemo(
+    () => tools.findIndex((tool) => tool.id === focusedToolId),
+    [focusedToolId, tools],
+  );
   const orbitConfigs = useMemo(
     () =>
       [...new Map(tools.map((tool) => [tool.orbitIndex, tool])).values()]
@@ -544,7 +659,7 @@ function GalaxyScene({
           active: tools.some(
             (item) =>
               item.orbitIndex === tool.orbitIndex &&
-              item.category === activeCategory,
+              (activeCategory === null || item.category === activeCategory),
           ),
         })),
     [activeCategory, tools],
@@ -553,6 +668,7 @@ function GalaxyScene({
   return (
     <>
       <ambientLight intensity={1.3} />
+      <ResponsiveCamera />
       <pointLight color="#ffd175" intensity={3.8} position={[0, 0.6, 2.6]} />
       <spotLight
         angle={0.55}
@@ -561,7 +677,7 @@ function GalaxyScene({
         penumbra={0.9}
         position={[2.4, 2.2, 3.4]}
       />
-      <group position={[0, 0, 0]} scale={sceneScale}>
+      <group position={[0, 0, 0]}>
         <StarField />
         <mesh>
           <sphereGeometry args={[0.11, 32, 32]} />
@@ -581,6 +697,7 @@ function GalaxyScene({
             key={orbit.index}
             active={orbit.active}
             radius={orbit.radius}
+            spread={projectionSpread}
             tilt={orbit.tilt}
           />
         ))}
@@ -588,9 +705,13 @@ function GalaxyScene({
           <ToolPlanet
             key={tool.id}
             activeCategory={activeCategory}
+            focusActive={focusedToolId !== null}
+            focusedToolIndex={focusedToolIndex}
             focused={focusedToolId === tool.id}
+            projectionSpread={projectionSpread}
             reducedMotion={reducedMotion}
             selected={selectedToolId === tool.id}
+            toolIndex={tools.findIndex((item) => item.id === tool.id)}
             tool={tool}
             onSelectTool={onSelectTool}
           />
@@ -627,7 +748,7 @@ export const ToolGalaxy3D = memo(function ToolGalaxy3D({
       aria-label="3D 原子轨道式工具星系"
     >
       <Canvas
-        camera={{ fov: 48, position: [0, 0.28, 6.2] }}
+        camera={{ fov: 44, position: [0, 0.24, 6.1] }}
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         onPointerMissed={onClearFocus}
