@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Component, lazy, Suspense, useMemo, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 import type { ToolCategory, ToolGalaxyTool } from "./ToolGalaxy3D";
@@ -20,6 +20,13 @@ class ToolGalaxyErrorBoundary extends Component<
     return { hasError: true };
   }
 
+  componentDidCatch(error: Error, errorInfo: { componentStack?: string }) {
+    console.error("[ToolGalaxy3D] Canvas runtime error", {
+      error,
+      componentStack: errorInfo.componentStack,
+    });
+  }
+
   componentDidUpdate(previousProps: { resetKey: string }) {
     if (this.state.hasError && previousProps.resetKey !== this.props.resetKey) {
       this.setState({ hasError: false });
@@ -30,7 +37,7 @@ class ToolGalaxyErrorBoundary extends Component<
     if (this.state.hasError) {
       return (
         <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
-          当前环境暂时无法启用 3D 工具星系，已切换为轻量展示。
+          3D 星系运行时出错，已切换为轻量展示。
         </div>
       );
     }
@@ -60,8 +67,8 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 0,
     orbitRadius: 1.45,
     orbitTilt: [58, -16, 12],
-    baseAngle: 0.15,
-    speed: 0.22,
+    baseAngle: 4.2,
+    speed: 0.08,
     phase: 0,
   },
   {
@@ -74,8 +81,8 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 1,
     orbitRadius: 1.88,
     orbitTilt: [-46, 24, -18],
-    baseAngle: 1.75,
-    speed: -0.18,
+    baseAngle: 1.05,
+    speed: -0.08,
     phase: 0,
   },
   {
@@ -88,8 +95,8 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 2,
     orbitRadius: 1.66,
     orbitTilt: [22, 54, 42],
-    baseAngle: 3.35,
-    speed: 0.2,
+    baseAngle: 3.67,
+    speed: 0.1,
     phase: 0,
   },
   {
@@ -102,8 +109,8 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 3,
     orbitRadius: 2.12,
     orbitTilt: [-68, -22, 34],
-    baseAngle: 4.95,
-    speed: -0.16,
+    baseAngle: 0,
+    speed: -0.08,
     phase: 0,
   },
   {
@@ -116,7 +123,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 0,
     orbitRadius: 1.52,
     orbitTilt: [58, -16, 12],
-    baseAngle: 3.35,
+    baseAngle: 5.76,
     speed: 0.18,
     phase: 0,
   },
@@ -130,7 +137,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 1,
     orbitRadius: 1.96,
     orbitTilt: [-46, 24, -18],
-    baseAngle: 4.85,
+    baseAngle: 2.62,
     speed: -0.17,
     phase: 0,
   },
@@ -144,7 +151,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 4,
     orbitRadius: 2.3,
     orbitTilt: [34, -66, -28],
-    baseAngle: 0.95,
+    baseAngle: 1.05,
     speed: 0.15,
     phase: 0,
   },
@@ -158,7 +165,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 5,
     orbitRadius: 1.74,
     orbitTilt: [-24, -42, 68],
-    baseAngle: 2.55,
+    baseAngle: 4.2,
     speed: -0.2,
     phase: 0,
   },
@@ -172,7 +179,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 2,
     orbitRadius: 1.76,
     orbitTilt: [22, 54, 42],
-    baseAngle: 0.25,
+    baseAngle: 0.52,
     speed: 0.16,
     phase: 0,
   },
@@ -186,7 +193,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 3,
     orbitRadius: 2.06,
     orbitTilt: [-68, -22, 34],
-    baseAngle: 1.55,
+    baseAngle: 3.14,
     speed: -0.15,
     phase: 0,
   },
@@ -200,7 +207,7 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 4,
     orbitRadius: 2.22,
     orbitTilt: [34, -66, -28],
-    baseAngle: 4.05,
+    baseAngle: 4.45,
     speed: 0.14,
     phase: 0,
   },
@@ -214,11 +221,27 @@ const tools: ToolGalaxyTool[] = [
     orbitIndex: 5,
     orbitRadius: 1.82,
     orbitTilt: [-24, -42, 68],
-    baseAngle: 5.65,
+    baseAngle: 1.2,
     speed: -0.18,
     phase: 0,
   },
 ];
+
+type GalaxySupportState = "loading" | "supported" | "unsupported";
+
+function canUseWebGL() {
+  if (typeof document === "undefined") return false;
+
+  try {
+    const canvas = document.createElement("canvas");
+    const context =
+      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    return Boolean(context);
+  } catch (error) {
+    console.error("[ToolGalaxy3D] WebGL capability check failed", error);
+    return false;
+  }
+}
 
 function ToolInfoPanel({ tool }: { tool: ToolGalaxyTool }) {
   return (
@@ -262,6 +285,12 @@ export function SkillsMatrixSection() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory>("AI 创作");
   const [selectedToolId, setSelectedToolId] = useState("codex");
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
+  const [galaxySupport, setGalaxySupport] =
+    useState<GalaxySupportState>("loading");
+
+  useEffect(() => {
+    setGalaxySupport(canUseWebGL() ? "supported" : "unsupported");
+  }, []);
 
   const selectedTool =
     tools.find((tool) => tool.id === selectedToolId) ?? tools[0];
@@ -328,25 +357,40 @@ export function SkillsMatrixSection() {
             ))}
           </div>
 
-          <ToolGalaxyErrorBoundary resetKey={`${activeCategory}-${selectedTool.id}`}>
-            <Suspense
-              fallback={
-                <div className="tool-galaxy-stage tool-galaxy-fallback">
-                  正在生成工具星系
-                </div>
-              }
+          {galaxySupport === "loading" ? (
+            <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
+              正在加载 3D 星系
+            </div>
+          ) : galaxySupport === "unsupported" ? (
+            <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
+              当前浏览器不支持 WebGL，已切换为轻量展示。
+            </div>
+          ) : (
+            <ToolGalaxyErrorBoundary
+              resetKey={`${activeCategory}-${selectedTool.id}`}
             >
-              <ToolGalaxy3D
-                activeCategory={activeCategory}
-                focusedToolId={focusedToolId}
-                reducedMotion={Boolean(shouldReduceMotion)}
-                selectedToolId={selectedTool.id}
-                tools={tools}
-                onClearFocus={() => setFocusedToolId(null)}
-                onSelectTool={selectTool}
-              />
-            </Suspense>
-          </ToolGalaxyErrorBoundary>
+              <Suspense
+                fallback={
+                  <div
+                    className="tool-galaxy-stage tool-galaxy-fallback"
+                    role="status"
+                  >
+                    正在加载 3D 星系
+                  </div>
+                }
+              >
+                <ToolGalaxy3D
+                  activeCategory={activeCategory}
+                  focusedToolId={focusedToolId}
+                  reducedMotion={Boolean(shouldReduceMotion)}
+                  selectedToolId={selectedTool.id}
+                  tools={tools}
+                  onClearFocus={() => setFocusedToolId(null)}
+                  onSelectTool={selectTool}
+                />
+              </Suspense>
+            </ToolGalaxyErrorBoundary>
+          )}
 
           <ToolInfoPanel tool={selectedTool} />
         </div>

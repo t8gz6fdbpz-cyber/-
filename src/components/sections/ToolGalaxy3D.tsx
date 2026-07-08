@@ -32,8 +32,22 @@ type ToolGalaxy3DProps = {
 };
 
 const twoPi = Math.PI * 2;
+const categoryOrder: ToolCategory[] = ["AI 创作", "内容制作", "平台运营"];
 const tempPosition = new THREE.Vector3();
 const tempEuler = new THREE.Euler();
+
+const orbitPresets: Array<{
+  radius: number;
+  tilt: [number, number, number];
+  direction: 1 | -1;
+}> = [
+  { radius: 1.26, tilt: [56, -14, 10], direction: 1 },
+  { radius: 1.48, tilt: [-42, 22, -18], direction: -1 },
+  { radius: 1.68, tilt: [24, 50, 38], direction: 1 },
+  { radius: 1.84, tilt: [-62, -18, 32], direction: -1 },
+  { radius: 1.96, tilt: [34, -58, -26], direction: 1 },
+  { radius: 1.58, tilt: [-22, -38, 62], direction: -1 },
+];
 
 function normalizeAngle(angle: number) {
   return ((angle % twoPi) + twoPi) % twoPi;
@@ -91,6 +105,43 @@ function seededUnit(seed: string) {
   return (hash >>> 0) / 4294967295;
 }
 
+function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
+  const grouped = new Map<ToolCategory, ToolGalaxyTool[]>();
+  tools.forEach((tool) => {
+    const group = grouped.get(tool.category) ?? [];
+    group.push(tool);
+    grouped.set(tool.category, group);
+  });
+
+  const categories = categoryOrder.filter((category) => grouped.has(category));
+
+  return categories.flatMap((category, categoryIndex) => {
+    const group = [...(grouped.get(category) ?? [])].sort((a, b) =>
+      a.id.localeCompare(b.id),
+    );
+    const categoryOffset = (categoryIndex * twoPi) / Math.max(group.length * 3, 1);
+
+    return group.map((tool, toolIndex) => {
+      const orbitIndex = (categoryIndex * 2 + toolIndex) % orbitPresets.length;
+      const preset = orbitPresets[orbitIndex];
+      const evenAngle = (toolIndex / Math.max(group.length, 1)) * twoPi;
+      const seededJitter = (seededUnit(`${tool.id}-angle`) - 0.5) * 0.12;
+      const radiusJitter = (seededUnit(`${tool.id}-radius`) - 0.5) * 0.08;
+      const speedJitter = seededUnit(`${tool.id}-speed`) * 0.012;
+
+      return {
+        ...tool,
+        orbitIndex,
+        orbitRadius: preset.radius + radiusJitter,
+        orbitTilt: preset.tilt,
+        baseAngle: normalizeAngle(categoryOffset + evenAngle + seededJitter),
+        speed: preset.direction * (0.038 + speedJitter),
+        phase: seededUnit(`${tool.id}-phase`) * twoPi,
+      };
+    });
+  });
+}
+
 function createOrbitPoints(radius: number, tilt: [number, number, number]) {
   const points: THREE.Vector3[] = [];
   const euler = new THREE.Euler(
@@ -139,15 +190,20 @@ function OrbitLine({
 function IconPlane({
   fallback,
   icon,
+  opacity,
+  renderOrder,
 }: {
   fallback: string;
   icon: string;
+  opacity: number;
+  renderOrder: number;
 }) {
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let active = true;
+    let currentTexture: THREE.Texture | null = null;
     const loader = new THREE.TextureLoader();
 
     setFailed(false);
@@ -155,29 +211,48 @@ function IconPlane({
     loader.load(
       icon,
       (loadedTexture) => {
-        if (!active) return;
+        if (!active) {
+          loadedTexture.dispose();
+          return;
+        }
+        currentTexture = loadedTexture;
         loadedTexture.colorSpace = THREE.SRGBColorSpace;
+        loadedTexture.premultiplyAlpha = true;
         setTexture(loadedTexture);
       },
       undefined,
-      () => {
+      (error) => {
+        console.warn("[ToolGalaxy3D] Icon texture failed to load", {
+          icon,
+          error,
+        });
         if (active) setFailed(true);
       },
     );
 
     return () => {
       active = false;
+      currentTexture?.dispose();
     };
   }, [icon]);
 
   if (!texture || failed) {
-    return <InitialsPlane initials={fallback} />;
+    return (
+      <InitialsPlane
+        initials={fallback}
+        opacity={opacity}
+        renderOrder={renderOrder}
+      />
+    );
   }
 
   return (
-    <sprite position={[0, 0, 0.26]} scale={[0.34, 0.34, 1]} renderOrder={8}>
+    <sprite position={[0, 0, 0.24]} scale={[0.28, 0.28, 1]} renderOrder={renderOrder}>
       <spriteMaterial
+        alphaTest={0.05}
         map={texture}
+        opacity={opacity}
+        toneMapped={false}
         transparent
         depthTest={false}
         depthWrite={false}
@@ -186,7 +261,15 @@ function IconPlane({
   );
 }
 
-function InitialsPlane({ initials }: { initials: string }) {
+function InitialsPlane({
+  initials,
+  opacity = 1,
+  renderOrder = 8,
+}: {
+  initials: string;
+  opacity?: number;
+  renderOrder?: number;
+}) {
   const groupRef = useRef<THREE.Group>(null);
   const { camera } = useThree();
 
@@ -196,12 +279,18 @@ function InitialsPlane({ initials }: { initials: string }) {
 
   return (
     <group ref={groupRef} position={[0, 0, 0.058]}>
-      <mesh>
+      <mesh renderOrder={renderOrder}>
         <circleGeometry args={[0.15, 32]} />
-        <meshBasicMaterial color="#ffd175" transparent opacity={0.92} />
+        <meshBasicMaterial
+          color="#ffd175"
+          transparent
+          opacity={0.92 * opacity}
+        />
       </mesh>
-      <Html center transform zIndexRange={[12, 0]}>
-        <span className="tool-galaxy-initials">{initials}</span>
+      <Html center zIndexRange={[12, 0]}>
+        <span className="tool-galaxy-initials" style={{ opacity }}>
+          {initials}
+        </span>
       </Html>
     </group>
   );
@@ -226,11 +315,30 @@ function ToolPlanet({
   const groupRef = useRef<THREE.Group>(null);
   const sphereRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
+  const hoveredRef = useRef(false);
+  const { gl } = useThree();
   const categoryActive = tool.category === activeCategory;
-  const frontAngle = useMemo(() => getFrontAngle(tool), [tool]);
+  const iconOpacity = categoryActive || focused || selected ? 1 : 0.22;
+  const frontAngle = useMemo(
+    () => getFrontAngle(tool),
+    [tool.baseAngle, tool.orbitRadius, tool.orbitTilt, tool.phase],
+  );
+  const renderOrder = focused ? 36 : selected ? 28 : categoryActive ? 16 : 8;
+
+  const setHovered = (value: boolean) => {
+    hoveredRef.current = value;
+    gl.domElement.style.cursor = value ? "pointer" : "";
+  };
+
+  useEffect(() => () => {
+    if (hoveredRef.current) {
+      gl.domElement.style.cursor = "";
+    }
+  }, [gl]);
 
   useFrame((_, delta) => {
+    const hovered = hoveredRef.current;
+
     if (focused) {
       angleRef.current = normalizeAngle(
         angleRef.current +
@@ -281,7 +389,7 @@ function ToolPlanet({
       );
       sphereMaterial.emissiveIntensity = THREE.MathUtils.lerp(
         sphereMaterial.emissiveIntensity,
-        focused ? 0.72 : hovered ? 0.42 : selected ? 0.3 : 0.1,
+        focused ? 0.68 : hovered ? 0.36 : selected ? 0.26 : 0.08,
         1 - Math.exp(-delta * 4.8),
       );
     }
@@ -303,10 +411,12 @@ function ToolPlanet({
       ref={groupRef}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
+      renderOrder={renderOrder}
     >
       <mesh
         ref={glowRef}
         scale={1.42}
+        renderOrder={renderOrder - 1}
         onClick={(event) => {
           event.stopPropagation();
           onSelectTool(tool, true);
@@ -315,6 +425,7 @@ function ToolPlanet({
         <sphereGeometry args={[0.2, 32, 32]} />
         <meshBasicMaterial
           color="#ffd175"
+          blending={THREE.AdditiveBlending}
           depthWrite={false}
           opacity={0.04}
           transparent
@@ -324,6 +435,7 @@ function ToolPlanet({
         ref={sphereRef}
         castShadow={false}
         receiveShadow={false}
+        renderOrder={renderOrder}
         onClick={(event) => {
           event.stopPropagation();
           onSelectTool(tool, true);
@@ -331,24 +443,31 @@ function ToolPlanet({
       >
         <sphereGeometry args={[0.18, 42, 42]} />
         <meshStandardMaterial
-          color={categoryActive ? "#1f170d" : "#3a2b18"}
+          color={categoryActive ? "#f2c667" : "#d6a64e"}
           emissive="#ffd175"
           emissiveIntensity={0.1}
           metalness={0.36}
-          opacity={categoryActive ? 0.84 : 0.18}
+          opacity={categoryActive ? 0.18 : 0.055}
           roughness={0.28}
           transparent
+          depthWrite={false}
         />
       </mesh>
       {tool.icon ? (
         <IconPlane
           fallback={tool.initials ?? tool.name.slice(0, 2)}
           icon={tool.icon}
+          opacity={iconOpacity}
+          renderOrder={renderOrder + 1}
         />
       ) : (
-        <InitialsPlane initials={tool.initials ?? tool.name.slice(0, 2)} />
+        <InitialsPlane
+          initials={tool.initials ?? tool.name.slice(0, 2)}
+          opacity={iconOpacity}
+          renderOrder={renderOrder + 1}
+        />
       )}
-      <Html center transform zIndexRange={[20, 0]}>
+      <Html center zIndexRange={[20, 0]}>
         <button
           type="button"
           className="tool-galaxy-a11y-button"
@@ -359,6 +478,8 @@ function ToolPlanet({
             event.stopPropagation();
             onSelectTool(tool, true);
           }}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
           onKeyDown={(event) => {
             if (event.key === "Enter" || event.key === " ") {
               event.preventDefault();
@@ -410,6 +531,8 @@ function GalaxyScene({
   onClearFocus,
   onSelectTool,
 }: ToolGalaxy3DProps) {
+  const { size } = useThree();
+  const sceneScale = size.width < 520 ? 0.74 : size.width < 900 ? 0.84 : 1;
   const orbitConfigs = useMemo(
     () =>
       [...new Map(tools.map((tool) => [tool.orbitIndex, tool])).values()]
@@ -438,7 +561,7 @@ function GalaxyScene({
         penumbra={0.9}
         position={[2.4, 2.2, 3.4]}
       />
-      <group position={[0, 0, 0]}>
+      <group position={[0, 0, 0]} scale={sceneScale}>
         <StarField />
         <mesh>
           <sphereGeometry args={[0.11, 32, 32]} />
@@ -496,13 +619,15 @@ export const ToolGalaxy3D = memo(function ToolGalaxy3D({
   onClearFocus,
   onSelectTool,
 }: ToolGalaxy3DProps) {
+  const layoutTools = useMemo(() => createStableGalaxyLayout(tools), [tools]);
+
   return (
     <div
       className="tool-galaxy-stage"
       aria-label="3D 原子轨道式工具星系"
     >
       <Canvas
-        camera={{ fov: 42, position: [0, 0.35, 5.2] }}
+        camera={{ fov: 48, position: [0, 0.28, 6.2] }}
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         onPointerMissed={onClearFocus}
@@ -512,7 +637,7 @@ export const ToolGalaxy3D = memo(function ToolGalaxy3D({
           focusedToolId={focusedToolId}
           reducedMotion={reducedMotion}
           selectedToolId={selectedToolId}
-          tools={tools}
+          tools={layoutTools}
           onClearFocus={onClearFocus}
           onSelectTool={onSelectTool}
         />
