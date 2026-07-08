@@ -1,328 +1,355 @@
-import { motion, useReducedMotion } from "framer-motion";
-import type { CSSProperties } from "react";
-import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Component, lazy, Suspense, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 
-type ToolCategory = "AI 工具" | "内容制作" | "平台运营";
+import type { ToolCategory, ToolGalaxyTool } from "./ToolGalaxy3D";
 
-type Tool = {
-  name: string;
-  category: ToolCategory;
-  tag: string;
-  description: string;
-  image: string;
-  position: { x: number; y: number };
-};
+const ToolGalaxy3D = lazy(() =>
+  import("./ToolGalaxy3D").then((module) => ({
+    default: module.ToolGalaxy3D,
+  })),
+);
+
+class ToolGalaxyErrorBoundary extends Component<
+  { children: ReactNode; resetKey: string },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidUpdate(previousProps: { resetKey: string }) {
+    if (this.state.hasError && previousProps.resetKey !== this.props.resetKey) {
+      this.setState({ hasError: false });
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
+          当前环境暂时无法启用 3D 工具星系，已切换为轻量展示。
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 const categoryMeta: Array<{
   name: ToolCategory;
-  english: string;
+  note: string;
   accent: string;
 }> = [
-  { name: "AI 工具", english: "AI CREATION", accent: "#ffd175" },
-  { name: "内容制作", english: "CONTENT PRODUCTION", accent: "#c28a2e" },
-  { name: "平台运营", english: "PLATFORM OPERATION", accent: "#8a5a18" },
+  { name: "AI 创作", note: "脚本、策略、视觉和原型", accent: "#ffd175" },
+  { name: "内容制作", note: "剪辑、设计、包装和交付", accent: "#c28a2e" },
+  { name: "平台运营", note: "分发、直播、社群和增长", accent: "#8a5a18" },
 ];
 
-const tools: Tool[] = [
+const tools: ToolGalaxyTool[] = [
   {
+    id: "chatgpt",
+    name: "ChatGPT",
+    category: "AI 创作",
+    description: "用于脚本生成、选题拆解、复盘整理和内容工作流搭建。",
+    tags: ["脚本生成", "选题拆解", "复盘整理"],
+    initials: "GPT",
+    orbitIndex: 0,
+    orbitRadius: 1.45,
+    orbitTilt: [58, -16, 12],
+    baseAngle: 0.15,
+    speed: 0.22,
+    phase: 0,
+  },
+  {
+    id: "claude",
     name: "Claude",
-    category: "AI 工具",
-    tag: "研究与策略",
-    description: "用于资料研究、长文本分析和内容策略梳理。",
-    image: "/toolbox/claude.png",
-    position: { x: 38, y: 28 },
+    category: "AI 创作",
+    description: "用于资料分析、策略梳理、长文本处理和复杂信息归纳。",
+    tags: ["资料分析", "策略梳理", "长文本处理"],
+    icon: "/toolbox/claude.png",
+    orbitIndex: 1,
+    orbitRadius: 1.88,
+    orbitTilt: [-46, 24, -18],
+    baseAngle: 1.75,
+    speed: -0.18,
+    phase: 0,
   },
   {
+    id: "codex",
     name: "Codex",
-    category: "AI 工具",
-    tag: "开发与自动化",
-    description: "用于网页开发、原型实现和重复工作自动化。",
-    image: "/toolbox/codex.png",
-    position: { x: 50, y: 18 },
+    category: "AI 创作",
+    description: "用于网页开发、自动化实现、原型搭建和小工具落地。",
+    tags: ["网页开发", "自动化实现", "原型搭建"],
+    icon: "/toolbox/codex.png",
+    orbitIndex: 2,
+    orbitRadius: 1.66,
+    orbitTilt: [22, 54, 42],
+    baseAngle: 3.35,
+    speed: 0.2,
+    phase: 0,
   },
   {
+    id: "jimeng",
     name: "即梦",
-    category: "AI 工具",
-    tag: "视觉创作",
-    description: "用于视觉概念探索、图像生成和创意方向验证。",
-    image: "/toolbox/jimeng.png",
-    position: { x: 62, y: 28 },
+    category: "AI 创作",
+    description: "用于视觉概念、图像生成、创意验证和内容情绪板探索。",
+    tags: ["视觉概念", "图像生成", "创意验证"],
+    icon: "/toolbox/jimeng.png",
+    orbitIndex: 3,
+    orbitRadius: 2.12,
+    orbitTilt: [-68, -22, 34],
+    baseAngle: 4.95,
+    speed: -0.16,
+    phase: 0,
   },
   {
-    name: "Photoshop",
-    category: "内容制作",
-    tag: "图像处理",
-    description: "用于图片精修、视觉合成和内容物料制作。",
-    image: "/toolbox/photoshop.jpg",
-    position: { x: 25, y: 48 },
-  },
-  {
-    name: "Premiere",
-    category: "内容制作",
-    tag: "视频剪辑",
-    description: "用于长短视频剪辑、节奏控制和多格式输出。",
-    image: "/toolbox/premiere.png",
-    position: { x: 75, y: 48 },
-  },
-  {
-    name: "DaVinci Resolve",
-    category: "内容制作",
-    tag: "调色与后期",
-    description: "用于专业调色、声音处理和视频后期交付。",
-    image: "/toolbox/davinci.png",
-    position: { x: 35, y: 62 },
-  },
-  {
+    id: "capcut",
     name: "剪映",
     category: "内容制作",
-    tag: "短视频制作",
-    description: "用于社交平台短视频、字幕和快速内容适配。",
-    image: "/toolbox/capcut.png",
-    position: { x: 65, y: 62 },
+    description: "用于短视频制作、字幕处理、快速剪辑和平台格式适配。",
+    tags: ["短视频制作", "字幕处理", "快速剪辑"],
+    icon: "/toolbox/capcut.png",
+    orbitIndex: 0,
+    orbitRadius: 1.52,
+    orbitTilt: [58, -16, 12],
+    baseAngle: 3.35,
+    speed: 0.18,
+    phase: 0,
   },
   {
-    name: "CDR",
+    id: "premiere",
+    name: "Premiere",
     category: "内容制作",
-    tag: "矢量设计",
-    description: "用于矢量图形、印刷排版和线下物料制作。",
-    image: "/toolbox/cdr.png",
-    position: { x: 50, y: 72 },
+    description: "用于视频剪辑、节奏处理、多轨整理和成片输出。",
+    tags: ["视频剪辑", "节奏处理", "成片输出"],
+    icon: "/toolbox/premiere.png",
+    orbitIndex: 1,
+    orbitRadius: 1.96,
+    orbitTilt: [-46, 24, -18],
+    baseAngle: 4.85,
+    speed: -0.17,
+    phase: 0,
   },
   {
+    id: "photoshop",
+    name: "Photoshop",
+    category: "内容制作",
+    description: "用于图片处理、视觉合成、封面制作和内容包装。",
+    tags: ["图片处理", "视觉合成", "封面制作"],
+    icon: "/toolbox/photoshop.jpg",
+    orbitIndex: 4,
+    orbitRadius: 2.3,
+    orbitTilt: [34, -66, -28],
+    baseAngle: 0.95,
+    speed: 0.15,
+    phase: 0,
+  },
+  {
+    id: "canva",
+    name: "Canva",
+    category: "内容制作",
+    description: "用于轻量设计、活动物料、模板搭建和快速协作。",
+    tags: ["轻量设计", "活动物料", "模板搭建"],
+    initials: "CV",
+    orbitIndex: 5,
+    orbitRadius: 1.74,
+    orbitTilt: [-24, -42, 68],
+    baseAngle: 2.55,
+    speed: -0.2,
+    phase: 0,
+  },
+  {
+    id: "douyin",
     name: "抖音",
     category: "平台运营",
-    tag: "短视频增长",
-    description: "用于内容分发、趋势洞察和账号增长运营。",
-    image: "/toolbox/douyin.png",
-    position: { x: 20, y: 78 },
+    description: "用于短视频增长、直播运营、内容分发和趋势观察。",
+    tags: ["短视频增长", "直播运营", "内容分发"],
+    icon: "/toolbox/douyin.png",
+    orbitIndex: 2,
+    orbitRadius: 1.76,
+    orbitTilt: [22, 54, 42],
+    baseAngle: 0.25,
+    speed: 0.16,
+    phase: 0,
   },
   {
+    id: "wechat-channels",
     name: "视频号",
     category: "平台运营",
-    tag: "视频分发",
-    description: "用于微信生态的视频发布、直播和内容联动。",
-    image: "/toolbox/wechat-channels.png",
-    position: { x: 38, y: 86 },
+    description: "用于微信生态分发、直播联动、内容沉淀和私域承接。",
+    tags: ["微信生态", "直播联动", "内容沉淀"],
+    icon: "/toolbox/wechat-channels.png",
+    orbitIndex: 3,
+    orbitRadius: 2.06,
+    orbitTilt: [-68, -22, 34],
+    baseAngle: 1.55,
+    speed: -0.15,
+    phase: 0,
   },
   {
-    name: "微信",
-    category: "平台运营",
-    tag: "私域运营",
-    description: "用于社群维护、用户沟通和私域关系沉淀。",
-    image: "/toolbox/wechat.png",
-    position: { x: 62, y: 86 },
-  },
-  {
+    id: "xiaohongshu",
     name: "小红书",
     category: "平台运营",
-    tag: "内容种草",
-    description: "用于视觉内容发布、社区洞察和品牌种草。",
-    image: "/toolbox/xiaohongshu.png",
-    position: { x: 80, y: 78 },
+    description: "用于内容种草、社区洞察、视觉表达和用户反馈观察。",
+    tags: ["内容种草", "社区洞察", "视觉表达"],
+    icon: "/toolbox/xiaohongshu.png",
+    orbitIndex: 4,
+    orbitRadius: 2.22,
+    orbitTilt: [34, -66, -28],
+    baseAngle: 4.05,
+    speed: 0.14,
+    phase: 0,
+  },
+  {
+    id: "tiktok",
+    name: "TikTok",
+    category: "平台运营",
+    description: "用于海外趋势观察、短视频参考和内容测试。",
+    tags: ["趋势观察", "短视频参考", "内容测试"],
+    initials: "TK",
+    orbitIndex: 5,
+    orbitRadius: 1.82,
+    orbitTilt: [-24, -42, 68],
+    baseAngle: 5.65,
+    speed: -0.18,
+    phase: 0,
   },
 ];
 
-function ToolIcon({
-  tool,
-  index,
-  active,
-  onActivate,
-}: {
-  tool: Tool;
-  index: number;
-  active: boolean;
-  onActivate: (tool: Tool) => void;
-}) {
-  const shouldReduceMotion = useReducedMotion();
-
+function ToolInfoPanel({ tool }: { tool: ToolGalaxyTool }) {
   return (
-    <motion.button
-      type="button"
-      aria-label={`${tool.name}：${tool.tag}`}
-      aria-pressed={active}
-      className="tool-planet-icon"
-      data-active={active}
-      style={{
-        left: `${tool.position.x}%`,
-        top: `${tool.position.y}%`,
-      }}
-      animate={
-        shouldReduceMotion
-          ? undefined
-          : { y: [0, -4 - (index % 3) * 2, 0] }
-      }
-      transition={{
-        duration: 5.5 + (index % 4),
-        delay: index * -0.35,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-      whileHover={shouldReduceMotion ? undefined : { scale: 1.15 }}
-      whileFocus={shouldReduceMotion ? undefined : { scale: 1.15 }}
-      onPointerEnter={() => onActivate(tool)}
-      onPointerDown={() => onActivate(tool)}
-      onFocus={() => onActivate(tool)}
-      onClick={() => onActivate(tool)}
-    >
-      <img src={tool.image} alt="" draggable={false} />
-    </motion.button>
-  );
-}
-
-function InfoPanel({ tool }: { tool: Tool }) {
-  const meta = categoryMeta.find((item) => item.name === tool.category);
-
-  return (
-    <motion.aside
-      key={tool.name}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28 }}
-      className="tool-info-panel"
-      aria-live="polite"
-    >
-      <div className="tool-info-logo">
-        <img src={tool.image} alt="" />
-      </div>
-      <p style={{ color: meta?.accent }}>{tool.category}</p>
-      <h3>{tool.name}</h3>
-      <span>{tool.tag}</span>
-      <div className="tool-info-divider" />
-      <p className="tool-info-description">{tool.description}</p>
-      <small>悬停或聚焦图标查看对应能力</small>
-    </motion.aside>
-  );
-}
-
-function MobileToolGrid({
-  activeTool,
-  onActivate,
-}: {
-  activeTool: Tool;
-  onActivate: (tool: Tool) => void;
-}) {
-  return (
-    <div className="tool-mobile-layout">
-      {categoryMeta.map((category) => (
-        <section key={category.name} className="tool-mobile-category">
-          <div className="tool-mobile-category-heading">
-            <span style={{ backgroundColor: category.accent }} />
-            <div>
-              <h3>{category.name}</h3>
-              <p>{category.english}</p>
-            </div>
-          </div>
-          <div className="tool-mobile-grid">
-            {tools
-              .filter((tool) => tool.category === category.name)
-              .map((tool) => (
-                <button
-                  type="button"
-                  key={tool.name}
-                  data-active={activeTool.name === tool.name}
-                  onPointerDown={() => onActivate(tool)}
-                  onClick={() => onActivate(tool)}
-                >
-                  <img src={tool.image} alt="" />
-                  <span>{tool.name}</span>
-                  <small>{tool.tag}</small>
-                </button>
-              ))}
-          </div>
-        </section>
-      ))}
-      <InfoPanel tool={activeTool} />
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.aside
+        key={tool.id}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        className="tool-info-panel"
+        aria-live="polite"
+      >
+        <div className="tool-info-logo">
+          {tool.icon ? (
+            <img src={tool.icon} alt="" draggable={false} />
+          ) : (
+            <span className="tool-planet-fallback">
+              {tool.initials ?? tool.name.slice(0, 2)}
+            </span>
+          )}
+        </div>
+        <p>{tool.category}</p>
+        <h3>{tool.name}</h3>
+        <span>{tool.tags[0]}</span>
+        <div className="tool-tag-list" aria-label="工具标签">
+          {tool.tags.map((tag) => (
+            <em key={tag}>{tag}</em>
+          ))}
+        </div>
+        <div className="tool-info-divider" />
+        <p className="tool-info-description">{tool.description}</p>
+        <small>点击星球可聚焦到镜头前方；点击空白处恢复轨道运动。</small>
+      </motion.aside>
+    </AnimatePresence>
   );
 }
 
 export function SkillsMatrixSection() {
-  const [activeTool, setActiveTool] = useState<Tool>(
-    tools.find((tool) => tool.name === "Codex") ?? tools[0],
-  );
   const shouldReduceMotion = useReducedMotion();
+  const [activeCategory, setActiveCategory] = useState<ToolCategory>("AI 创作");
+  const [selectedToolId, setSelectedToolId] = useState("codex");
+  const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
+
+  const selectedTool =
+    tools.find((tool) => tool.id === selectedToolId) ?? tools[0];
+
+  const categoryCounts = useMemo(
+    () =>
+      categoryMeta.map((category) => ({
+        ...category,
+        count: tools.filter((tool) => tool.category === category.name).length,
+      })),
+    [],
+  );
+
+  const selectTool = (tool: ToolGalaxyTool, focus = true) => {
+    setSelectedToolId(tool.id);
+    setActiveCategory(tool.category);
+    setFocusedToolId(focus ? tool.id : null);
+  };
+
+  const selectCategory = (category: ToolCategory) => {
+    const firstTool = tools.find((tool) => tool.category === category);
+    setActiveCategory(category);
+    if (firstTool) {
+      setSelectedToolId(firstTool.id);
+      setFocusedToolId(null);
+    }
+  };
 
   return (
     <section
       id="skills"
-      className="toolbox-section scroll-mt-8 bg-[var(--color-bg)] px-5 py-20 text-[var(--color-text)] sm:px-8 md:px-10 md:py-28"
+      className="toolbox-section scroll-mt-8 bg-[var(--color-bg)] px-5 py-24 text-[var(--color-text)] sm:px-8 md:px-10 md:py-36"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="skill-planet-heading">
           <div>
-            <p className="mb-3 text-xs uppercase tracking-[0.32em] text-[var(--color-text-muted)]">
-              My Skills
-            </p>
-            <h2 className="text-[clamp(3.5rem,10vw,9rem)] font-black uppercase leading-[0.82] tracking-[-0.05em]">
-              我的技能
-            </h2>
+            <p>技能</p>
+            <h2>工具星系</h2>
           </div>
-          <div className="max-w-md md:text-right">
-            <h3 className="text-2xl font-semibold text-[var(--color-text)] md:text-3xl">
-              我的工具栈
-            </h3>
-            <p className="mt-2 text-sm tracking-[0.08em] text-[var(--color-text-muted)]">
-              AI创作 / 内容制作 / 平台运营
-            </p>
-          </div>
+          <span>
+            我常用的工具、平台和创作系统。它们不是孤立的软件，而是围绕内容生产、平台运营和 AI 工作流运行的工具生态。
+          </span>
         </div>
 
-        <div className="tool-desktop-layout mt-12">
+        <div className="tool-desktop-layout mt-14">
           <div className="tool-category-index" aria-label="工具分类">
-            <p>TOOL PLANET</p>
-            {categoryMeta.map((category) => (
-              <div key={category.name} className="tool-category-item">
+            <p>分类轨道</p>
+            {categoryCounts.map((category) => (
+              <button
+                key={category.name}
+                type="button"
+                className="tool-category-item"
+                data-active={activeCategory === category.name}
+                onClick={() => selectCategory(category.name)}
+              >
                 <span style={{ backgroundColor: category.accent }} />
                 <div>
                   <strong>{category.name}</strong>
-                  <small>{category.english}</small>
+                  <small>
+                    {category.note} / {category.count} 个工具
+                  </small>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 
-          <motion.div
-            className="tool-planet-stage"
-            animate={
-              shouldReduceMotion
-                ? undefined
-                : { rotate: [-0.8, 0.8, -0.8] }
-            }
-            transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <div className="tool-nebula" aria-hidden="true" />
-            <div className="tool-planet-orbit tool-planet-orbit-inner" />
-            <div className="tool-planet-orbit tool-planet-orbit-outer" />
-            <div className="tool-particle-field" aria-hidden="true">
-              {Array.from({ length: 12 }, (_, index) => (
-                <span
-                  key={index}
-                  style={
-                    {
-                      "--particle-x": `${8 + ((index * 31) % 84)}%`,
-                      "--particle-y": `${8 + ((index * 47) % 82)}%`,
-                      "--particle-delay": `${-((index * 0.73) % 7)}s`,
-                      "--particle-duration": `${7 + (index % 5)}s`,
-                    } as CSSProperties
-                  }
-                />
-              ))}
-            </div>
-            {tools.map((tool, index) => (
-              <ToolIcon
-                key={tool.name}
-                tool={tool}
-                index={index}
-                active={activeTool.name === tool.name}
-                onActivate={setActiveTool}
+          <ToolGalaxyErrorBoundary resetKey={`${activeCategory}-${selectedTool.id}`}>
+            <Suspense
+              fallback={
+                <div className="tool-galaxy-stage tool-galaxy-fallback">
+                  正在生成工具星系
+                </div>
+              }
+            >
+              <ToolGalaxy3D
+                activeCategory={activeCategory}
+                focusedToolId={focusedToolId}
+                reducedMotion={Boolean(shouldReduceMotion)}
+                selectedToolId={selectedTool.id}
+                tools={tools}
+                onClearFocus={() => setFocusedToolId(null)}
+                onSelectTool={selectTool}
               />
-            ))}
-          </motion.div>
+            </Suspense>
+          </ToolGalaxyErrorBoundary>
 
-          <InfoPanel tool={activeTool} />
+          <ToolInfoPanel tool={selectedTool} />
         </div>
-
-        <MobileToolGrid activeTool={activeTool} onActivate={setActiveTool} />
       </div>
     </section>
   );

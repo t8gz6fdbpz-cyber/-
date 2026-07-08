@@ -1,0 +1,12 @@
+<svg width="960" height="720" viewBox="0 0 960 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="720" fill="#090806"/>
+  <path d="M0 505C140 430 236 456 340 390C472 306 548 182 719 174C820 169 895 205 960 249V720H0V505Z" fill="#FFD175" fill-opacity=".16"/>
+  <path d="M105 558C223 494 304 512 392 456C503 385 568 280 713 273C798 269 861 299 916 336" stroke="#FFD175" stroke-opacity=".35" stroke-width="3"/>
+  <circle cx="690" cy="186" r="58" fill="#FFD175"/>
+  <circle cx="690" cy="186" r="22" fill="#090806"/>
+  <path d="M250 260H525" stroke="#FFD175" stroke-width="24" stroke-linecap="round"/>
+  <path d="M318 205L248 260L318 315" stroke="#FFD175" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M456 205L526 260L456 315" stroke="#FFD175" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="58" y="92" fill="#FFD175" font-family="Arial Black, Arial, sans-serif" font-size="52" font-weight="900">SPORT</text>
+  <text x="62" y="140" fill="#FFD175" fill-opacity=".58" font-family="Arial, sans-serif" font-size="22" font-weight="700">Replace with riding, training or hiking photo</text>
+</svg>

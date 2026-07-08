@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
 const navItems = [
-  { label: "首页", href: "#" },
-  { label: "工作经历", href: "#growth-systems" },
-  { label: "作品", href: "#projects" },
-  { label: "爱好", href: "#philosophy" },
-  { label: "联系我", href: "#contact" },
+  { label: "首页", href: "/" },
+  { label: "关于我", href: "/#about" },
+  { label: "经历", href: "/#case-studies" },
+  { label: "作品", href: "/#works-gallery" },
+  { label: "技能", href: "/#skills" },
+  { label: "兴趣", href: "/#interests" },
+  { label: "联系", href: "/#contact" },
 ];
 
 export function FloatingLogoNav() {
@@ -43,7 +45,7 @@ export function FloatingLogoNav() {
   return (
     <nav
       ref={navRef}
-      aria-label="Primary"
+      aria-label="主导航"
       className={`floating-logo-nav notranslate${isOpen ? " is-open" : ""}`}
       translate="no"
       onMouseEnter={() => setIsOpen(true)}
@@ -64,7 +66,7 @@ export function FloatingLogoNav() {
       </div>
       <button
         aria-expanded={isOpen}
-        aria-label="Toggle navigation"
+        aria-label={isOpen ? "关闭导航" : "打开导航"}
         className="floating-logo-nav-logo"
         type="button"
         onClick={() => setIsOpen((open) => !open)}

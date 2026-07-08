@@ -1,0 +1,9 @@
+<svg width="760" height="900" viewBox="0 0 760 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="760" height="900" fill="#080705"/>
+  <path d="M86 590C180 512 262 548 338 454C411 363 434 216 566 192C642 178 705 214 760 262V900H0V688C24 660 52 622 86 590Z" fill="#FFD175" fill-opacity=".18"/>
+  <circle cx="548" cy="210" r="62" fill="#FFD175"/>
+  <path d="M163 204H389M163 284H319M163 364H443" stroke="#FFD175" stroke-width="28" stroke-linecap="round"/>
+  <rect x="142" y="546" width="476" height="214" rx="28" fill="#FFD175" fill-opacity=".12" stroke="#FFD175" stroke-opacity=".3" stroke-width="3"/>
+  <text x="64" y="92" fill="#FFD175" font-family="Arial Black, Arial, sans-serif" font-size="52" font-weight="900">LIFE</text>
+  <text x="66" y="830" fill="#FFD175" fill-opacity=".62" font-family="Arial, sans-serif" font-size="22" font-weight="700">Replace with a personal life moment</text>
+</svg>

@@ -230,6 +230,7 @@ export function MarqueeSection() {
 
   return (
     <section
+      id="works-gallery"
       ref={sectionRef}
       aria-label="02 Showcase"
       className="relative h-[calc(100vh+480px)] bg-[#0C0C0C] md:h-[calc(100vh+640px)]"
