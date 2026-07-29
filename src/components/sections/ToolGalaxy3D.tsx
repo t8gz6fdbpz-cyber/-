@@ -1,6 +1,7 @@
 import { Html, Line } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
+import type { MutableRefObject } from "react";
 import * as THREE from "three";
 
 export type ToolCategory = "AI 创作" | "内容制作" | "平台运营";
@@ -19,6 +20,8 @@ export type ToolGalaxyTool = {
   baseAngle: number;
   speed: number;
   phase: number;
+  layoutAnchor?: [number, number];
+  mobileLayoutAnchor?: [number, number];
 };
 
 type ToolGalaxy3DProps = {
@@ -36,6 +39,15 @@ const categoryOrder: ToolCategory[] = ["AI 创作", "内容制作", "平台运�
 const tempPosition = new THREE.Vector3();
 const tempEuler = new THREE.Euler();
 const defaultProjectionSpread = { x: 1, y: 1, z: 1 };
+const iconTextureSize = 192;
+const iconCornerRatio = 0.382;
+type PlanetPositionRegistry = MutableRefObject<Map<string, THREE.Vector3>>;
+type LoadedIconImage = CanvasImageSource & {
+  height?: number;
+  naturalHeight?: number;
+  naturalWidth?: number;
+  width?: number;
+};
 
 const layoutPresets: Array<{
   baseAngle: number;
@@ -55,12 +67,72 @@ const layoutPresets: Array<{
   { orbitIndex: 8, baseAngle: 225, radius: 3.78, tilt: [-18, -26, 10], phase: 0.65 },
   { orbitIndex: 9, baseAngle: 306, radius: 3.58, tilt: [12, 34, -18], phase: 1.45 },
   { orbitIndex: 10, baseAngle: 44, radius: 3.36, tilt: [-40, 16, 24], phase: 2.25 },
-  { orbitIndex: 11, baseAngle: 226, radius: 3.96, tilt: [34, -18, -16], phase: 3.05 },
+  { orbitIndex: 11, baseAngle: 8, radius: 3.96, tilt: [34, -18, -16], phase: 3.05 },
+];
+
+const layoutAnchors: Array<[number, number]> = [
+  [-0.68, 0.34],
+  [0.06, 0.3],
+  [0.66, 0.32],
+  [-0.48, -0.02],
+  [0.26, -0.04],
+  [0.72, -0.14],
+  [-0.64, -0.42],
+  [-0.08, -0.34],
+  [0.46, -0.38],
+  [-0.24, 0.48],
+  [0.42, 0.46],
+  [0.02, -0.02],
+];
+
+const mobileLayoutAnchors: Array<[number, number]> = [
+  [-0.7, 0.58],
+  [-0.12, 0.54],
+  [0.48, 0.58],
+  [-0.62, 0.24],
+  [0.02, 0.2],
+  [0.64, 0.24],
+  [0.48, -0.16],
+  [-0.08, -0.18],
+  [0.76, -0.36],
+  [-0.64, -0.36],
+  [0.02, -0.48],
+  [0.54, -0.55],
+];
+
+const mobileFocusAnchors: Array<[number, number]> = [
+  [-0.78, 0.9],
+  [-0.32, 0.86],
+  [0.18, 0.9],
+  [0.68, 0.84],
+  [-0.62, 0.72],
+  [-0.12, 0.68],
+  [0.42, 0.72],
+  [0.78, 0.66],
+  [-0.74, 0.54],
+  [-0.24, 0.5],
+  [0.28, 0.54],
+  [0.72, 0.48],
 ];
 
 const defaultFocusAvoidAngles = [
   205, 238, 172, 120, 100, 88, 260, 145, 330, 62, 120, 285,
 ].map(THREE.MathUtils.degToRad);
+
+const focusAvoidOffsets: Array<[number, number]> = [
+  [0.22, -0.08],
+  [-0.18, 0.12],
+  [0.28, 0.12],
+  [-0.24, -0.12],
+  [-0.34, 0.1],
+  [-0.34, -0.24],
+  [0, 0],
+  [0.34, -0.2],
+  [-0.36, 0.18],
+  [0.28, -0.24],
+  [0.38, 0.24],
+  [-0.26, 0.28],
+];
 
 const focusAvoidAngleTable = [
   [205, 100, 90, 0, 100, 140, 260, 60, 30, 70, 130, 150],
@@ -69,7 +141,7 @@ const focusAvoidAngleTable = [
   [60, 280, 172, 120, 100, 340, 260, 140, 30, 62, 120, 190],
   [205, 100, 90, 0, 100, 140, 260, 60, 30, 62, 130, 150],
   [60, 100, 172, 10, 100, 88, 260, 145, 330, 100, 120, 180],
-  [300, 110, 10, 70, 100, 140, 260, 90, 30, 80, 110, 130],
+  [300, 110, 10, 70, 100, 240, 260, 0, 120, 80, 110, 130],
   [205, 110, 180, 140, 330, 140, 260, 145, 30, 100, 70, 285],
   [50, 100, 10, 40, 100, 140, 260, 60, 330, 80, 100, 130],
   [205, 10, 172, 120, 60, 130, 260, 40, 330, 62, 120, 285],
@@ -83,6 +155,147 @@ function normalizeAngle(angle: number) {
 
 function shortestAngleDelta(from: number, to: number) {
   return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+}
+
+function projectToScreen(
+  position: THREE.Vector3,
+  camera: THREE.Camera,
+  size: { height: number; width: number },
+  target: THREE.Vector3,
+) {
+  target.copy(position).project(camera);
+
+  return {
+    x: (target.x * 0.5 + 0.5) * size.width,
+    y: (-target.y * 0.5 + 0.5) * size.height,
+  };
+}
+
+function moveTowardScreenPoint(
+  position: THREE.Vector3,
+  camera: THREE.Camera,
+  size: { height: number; width: number },
+  screenX: number,
+  screenY: number,
+  strength: number,
+  target: THREE.Vector3,
+) {
+  target.copy(position).project(camera);
+  const nextX = THREE.MathUtils.lerp(
+    (target.x * 0.5 + 0.5) * size.width,
+    screenX,
+    strength,
+  );
+  const nextY = THREE.MathUtils.lerp(
+    (-target.y * 0.5 + 0.5) * size.height,
+    screenY,
+    strength,
+  );
+
+  target.set(
+    (nextX / Math.max(size.width, 1)) * 2 - 1,
+    -((nextY / Math.max(size.height, 1)) * 2 - 1),
+    target.z,
+  );
+  target.unproject(camera);
+  position.x = target.x;
+  position.y = target.y;
+}
+
+function applySoftBounds(
+  position: THREE.Vector3,
+  xLimit: number,
+  yLimit: number,
+) {
+  const softZoneX = Math.max(0.18, xLimit * 0.1);
+  const softZoneY = Math.max(0.14, yLimit * 0.1);
+  const softX = Math.max(0, xLimit - softZoneX);
+  const softY = Math.max(0, yLimit - softZoneY);
+
+  if (Math.abs(position.x) > softX) {
+    const direction = Math.sign(position.x) || 1;
+    const overflow = Math.abs(position.x) - softX;
+    position.x = direction * (softX + overflow * 0.42);
+  }
+
+  if (Math.abs(position.y) > softY) {
+    const direction = Math.sign(position.y) || 1;
+    const overflow = Math.abs(position.y) - softY;
+    position.y = direction * (softY + overflow * 0.42);
+  }
+
+  position.x = THREE.MathUtils.clamp(position.x, -xLimit, xLimit);
+  position.y = THREE.MathUtils.clamp(position.y, -yLimit, yLimit);
+}
+
+function separateFromNeighbors({
+  camera,
+  compact,
+  focusActive,
+  focused,
+  minDistancePx,
+  position,
+  registry,
+  size,
+  toolId,
+  toolIndex,
+  worldPerPixelX,
+  worldPerPixelY,
+  xLimit,
+  yLimit,
+}: {
+  camera: THREE.Camera;
+  compact: boolean;
+  focusActive: boolean;
+  focused: boolean;
+  minDistancePx: number;
+  position: THREE.Vector3;
+  registry: Map<string, THREE.Vector3>;
+  size: { height: number; width: number };
+  toolId: string;
+  toolIndex: number;
+  worldPerPixelX: number;
+  worldPerPixelY: number;
+  xLimit: number;
+  yLimit: number;
+}) {
+  if (focused) return;
+
+  const projection = new THREE.Vector3();
+  const neighborProjection = new THREE.Vector3();
+  const passes = focusActive ? 5 : 4;
+  const pushStrength = compact ? 0.82 : 0.96;
+
+  for (let pass = 0; pass < passes; pass += 1) {
+    registry.forEach((neighborPosition, neighborId) => {
+      if (neighborId === toolId) return;
+
+      const current = projectToScreen(position, camera, size, projection);
+      const neighbor = projectToScreen(
+        neighborPosition,
+        camera,
+        size,
+        neighborProjection,
+      );
+      let dx = current.x - neighbor.x;
+      let dy = current.y - neighbor.y;
+      let distance = Math.hypot(dx, dy);
+
+      if (distance >= minDistancePx) return;
+
+      if (distance < 0.001) {
+        const angle = seededUnit(`${toolId}-${neighborId}-${toolIndex}`) * twoPi;
+        dx = Math.cos(angle);
+        dy = Math.sin(angle);
+        distance = 1;
+      }
+
+      const pushPx = (minDistancePx - distance) * pushStrength;
+      position.x += (dx / distance) * pushPx * worldPerPixelX;
+      position.y += (dy / distance) * pushPx * worldPerPixelY;
+      applySoftBounds(position, xLimit, yLimit);
+    });
+  }
 }
 
 function setOrbitPosition(
@@ -135,6 +348,98 @@ function seededUnit(seed: string) {
   return (hash >>> 0) / 4294967295;
 }
 
+function roundedRectPath(
+  context: CanvasRenderingContext2D,
+  size: number,
+  radius: number,
+) {
+  context.beginPath();
+  context.moveTo(radius, 0);
+  context.lineTo(size - radius, 0);
+  context.quadraticCurveTo(size, 0, size, radius);
+  context.lineTo(size, size - radius);
+  context.quadraticCurveTo(size, size, size - radius, size);
+  context.lineTo(radius, size);
+  context.quadraticCurveTo(0, size, 0, size - radius);
+  context.lineTo(0, radius);
+  context.quadraticCurveTo(0, 0, radius, 0);
+  context.closePath();
+}
+
+function getIconContainerBackground(icon: string) {
+  if (icon.includes("chatgpt")) return "#f3eee3";
+  if (icon.includes("canva")) return "#fff8e8";
+  if (icon.includes("claude")) return "#fff4e3";
+  if (icon.includes("tiktok")) return "#050505";
+
+  return null;
+}
+
+function getIconDrawInset(icon: string) {
+  if (
+    icon.includes("chatgpt") ||
+    icon.includes("canva") ||
+    icon.includes("claude") ||
+    icon.includes("tiktok")
+  ) {
+    return iconTextureSize * 0.18;
+  }
+
+  return 0;
+}
+
+function createRoundedIconTexture(
+  image: LoadedIconImage,
+  icon: string,
+) {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  const sourceWidth = image.naturalWidth ?? Number(image.width);
+  const sourceHeight = image.naturalHeight ?? Number(image.height);
+  const sourceSize = Math.min(sourceWidth, sourceHeight);
+  const insetRatio = icon.includes("photoshop") ? 0.125 : 0;
+  const cropSize = sourceSize * (1 - insetRatio * 2);
+  const sourceX = (sourceWidth - cropSize) / 2;
+  const sourceY = (sourceHeight - cropSize) / 2;
+  const destinationInset = getIconDrawInset(icon);
+  const destinationSize = iconTextureSize - destinationInset * 2;
+
+  canvas.width = iconTextureSize;
+  canvas.height = iconTextureSize;
+
+  if (!context) return null;
+
+  context.clearRect(0, 0, iconTextureSize, iconTextureSize);
+  roundedRectPath(
+    context,
+    iconTextureSize,
+    iconTextureSize * iconCornerRatio,
+  );
+  context.clip();
+  const background = getIconContainerBackground(icon);
+  if (background) {
+    context.fillStyle = background;
+    context.fillRect(0, 0, iconTextureSize, iconTextureSize);
+  }
+  context.drawImage(
+    image,
+    sourceX,
+    sourceY,
+    cropSize,
+    cropSize,
+    destinationInset,
+    destinationInset,
+    destinationSize,
+    destinationSize,
+  );
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+
+  return texture;
+}
+
 function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
   const grouped = new Map<ToolCategory, ToolGalaxyTool[]>();
   tools.forEach((tool) => {
@@ -153,6 +458,10 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
       const presetIndex = (categoryIndex * 4 + toolIndex) % layoutPresets.length;
       const preset = layoutPresets[presetIndex];
       const cycle = Math.floor((categoryIndex * 4 + toolIndex) / layoutPresets.length);
+      const globalIndex = categoryIndex * 4 + toolIndex;
+      const anchor = layoutAnchors[globalIndex % layoutAnchors.length];
+      const mobileAnchor =
+        mobileLayoutAnchors[globalIndex % mobileLayoutAnchors.length];
       const cycleOffset =
         cycle > 0 ? (cycle / Math.max(group.length, 1)) * twoPi : 0;
 
@@ -166,6 +475,8 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
         ),
         speed: 0.026,
         phase: preset.phase,
+        layoutAnchor: anchor,
+        mobileLayoutAnchor: mobileAnchor,
       };
     });
   });
@@ -254,10 +565,19 @@ function IconPlane({
           loadedTexture.dispose();
           return;
         }
-        currentTexture = loadedTexture;
-        loadedTexture.colorSpace = THREE.SRGBColorSpace;
-        loadedTexture.premultiplyAlpha = true;
-        setTexture(loadedTexture);
+        const roundedTexture = createRoundedIconTexture(
+          loadedTexture.image as LoadedIconImage,
+          icon,
+        );
+        loadedTexture.dispose();
+
+        if (!roundedTexture) {
+          if (active) setFailed(true);
+          return;
+        }
+
+        currentTexture = roundedTexture;
+        setTexture(roundedTexture);
       },
       undefined,
       (error) => {
@@ -286,7 +606,7 @@ function IconPlane({
   }
 
   return (
-    <sprite position={[0, 0, 0.24]} scale={[0.28, 0.28, 1]} renderOrder={renderOrder}>
+    <sprite position={[0, 0, 0.26]} scale={[0.36, 0.36, 1]} renderOrder={renderOrder}>
       <spriteMaterial
         alphaTest={0.05}
         map={texture}
@@ -318,14 +638,6 @@ function InitialsPlane({
 
   return (
     <group ref={groupRef} position={[0, 0, 0.058]}>
-      <mesh renderOrder={renderOrder}>
-        <circleGeometry args={[0.15, 32]} />
-        <meshBasicMaterial
-          color="#ffd175"
-          transparent
-          opacity={0.92 * opacity}
-        />
-      </mesh>
       <Html center zIndexRange={[12, 0]}>
         <span className="tool-galaxy-initials" style={{ opacity }}>
           {initials}
@@ -337,10 +649,12 @@ function InitialsPlane({
 
 function ToolPlanet({
   activeCategory,
+  compact,
   focusActive,
   focusedToolIndex,
   focused,
   projectionSpread,
+  positionRegistry,
   reducedMotion,
   selected,
   toolIndex,
@@ -348,10 +662,12 @@ function ToolPlanet({
   onSelectTool,
 }: {
   activeCategory: ToolCategory | null;
+  compact: boolean;
   focusActive: boolean;
   focusedToolIndex: number;
   focused: boolean;
   projectionSpread: typeof defaultProjectionSpread;
+  positionRegistry: PlanetPositionRegistry;
   reducedMotion: boolean;
   selected: boolean;
   toolIndex: number;
@@ -360,12 +676,14 @@ function ToolPlanet({
 }) {
   const angleRef = useRef(normalizeAngle(tool.baseAngle));
   const groupRef = useRef<THREE.Group>(null);
-  const sphereRef = useRef<THREE.Mesh>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
   const hoveredRef = useRef(false);
+  const focusDriftRef = useRef(tool.phase + toolIndex * 0.71);
+  const initializedRef = useRef(false);
+  const lastPositionRef = useRef(new THREE.Vector3());
+  const screenAnchorRef = useRef(new THREE.Vector3());
   const previousFocusActiveRef = useRef(focusActive);
   const returningToOrbitRef = useRef(false);
-  const { gl } = useThree();
+  const { camera, gl, size, viewport } = useThree();
   const categoryActive = activeCategory === null || tool.category === activeCategory;
   const iconOpacity = focusActive
     ? focused
@@ -396,6 +714,13 @@ function ToolPlanet({
     }
   }, [gl]);
 
+  useEffect(
+    () => () => {
+      positionRegistry.current.delete(tool.id);
+    },
+    [positionRegistry, tool.id],
+  );
+
   useEffect(() => {
     if (previousFocusActiveRef.current && !focusActive) {
       returningToOrbitRef.current = true;
@@ -414,9 +739,19 @@ function ToolPlanet({
       );
     } else if (focusActive) {
       returningToOrbitRef.current = false;
+      if (!reducedMotion) {
+        focusDriftRef.current += delta * (0.82 + toolIndex * 0.035);
+      }
+      const movingAvoidAngle = reducedMotion
+        ? avoidAngle
+        : normalizeAngle(
+            avoidAngle +
+              Math.sin(focusDriftRef.current) * 0.1 +
+              Math.sin(focusDriftRef.current * 0.47 + tool.phase) * 0.04,
+          );
       angleRef.current = normalizeAngle(
         angleRef.current +
-          shortestAngleDelta(angleRef.current, avoidAngle) *
+          shortestAngleDelta(angleRef.current, movingAvoidAngle) *
             (reducedMotion ? 1 : 1 - Math.exp(-delta * 4.4)),
       );
     } else if (returningToOrbitRef.current) {
@@ -436,63 +771,128 @@ function ToolPlanet({
     }
 
     setOrbitPosition(tempPosition, tool, angleRef.current, projectionSpread);
+    if (focusActive && !focused) {
+      const [offsetX, offsetY] =
+        focusAvoidOffsets[toolIndex % focusAvoidOffsets.length];
+      const compactBoost = projectionSpread.y > 1 ? 1.34 : 0.72;
+      tempPosition.x += offsetX * compactBoost;
+      tempPosition.y += offsetY * compactBoost;
+    }
 
-    const opacity = focusActive
-      ? focused
-        ? 1
-        : 0.32
-      : categoryActive
-        ? 0.96
-        : 0.44;
+    const currentViewport = viewport.getCurrentViewport(camera, tempPosition);
+    const safePixels = focused ? (compact ? 86 : 112) : compact ? 66 : 82;
+    const safeX = Math.min(
+      currentViewport.width * 0.26,
+      Math.max(0.34, (safePixels / Math.max(size.width, 1)) * currentViewport.width),
+    );
+    const safeY = Math.min(
+      currentViewport.height * 0.26,
+      Math.max(0.34, (safePixels / Math.max(size.height, 1)) * currentViewport.height),
+    );
+    const xLimit = Math.max(0.4, currentViewport.width / 2 - safeX);
+    const yLimit = Math.max(0.34, currentViewport.height / 2 - safeY);
+    const anchor = compact
+      ? focusActive && !focused
+        ? mobileFocusAnchors[toolIndex % mobileFocusAnchors.length]
+        : tool.mobileLayoutAnchor ?? tool.layoutAnchor
+      : tool.layoutAnchor;
+    if (anchor && !focused) {
+      const orbitDriftX = Math.sin(angleRef.current * 0.74 + tool.phase) * xLimit * 0.08;
+      const orbitDriftY =
+        Math.cos(angleRef.current * 0.92 + tool.phase + toolIndex) * yLimit * 0.08;
+      const anchorStrength = compact
+        ? focusActive
+          ? 0.96
+          : 0.9
+        : focusActive
+          ? 0.34
+          : 0.24;
+      if (compact) {
+        const screenMargin = focusActive ? 62 : 54;
+        const screenX = THREE.MathUtils.clamp(
+          size.width * (0.5 + anchor[0] * 0.42) +
+            Math.sin(angleRef.current * 0.74 + tool.phase) * 8,
+          screenMargin,
+          size.width - screenMargin,
+        );
+        const screenY = THREE.MathUtils.clamp(
+          size.height * (0.5 - anchor[1] * 0.42) +
+            Math.cos(angleRef.current * 0.92 + tool.phase + toolIndex) * 8,
+          screenMargin,
+          size.height - screenMargin,
+        );
+        moveTowardScreenPoint(
+          tempPosition,
+          camera,
+          size,
+          screenX,
+          screenY,
+          anchorStrength,
+          screenAnchorRef.current,
+        );
+      } else {
+        tempPosition.x = THREE.MathUtils.lerp(
+          tempPosition.x,
+          anchor[0] * xLimit + orbitDriftX,
+          anchorStrength,
+        );
+        tempPosition.y = THREE.MathUtils.lerp(
+          tempPosition.y,
+          anchor[1] * yLimit + orbitDriftY,
+          anchorStrength,
+        );
+      }
+    }
+    applySoftBounds(tempPosition, xLimit, yLimit);
+    separateFromNeighbors({
+      camera,
+      compact,
+      focusActive,
+      focused,
+      minDistancePx: focusActive ? (compact ? 66 : 92) : compact ? 64 : 92,
+      position: tempPosition,
+      registry: positionRegistry.current,
+      size,
+      toolId: tool.id,
+      toolIndex,
+      worldPerPixelX: currentViewport.width / Math.max(size.width, 1),
+      worldPerPixelY: currentViewport.height / Math.max(size.height, 1),
+      xLimit,
+      yLimit,
+    });
+    applySoftBounds(tempPosition, xLimit, yLimit);
+
     const scale = focused
       ? 1.42
-      : hovered
-        ? 1.08
-        : focusActive
-          ? 0.78
+        : hovered
+          ? 1.08
+          : focusActive
+          ? compact
+            ? 0.56
+            : 0.78
           : categoryActive
             ? 1
             : 0.82;
 
-    groupRef.current?.position.lerp(
-      tempPosition,
-      reducedMotion ? 1 : 1 - Math.exp(-delta * 6.2),
-    );
-
     if (groupRef.current) {
+      if (!initializedRef.current) {
+        groupRef.current.position.copy(tempPosition);
+        initializedRef.current = true;
+      } else {
+        groupRef.current.position.lerp(
+          tempPosition,
+          reducedMotion ? 1 : 1 - Math.exp(-delta * 6.2),
+        );
+      }
+
       const nextScale = THREE.MathUtils.lerp(
         groupRef.current.scale.x,
         scale,
         reducedMotion ? 1 : 1 - Math.exp(-delta * 5),
       );
       groupRef.current.scale.setScalar(nextScale);
-    }
-
-    const sphereMaterial = sphereRef.current?.material as
-      | THREE.MeshStandardMaterial
-      | undefined;
-    if (sphereMaterial) {
-      sphereMaterial.opacity = THREE.MathUtils.lerp(
-        sphereMaterial.opacity,
-        opacity,
-        1 - Math.exp(-delta * 6),
-      );
-      sphereMaterial.emissiveIntensity = THREE.MathUtils.lerp(
-        sphereMaterial.emissiveIntensity,
-        focused ? 0.82 : hovered ? 0.38 : selected ? 0.28 : 0.12,
-        1 - Math.exp(-delta * 4.8),
-      );
-    }
-
-    const glowMaterial = glowRef.current?.material as
-      | THREE.MeshBasicMaterial
-      | undefined;
-    if (glowMaterial) {
-      glowMaterial.opacity = THREE.MathUtils.lerp(
-        glowMaterial.opacity,
-        focused ? 0.24 : hovered ? 0.12 : focusActive ? 0.018 : 0.048,
-        1 - Math.exp(-delta * 4.8),
-      );
+      lastPositionRef.current.copy(groupRef.current.position);
+      positionRegistry.current.set(tool.id, lastPositionRef.current);
     }
   });
 
@@ -501,48 +901,12 @@ function ToolPlanet({
       ref={groupRef}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
+      onClick={(event) => {
+        event.stopPropagation();
+        onSelectTool(tool, true);
+      }}
       renderOrder={renderOrder}
     >
-      <mesh
-        ref={glowRef}
-        scale={1.42}
-        renderOrder={renderOrder - 1}
-        onClick={(event) => {
-          event.stopPropagation();
-          onSelectTool(tool, true);
-        }}
-      >
-        <sphereGeometry args={[0.2, 32, 32]} />
-        <meshBasicMaterial
-          color="#ffd175"
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-          opacity={0.04}
-          transparent
-        />
-      </mesh>
-      <mesh
-        ref={sphereRef}
-        castShadow={false}
-        receiveShadow={false}
-        renderOrder={renderOrder}
-        onClick={(event) => {
-          event.stopPropagation();
-          onSelectTool(tool, true);
-        }}
-      >
-        <sphereGeometry args={[0.18, 42, 42]} />
-        <meshStandardMaterial
-          color={categoryActive ? "#f2c667" : "#d6a64e"}
-          emissive="#ffd175"
-          emissiveIntensity={0.1}
-          metalness={0.36}
-          opacity={categoryActive ? 0.34 : 0.16}
-          roughness={0.28}
-          transparent
-          depthWrite={false}
-        />
-      </mesh>
       {tool.icon ? (
         <IconPlane
           fallback={tool.initials ?? tool.name.slice(0, 2)}
@@ -640,6 +1004,7 @@ function GalaxyScene({
   onSelectTool,
 }: ToolGalaxy3DProps) {
   const { size } = useThree();
+  const positionRegistry = useRef(new Map<string, THREE.Vector3>());
   const projectionSpread = useMemo(
     () => (size.width < 520 ? { x: 0.78, y: 1.86, z: 1 } : defaultProjectionSpread),
     [size.width],
@@ -679,19 +1044,6 @@ function GalaxyScene({
       />
       <group position={[0, 0, 0]}>
         <StarField />
-        <mesh>
-          <sphereGeometry args={[0.11, 32, 32]} />
-          <meshBasicMaterial color="#ffd175" opacity={0.58} transparent />
-        </mesh>
-        <mesh scale={1.9}>
-          <sphereGeometry args={[0.13, 32, 32]} />
-          <meshBasicMaterial
-            color="#ffd175"
-            depthWrite={false}
-            opacity={0.055}
-            transparent
-          />
-        </mesh>
         {orbitConfigs.map((orbit) => (
           <OrbitLine
             key={orbit.index}
@@ -705,10 +1057,12 @@ function GalaxyScene({
           <ToolPlanet
             key={tool.id}
             activeCategory={activeCategory}
+            compact={size.width < 520}
             focusActive={focusedToolId !== null}
             focusedToolIndex={focusedToolIndex}
             focused={focusedToolId === tool.id}
             projectionSpread={projectionSpread}
+            positionRegistry={positionRegistry}
             reducedMotion={reducedMotion}
             selected={selectedToolId === tool.id}
             toolIndex={tools.findIndex((item) => item.id === tool.id)}

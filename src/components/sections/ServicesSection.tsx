@@ -10,6 +10,8 @@ const ToolGalaxy3D = lazy(() =>
   })),
 );
 
+const DETAIL_REVEAL_DELAY_MS = 820;
+
 class ToolGalaxyErrorBoundary extends Component<
   { children: ReactNode; resetKey: string },
   { hasError: boolean }
@@ -63,6 +65,7 @@ const tools: ToolGalaxyTool[] = [
     category: "AI 创作",
     description: "用于脚本生成、选题拆解、复盘整理和内容工作流搭建。",
     tags: ["脚本生成", "选题拆解", "复盘整理"],
+    icon: "/toolbox/chatgpt.svg",
     initials: "GPT",
     orbitIndex: 0,
     orbitRadius: 1.45,
@@ -161,6 +164,7 @@ const tools: ToolGalaxyTool[] = [
     category: "内容制作",
     description: "用于轻量设计、活动物料、模板搭建和快速协作。",
     tags: ["轻量设计", "活动物料", "模板搭建"],
+    icon: "/toolbox/canva.svg",
     initials: "CV",
     orbitIndex: 5,
     orbitRadius: 1.74,
@@ -217,6 +221,7 @@ const tools: ToolGalaxyTool[] = [
     category: "平台运营",
     description: "用于海外趋势观察、短视频参考和内容测试。",
     tags: ["趋势观察", "短视频参考", "内容测试"],
+    icon: "/toolbox/tiktok.svg",
     initials: "TK",
     orbitIndex: 5,
     orbitRadius: 1.82,
@@ -339,12 +344,30 @@ function ToolInfoPanel({
     <AnimatePresence mode="wait">
       <motion.aside
         key={tool.id}
-        initial={{ opacity: 0, x: 28, scale: 0.94 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        exit={{ opacity: 0, x: 22, scale: 0.96 }}
-        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        initial={{
+          borderRadius: 999,
+          opacity: 0,
+          scale: 0.22,
+          x: 120,
+          y: 36,
+        }}
+        animate={{
+          borderRadius: 28,
+          opacity: 1,
+          scale: 1,
+          x: 0,
+          y: 0,
+        }}
+        exit={{
+          borderRadius: 999,
+          opacity: 0,
+          scale: 0.24,
+          x: 96,
+          y: 28,
+        }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="tool-info-panel"
-        style={style}
+        style={{ ...style, transformOrigin: "86% 48%" }}
         aria-live="polite"
       >
         <button
@@ -385,6 +408,7 @@ export function SkillsMatrixSection() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | null>(null);
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
+  const [detailToolId, setDetailToolId] = useState<string | null>(null);
   const [galaxySupport, setGalaxySupport] =
     useState<GalaxySupportState>("loading");
 
@@ -392,10 +416,24 @@ export function SkillsMatrixSection() {
     setGalaxySupport(canUseWebGL() ? "supported" : "unsupported");
   }, []);
 
-  const selectedTool =
-    selectedToolId === null
+  const detailTool =
+    detailToolId === null
       ? null
-      : tools.find((tool) => tool.id === selectedToolId) ?? null;
+      : tools.find((tool) => tool.id === detailToolId) ?? null;
+
+  useEffect(() => {
+    if (focusedToolId === null) {
+      setDetailToolId(null);
+      return undefined;
+    }
+
+    setDetailToolId(null);
+    const timer = window.setTimeout(() => {
+      setDetailToolId(focusedToolId);
+    }, DETAIL_REVEAL_DELAY_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [focusedToolId]);
 
   const categoryCounts = useMemo(
     () =>
@@ -414,6 +452,7 @@ export function SkillsMatrixSection() {
   const clearFocus = () => {
     setSelectedToolId(null);
     setFocusedToolId(null);
+    setDetailToolId(null);
   };
 
   const selectCategory = (category: ToolCategory | null) => {
@@ -511,10 +550,10 @@ export function SkillsMatrixSection() {
           )}
 
           <AnimatePresence mode="wait">
-            {selectedTool && focusedToolId ? (
+            {detailTool && focusedToolId ? (
               <ToolInfoPanel
-                key={selectedTool.id}
-                tool={selectedTool}
+                key={detailTool.id}
+                tool={detailTool}
                 onClose={clearFocus}
               />
             ) : null}

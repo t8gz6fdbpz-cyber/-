@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { AboutSection } from "./components/sections/AboutSection";
 import { CaseStudiesPreviewSection } from "./components/sections/CaseStudiesPreviewSection";
@@ -72,6 +72,7 @@ function HomePage() {
 
 export default function App() {
   const [route, setRoute] = useState(getCurrentRoute);
+  const hasHandledInitialRouteRef = useRef(false);
   const path = route.pathname;
 
   useEffect(() => {
@@ -152,6 +153,17 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (!hasHandledInitialRouteRef.current) {
+      hasHandledInitialRouteRef.current = true;
+
+      if (path === "/" && route.hash === "#skills") {
+        window.history.replaceState({}, "", `${path}${route.search}`);
+        setRoute(getCurrentRoute());
+        window.setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 0);
+        return;
+      }
+    }
+
     if (route.hash) {
       scrollToHash(route.hash, "auto");
       return;

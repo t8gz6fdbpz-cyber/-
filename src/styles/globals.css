@@ -3991,10 +3991,10 @@ main > section {
 }
 
 .tool-galaxy-a11y-button {
-  width: 44px;
-  height: 44px;
+  width: 58px;
+  height: 58px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 38.2%;
   background: transparent;
   cursor: pointer;
   opacity: 0;
