@@ -1,16 +1,27 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Component, lazy, Suspense, useEffect, useMemo, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
+import {
+  Component,
+  lazy,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import type { CSSProperties, MutableRefObject, ReactNode } from "react";
 
-import type { ToolCategory, ToolGalaxyTool } from "./ToolGalaxy3D";
+import type {
+  GalaxyInteractionPhase,
+  ToolCategory,
+  ToolGalaxyTool,
+} from "./ToolGalaxy3D";
 
 const ToolGalaxy3D = lazy(() =>
   import("./ToolGalaxy3D").then((module) => ({
     default: module.ToolGalaxy3D,
   })),
 );
-
-const DETAIL_REVEAL_DELAY_MS = 820;
 
 class ToolGalaxyErrorBoundary extends Component<
   { children: ReactNode; resetKey: string },
@@ -328,9 +339,11 @@ function getToolCardTheme(tool: ToolGalaxyTool) {
 
 function ToolInfoPanel({
   onClose,
+  panelRef,
   tool,
 }: {
   onClose: () => void;
+  panelRef: MutableRefObject<HTMLElement | null>;
   tool: ToolGalaxyTool;
 }) {
   const theme = getToolCardTheme(tool);
@@ -340,53 +353,53 @@ function ToolInfoPanel({
     "--tool-glow": theme.glow,
   } as CSSProperties;
 
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    [
+      "bottom",
+      "height",
+      "left",
+      "opacity",
+      "overflow",
+      "padding",
+      "pointer-events",
+      "right",
+      "top",
+      "visibility",
+      "width",
+    ].forEach((property) => panel.style.removeProperty(property));
+    panel.style.setProperty("--morph-logo-progress", "0");
+    panel.style.setProperty("--morph-content-progress", "0");
+    panel.style.setProperty("--morph-content-offset", "12px");
+  }, [panelRef, tool.id]);
+
   return (
-    <AnimatePresence mode="wait">
-      <motion.aside
-        key={tool.id}
-        initial={{
-          borderRadius: 999,
-          opacity: 0,
-          scale: 0.22,
-          x: 120,
-          y: 36,
-        }}
-        animate={{
-          borderRadius: 28,
-          opacity: 1,
-          scale: 1,
-          x: 0,
-          y: 0,
-        }}
-        exit={{
-          borderRadius: 999,
-          opacity: 0,
-          scale: 0.24,
-          x: 96,
-          y: 28,
-        }}
-        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-        className="tool-info-panel"
-        style={{ ...style, transformOrigin: "86% 48%" }}
-        aria-live="polite"
+    <aside
+      ref={panelRef}
+      className="tool-info-panel"
+      style={style}
+      aria-live="polite"
+    >
+      <button
+        type="button"
+        className="tool-info-close"
+        aria-label="关闭详情"
+        onClick={onClose}
       >
-        <button
-          type="button"
-          className="tool-info-close"
-          aria-label="关闭详情"
-          onClick={onClose}
-        >
-          ×
-        </button>
-        <div className="tool-info-logo">
-          {tool.icon ? (
-            <img src={tool.icon} alt="" draggable={false} />
-          ) : (
-            <span className="tool-planet-fallback">
-              {tool.initials ?? tool.name.slice(0, 2)}
-            </span>
-          )}
-        </div>
+        ×
+      </button>
+      <div className="tool-info-logo">
+        {tool.icon ? (
+          <img src={tool.icon} alt="" draggable={false} />
+        ) : (
+          <span className="tool-planet-fallback">
+            {tool.initials ?? tool.name.slice(0, 2)}
+          </span>
+        )}
+      </div>
+      <div className="tool-info-content">
         <p>{tool.category}</p>
         <h3>{tool.name}</h3>
         <span>{tool.tags[0]}</span>
@@ -398,8 +411,8 @@ function ToolInfoPanel({
         <div className="tool-info-divider" />
         <p className="tool-info-description">{tool.description}</p>
         <small>点击空白处或关闭按钮，恢复自由轨道。</small>
-      </motion.aside>
-    </AnimatePresence>
+      </div>
+    </aside>
   );
 }
 
@@ -408,32 +421,20 @@ export function SkillsMatrixSection() {
   const [activeCategory, setActiveCategory] = useState<ToolCategory | null>(null);
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
-  const [detailToolId, setDetailToolId] = useState<string | null>(null);
+  const [interactionPhase, setInteractionPhase] =
+    useState<GalaxyInteractionPhase>("free");
   const [galaxySupport, setGalaxySupport] =
     useState<GalaxySupportState>("loading");
+  const detailPanelRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setGalaxySupport(canUseWebGL() ? "supported" : "unsupported");
   }, []);
 
   const detailTool =
-    detailToolId === null
+    focusedToolId === null
       ? null
-      : tools.find((tool) => tool.id === detailToolId) ?? null;
-
-  useEffect(() => {
-    if (focusedToolId === null) {
-      setDetailToolId(null);
-      return undefined;
-    }
-
-    setDetailToolId(null);
-    const timer = window.setTimeout(() => {
-      setDetailToolId(focusedToolId);
-    }, DETAIL_REVEAL_DELAY_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [focusedToolId]);
+      : tools.find((tool) => tool.id === focusedToolId) ?? null;
 
   const categoryCounts = useMemo(
     () =>
@@ -446,18 +447,45 @@ export function SkillsMatrixSection() {
 
   const selectTool = (tool: ToolGalaxyTool, focus = true) => {
     setSelectedToolId(tool.id);
-    setFocusedToolId(focus ? tool.id : null);
+    if (!focus) {
+      setFocusedToolId(null);
+      setInteractionPhase("free");
+      return;
+    }
+    if (
+      focusedToolId === tool.id &&
+      (interactionPhase === "focusing" || interactionPhase === "focused")
+    ) {
+      return;
+    }
+
+    setFocusedToolId(tool.id);
+    setInteractionPhase("focusing");
   };
 
   const clearFocus = () => {
+    if (focusedToolId === null || interactionPhase === "releasing") return;
+
+    setInteractionPhase("releasing");
+  };
+
+  const handleFocusSettled = (toolId: string) => {
+    if (focusedToolId !== toolId || interactionPhase !== "focusing") return;
+
+    setInteractionPhase("focused");
+  };
+
+  const handleReleaseSettled = (toolId: string) => {
+    if (focusedToolId !== toolId || interactionPhase !== "releasing") return;
+
     setSelectedToolId(null);
     setFocusedToolId(null);
-    setDetailToolId(null);
+    setInteractionPhase("free");
   };
 
   const selectCategory = (category: ToolCategory | null) => {
     setActiveCategory((current) => (current === category ? null : category));
-    clearFocus();
+    if (focusedToolId !== null) clearFocus();
   };
 
   return (
@@ -480,6 +508,7 @@ export function SkillsMatrixSection() {
           className={`tool-desktop-layout mt-14 ${
             focusedToolId ? "is-focused" : ""
           }`}
+          data-galaxy-phase={interactionPhase}
         >
           <div className="tool-category-index" aria-label="工具分类">
             <p>分类</p>
@@ -538,26 +567,28 @@ export function SkillsMatrixSection() {
               >
                 <ToolGalaxy3D
                   activeCategory={activeCategory}
+                  detailPanelRef={detailPanelRef}
                   focusedToolId={focusedToolId}
+                  interactionPhase={interactionPhase}
                   reducedMotion={Boolean(shouldReduceMotion)}
                   selectedToolId={selectedToolId}
                   tools={tools}
                   onClearFocus={clearFocus}
+                  onFocusSettled={handleFocusSettled}
+                  onReleaseSettled={handleReleaseSettled}
                   onSelectTool={selectTool}
                 />
               </Suspense>
             </ToolGalaxyErrorBoundary>
           )}
 
-          <AnimatePresence mode="wait">
-            {detailTool && focusedToolId ? (
-              <ToolInfoPanel
-                key={detailTool.id}
-                tool={detailTool}
-                onClose={clearFocus}
-              />
-            ) : null}
-          </AnimatePresence>
+          {detailTool && focusedToolId ? (
+            <ToolInfoPanel
+              panelRef={detailPanelRef}
+              tool={detailTool}
+              onClose={clearFocus}
+            />
+          ) : null}
         </div>
       </div>
     </section>

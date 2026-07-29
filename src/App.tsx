@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AboutSection } from "./components/sections/AboutSection";
 import { CaseStudiesPreviewSection } from "./components/sections/CaseStudiesPreviewSection";
@@ -27,6 +27,22 @@ const getCurrentRoute = (): PortfolioRoute =>
         pathname: window.location.pathname,
         search: window.location.search,
       };
+
+const getInitialRoute = (): PortfolioRoute => {
+  const route = getCurrentRoute();
+
+  if (
+    typeof window !== "undefined" &&
+    route.pathname === "/" &&
+    route.hash === "#skills"
+  ) {
+    window.history.replaceState({}, "", `${route.pathname}${route.search}`);
+    window.scrollTo({ top: 0, behavior: "auto" });
+    return { ...route, hash: "" };
+  }
+
+  return route;
+};
 
 const scrollToHash = (hash: string, behavior: ScrollBehavior = "smooth") => {
   if (!hash) return;
@@ -71,8 +87,7 @@ function HomePage() {
 }
 
 export default function App() {
-  const [route, setRoute] = useState(getCurrentRoute);
-  const hasHandledInitialRouteRef = useRef(false);
+  const [route, setRoute] = useState(getInitialRoute);
   const path = route.pathname;
 
   useEffect(() => {
@@ -153,17 +168,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!hasHandledInitialRouteRef.current) {
-      hasHandledInitialRouteRef.current = true;
-
-      if (path === "/" && route.hash === "#skills") {
-        window.history.replaceState({}, "", `${path}${route.search}`);
-        setRoute(getCurrentRoute());
-        window.setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 0);
-        return;
-      }
-    }
-
     if (route.hash) {
       scrollToHash(route.hash, "auto");
       return;
