@@ -369,6 +369,7 @@ function ToolInfoPanel({
       "top",
       "visibility",
       "width",
+      "z-index",
     ].forEach((property) => panel.style.removeProperty(property));
     panel.style.setProperty("--morph-logo-progress", "0");
     panel.style.setProperty("--morph-content-progress", "0");

@@ -19,6 +19,12 @@ type PortfolioRoute = {
   search: string;
 };
 
+let hashScrollRequestId = 0;
+
+const cancelPendingHashScroll = () => {
+  hashScrollRequestId += 1;
+};
+
 const getCurrentRoute = (): PortfolioRoute =>
   typeof window === "undefined"
     ? { hash: "", pathname: "/", search: "" }
@@ -30,6 +36,13 @@ const getCurrentRoute = (): PortfolioRoute =>
 
 const getInitialRoute = (): PortfolioRoute => {
   const route = getCurrentRoute();
+
+  if (
+    typeof window !== "undefined" &&
+    "scrollRestoration" in window.history
+  ) {
+    window.history.scrollRestoration = "manual";
+  }
 
   if (
     typeof window !== "undefined" &&
@@ -47,6 +60,7 @@ const getInitialRoute = (): PortfolioRoute => {
 const scrollToHash = (hash: string, behavior: ScrollBehavior = "smooth") => {
   if (!hash) return;
 
+  const requestId = ++hashScrollRequestId;
   const targetId = hash.replace(/^#/, "");
   const delays = [0, 120, 320, 640, 1040];
 
@@ -62,6 +76,13 @@ const scrollToHash = (hash: string, behavior: ScrollBehavior = "smooth") => {
 
   delays.forEach((delay, index) => {
     window.setTimeout(() => {
+      if (
+        requestId !== hashScrollRequestId ||
+        window.location.hash !== hash
+      ) {
+        return;
+      }
+
       const target =
         document.getElementById(targetId) ?? document.querySelector(hash);
 
@@ -91,16 +112,15 @@ export default function App() {
   const path = route.pathname;
 
   useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-  }, []);
-
-  useEffect(() => {
     const handleRouteChange = () => {
       const nextRoute = getCurrentRoute();
+      cancelPendingHashScroll();
       setRoute(nextRoute);
       scrollToHash(nextRoute.hash);
+
+      if (!nextRoute.hash && nextRoute.pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
     };
 
     const handleDocumentClick = (event: MouseEvent) => {
@@ -146,6 +166,7 @@ export default function App() {
       }
 
       event.preventDefault();
+      cancelPendingHashScroll();
 
       const next = `${url.pathname}${url.search}${url.hash}`;
       window.history.pushState({}, "", next);
@@ -162,20 +183,35 @@ export default function App() {
     document.addEventListener("click", handleDocumentClick);
 
     return () => {
+      cancelPendingHashScroll();
       window.removeEventListener("popstate", handleRouteChange);
       document.removeEventListener("click", handleDocumentClick);
     };
   }, []);
 
   useEffect(() => {
+    cancelPendingHashScroll();
+
     if (route.hash) {
       scrollToHash(route.hash, "auto");
-      return;
+      return cancelPendingHashScroll;
     }
 
     if (path === "/") {
-      window.setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 0);
+      window.scrollTo({ top: 0, behavior: "auto" });
+      const frameId = window.requestAnimationFrame(() => {
+        if (!window.location.hash && window.location.pathname === "/") {
+          window.scrollTo({ top: 0, behavior: "auto" });
+        }
+      });
+
+      return () => {
+        window.cancelAnimationFrame(frameId);
+        cancelPendingHashScroll();
+      };
     }
+
+    return cancelPendingHashScroll;
   }, [path, route.hash]);
 
   const routeKey = path.startsWith("/cases/") ? path : path || "/";

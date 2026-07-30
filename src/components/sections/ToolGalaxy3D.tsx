@@ -35,8 +35,6 @@ export type ToolGalaxyTool = {
   mobileBaseAngle?: number;
   speed: number;
   phase: number;
-  trackCenter?: [number, number, number];
-  trackRadius?: number;
 };
 
 type ToolGalaxy3DProps = {
@@ -57,10 +55,15 @@ const twoPi = Math.PI * 2;
 const categoryOrder: ToolCategory[] = ["AI 创作", "内容制作", "平台运营"];
 const tempPosition = new THREE.Vector3();
 const tempProjectedPosition = new THREE.Vector3();
-const tempEuler = new THREE.Euler();
 const defaultProjectionSpread = { x: 1, y: 1, z: 1 };
+const desktopFreeOrbitPhaseRate = 0.32;
+const mobileFreeOrbitPhaseRate = 0.24;
+const freeOrbitSpeedMultiplier = 1.2;
 const iconTextureSize = 192;
 const iconCornerRatio = 0.382;
+const iconTextureCache = new Map<string, THREE.Texture>();
+const iconTextureRequests = new Map<string, Promise<THREE.Texture>>();
+let iconTextureLoader: THREE.TextureLoader | null = null;
 type LoadedIconImage = CanvasImageSource & {
   height?: number;
   naturalHeight?: number;
@@ -120,11 +123,17 @@ const layoutPresets: Array<{
   },
 ];
 const mobilePhaseSlotsDegrees = [
-  328, 88, 326, 88, 32, 152, 122, 146, 124, 238, 48, 276,
+  199.374, 284.325, 30, 59.59, 308.675, 38.079, 115, 135, 25,
+  169.553, 246.709, 290,
 ];
 const desktopPhaseSlotsDegrees = [
-  116, 318, 288, 52, 80, 34, 40, 336, 156, 168, 216, 280,
+  75, 154.006, 18.784, 0.578, 160, 255, 268.565, 130.774, 245,
+  17.805, 110, 275,
 ];
+const focusAvoidOffsets = new Map<string, number>([
+  ["tiktok", THREE.MathUtils.degToRad(85 - 17.805)],
+  ["wechat-channels", THREE.MathUtils.degToRad(115 - 110)],
+]);
 
 function normalizeAngle(angle: number) {
   return ((angle % twoPi) + twoPi) % twoPi;
@@ -134,29 +143,20 @@ function shortestAngleDelta(from: number, to: number) {
   return Math.atan2(Math.sin(to - from), Math.cos(to - from));
 }
 
-function setOrbitPosition(
+function setOrbitPoint(
   target: THREE.Vector3,
-  tool: ToolGalaxyTool,
+  center: [number, number, number],
+  radius: number,
   angle: number,
-  spread = defaultProjectionSpread,
-  rotation?: THREE.Quaternion,
+  spread: typeof defaultProjectionSpread,
+  rotation: THREE.Quaternion,
 ) {
   target.set(
-    Math.cos(angle) * tool.orbitRadius,
+    Math.cos(angle) * radius,
     0,
-    Math.sin(angle) * tool.orbitRadius * 0.72,
+    Math.sin(angle) * radius * 0.72,
   );
-  if (rotation) {
-    target.applyQuaternion(rotation);
-  } else {
-    tempEuler.set(
-      THREE.MathUtils.degToRad(tool.orbitTilt[0]),
-      THREE.MathUtils.degToRad(tool.orbitTilt[1]),
-      THREE.MathUtils.degToRad(tool.orbitTilt[2]),
-    );
-    target.applyEuler(tempEuler);
-  }
-  const center = tool.orbitCenter ?? [0, 0, 0];
+  target.applyQuaternion(rotation);
   target.set(
     target.x * spread.x + center[0],
     target.y * spread.y + center[1],
@@ -164,6 +164,23 @@ function setOrbitPosition(
   );
 
   return target;
+}
+
+function setOrbitPosition(
+  target: THREE.Vector3,
+  tool: ToolGalaxyTool,
+  angle: number,
+  spread = defaultProjectionSpread,
+  rotation: THREE.Quaternion,
+) {
+  return setOrbitPoint(
+    target,
+    tool.orbitCenter ?? [0, 0, 0],
+    tool.orbitRadius,
+    angle,
+    spread,
+    rotation,
+  );
 }
 
 function setCubicBezier(
@@ -243,8 +260,16 @@ function writeMorphPanelFrame(
   const sourceSize = compact ? 66 : 76;
   const width = THREE.MathUtils.lerp(sourceSize, target.width, shapeProgress);
   const height = THREE.MathUtils.lerp(sourceSize, target.height, shapeProgress);
-  const anchorX = THREE.MathUtils.lerp(width / 2, target.logoX, shapeProgress);
-  const anchorY = THREE.MathUtils.lerp(height / 2, target.logoY, shapeProgress);
+  const anchorX = THREE.MathUtils.lerp(
+    sourceSize / 2,
+    target.logoX,
+    shapeProgress,
+  );
+  const anchorY = THREE.MathUtils.lerp(
+    sourceSize / 2,
+    target.logoY,
+    shapeProgress,
+  );
   const left = THREE.MathUtils.lerp(
     centerX - anchorX,
     target.left,
@@ -270,13 +295,14 @@ function writeMorphPanelFrame(
   panel.style.height = `${height}px`;
   panel.style.padding = `${padding}px`;
   panel.style.borderRadius = `${radius}px`;
-  panel.style.opacity = `${smoothRange(progress, 0.1, 0.3)}`;
+  panel.style.opacity = `${smoothRange(progress, 0.06, 0.18)}`;
   panel.style.visibility = progress > 0.015 ? "visible" : "hidden";
   panel.style.pointerEvents = progress > 0.9 ? "auto" : "none";
   panel.style.overflow = progress > 0.985 ? "" : "hidden";
+  panel.style.zIndex = progress >= 0.18 ? "6" : "0";
   panel.style.setProperty(
     "--morph-logo-progress",
-    `${smoothRange(progress, 0.12, 0.38)}`,
+    progress >= 0.18 ? "1" : "0",
   );
   panel.style.setProperty(
     "--morph-content-progress",
@@ -360,6 +386,9 @@ function createRoundedIconTexture(
   if (!context) return null;
 
   context.clearRect(0, 0, iconTextureSize, iconTextureSize);
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
+  context.save();
   roundedRectPath(
     context,
     iconTextureSize,
@@ -382,12 +411,74 @@ function createRoundedIconTexture(
     destinationSize,
     destinationSize,
   );
+  context.restore();
+
+  const pixels = context.getImageData(
+    0,
+    0,
+    iconTextureSize,
+    iconTextureSize,
+  );
+  for (let index = 0; index < pixels.data.length; index += 4) {
+    if (pixels.data[index + 3] > 2) continue;
+    pixels.data[index] = 0;
+    pixels.data[index + 1] = 0;
+    pixels.data[index + 2] = 0;
+    pixels.data[index + 3] = 0;
+  }
+  context.putImageData(pixels, 0, 0);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = false;
+  texture.magFilter = THREE.LinearFilter;
+  texture.minFilter = THREE.LinearFilter;
+  texture.premultiplyAlpha = true;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
   texture.needsUpdate = true;
 
   return texture;
+}
+
+function loadRoundedIconTexture(icon: string) {
+  const cached = iconTextureCache.get(icon);
+  if (cached) return Promise.resolve(cached);
+
+  const pending = iconTextureRequests.get(icon);
+  if (pending) return pending;
+
+  iconTextureLoader ??= new THREE.TextureLoader();
+  const request = new Promise<THREE.Texture>((resolve, reject) => {
+    iconTextureLoader?.load(
+      icon,
+      (loadedTexture) => {
+        const roundedTexture = createRoundedIconTexture(
+          loadedTexture.image as LoadedIconImage,
+          icon,
+        );
+        loadedTexture.dispose();
+
+        if (!roundedTexture) {
+          iconTextureRequests.delete(icon);
+          reject(new Error(`Unable to create icon texture for ${icon}`));
+          return;
+        }
+
+        iconTextureCache.set(icon, roundedTexture);
+        iconTextureRequests.delete(icon);
+        resolve(roundedTexture);
+      },
+      undefined,
+      (error) => {
+        iconTextureRequests.delete(icon);
+        reject(error);
+      },
+    );
+  });
+  iconTextureRequests.set(icon, request);
+
+  return request;
 }
 
 function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
@@ -408,24 +499,13 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
       const globalIndex = categoryIndex * 4 + toolIndex;
       const presetIndex = globalIndex % layoutPresets.length;
       const preset = layoutPresets[presetIndex];
-      const orbitSlot = Math.floor(globalIndex / layoutPresets.length);
-      const lane = orbitSlot - 1;
-      const orbitEuler = new THREE.Euler(
-        THREE.MathUtils.degToRad(preset.tilt[0]),
-        THREE.MathUtils.degToRad(preset.tilt[1]),
-        THREE.MathUtils.degToRad(preset.tilt[2]),
-      );
-      const laneCenter = new THREE.Vector3(...preset.center).addScaledVector(
-        new THREE.Vector3(0, 1, 0).applyEuler(orbitEuler),
-        lane * 0.52,
-      );
 
       return {
         ...tool,
-        focusAvoidOffset: 0.07,
+        focusAvoidOffset: focusAvoidOffsets.get(tool.id) ?? 0.07,
         orbitIndex: preset.orbitIndex,
-        orbitCenter: laneCenter.toArray() as [number, number, number],
-        orbitRadius: preset.radius + lane * 0.28,
+        orbitCenter: preset.center,
+        orbitRadius: preset.radius,
         orbitTilt: preset.tilt,
         baseAngle: THREE.MathUtils.degToRad(
           desktopPhaseSlotsDegrees[
@@ -437,8 +517,6 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
         ),
         speed: preset.speed,
         phase: preset.phase,
-        trackCenter: preset.center,
-        trackRadius: preset.radius,
       };
     });
   });
@@ -452,25 +530,23 @@ function createOrbitPoints(
 ) {
   const points: THREE.Vector3[] = [];
   const depths: number[] = [];
-  const euler = new THREE.Euler(
-    THREE.MathUtils.degToRad(tilt[0]),
-    THREE.MathUtils.degToRad(tilt[1]),
-    THREE.MathUtils.degToRad(tilt[2]),
+  const rotation = new THREE.Quaternion().setFromEuler(
+    new THREE.Euler(
+      THREE.MathUtils.degToRad(tilt[0]),
+      THREE.MathUtils.degToRad(tilt[1]),
+      THREE.MathUtils.degToRad(tilt[2]),
+    ),
   );
 
   for (let index = 0; index <= 192; index += 1) {
     const angle = (index / 192) * Math.PI * 2;
-    const point = new THREE.Vector3(
-      Math.cos(angle) * radius,
-      0,
-      Math.sin(angle) * radius * 0.72,
-    );
-
-    point.applyEuler(euler);
-    point.set(
-      point.x * spread.x + center[0],
-      point.y * spread.y + center[1],
-      point.z * spread.z + center[2],
+    const point = setOrbitPoint(
+      new THREE.Vector3(),
+      center,
+      radius,
+      angle,
+      spread,
+      rotation,
     );
     points.push(point);
     depths.push(point.z);
@@ -544,39 +620,20 @@ function IconPlane({
   renderOrder: number;
   scale: number;
 }) {
-  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const [texture, setTexture] = useState<THREE.Texture | null>(
+    () => iconTextureCache.get(icon) ?? null,
+  );
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let active = true;
-    let currentTexture: THREE.Texture | null = null;
-    const loader = new THREE.TextureLoader();
-
     setFailed(false);
-    setTexture(null);
-    loader.load(
-      icon,
+    setTexture(iconTextureCache.get(icon) ?? null);
+    loadRoundedIconTexture(icon).then(
       (loadedTexture) => {
-        if (!active) {
-          loadedTexture.dispose();
-          return;
-        }
-        const roundedTexture = createRoundedIconTexture(
-          loadedTexture.image as LoadedIconImage,
-          icon,
-        );
-        loadedTexture.dispose();
-
-        if (!roundedTexture) {
-          if (active) setFailed(true);
-          return;
-        }
-
-        currentTexture = roundedTexture;
-        setTexture(roundedTexture);
+        if (active) setTexture(loadedTexture);
       },
-      undefined,
-      (error) => {
+      (error: unknown) => {
         console.warn("[ToolGalaxy3D] Icon texture failed to load", {
           icon,
           error,
@@ -587,11 +644,10 @@ function IconPlane({
 
     return () => {
       active = false;
-      currentTexture?.dispose();
     };
   }, [icon]);
 
-  if (!texture || failed) {
+  if (failed) {
     return (
       <InitialsPlane
         initials={fallback}
@@ -601,15 +657,20 @@ function IconPlane({
     );
   }
 
+  if (!texture) return null;
+
   return (
-    <sprite position={[0, 0, 0.26]} scale={[scale, scale, 1]} renderOrder={renderOrder}>
+    <sprite position={[0, 0, 0]} scale={[scale, scale, 1]} renderOrder={renderOrder}>
       <spriteMaterial
         ref={materialRef}
-        alphaTest={0.05}
+        alphaTest={0.12}
+        alphaToCoverage
+        blending={THREE.NormalBlending}
         depthTest
-        depthWrite={false}
+        depthWrite
         map={texture}
         opacity={1}
+        premultipliedAlpha
         toneMapped={false}
         transparent
       />
@@ -634,7 +695,7 @@ function InitialsPlane({
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, 0.058]}>
+    <group ref={groupRef} position={[0, 0, 0]}>
       <Html center zIndexRange={[12, 0]}>
         <span className="tool-galaxy-initials" style={{ opacity }}>
           {initials}
@@ -750,17 +811,21 @@ function ToolPlanet({
         : null;
       const path = focusPathRef.current;
       if (path) {
+        const currentAvoidAngle =
+          (compact ? 0 : tool.focusAvoidOffset ?? 0) *
+          smoothRange(avoidBlendRef.current, 0, 1);
+        const pathStartAngle = freeAngleRef.current + currentAvoidAngle;
         setOrbitPosition(
           path.start,
           tool,
-          freeAngleRef.current,
+          pathStartAngle,
           projectionSpread,
           orbitRotation,
         );
         setOrbitPosition(
           path.tangentPoint,
           tool,
-          freeAngleRef.current + 0.08,
+          pathStartAngle + 0.08,
           projectionSpread,
           orbitRotation,
         );
@@ -830,7 +895,11 @@ function ToolPlanet({
     const frameDelta = Math.min(delta, 0.05);
 
     if (!reducedMotion) {
-      orbitMotionTimeRef.current += frameDelta * (compact ? 0.24 : 0.32);
+      const basePhaseRate = compact
+        ? mobileFreeOrbitPhaseRate
+        : desktopFreeOrbitPhaseRate;
+      orbitMotionTimeRef.current +=
+        frameDelta * basePhaseRate * freeOrbitSpeedMultiplier;
       freeAngleRef.current = normalizeAngle(
         (compact ? tool.mobileBaseAngle ?? tool.baseAngle : tool.baseAngle) +
           Math.sin(orbitMotionTimeRef.current) * (compact ? 0.04 : 0.14),
@@ -840,15 +909,23 @@ function ToolPlanet({
     const returning =
       (focused && interactionPhase === "releasing") ||
       returningRef.current;
-    avoidBlendRef.current = THREE.MathUtils.damp(
-      avoidBlendRef.current,
-      focusActive && !focused ? 1 : 0,
-      4.8,
-      frameDelta,
+    const focusEmphasisActive =
+      focusActive && interactionPhase !== "releasing";
+    const shouldAvoid = focusEmphasisActive && !focused;
+    const avoidDirection = shouldAvoid ? 1 : -1;
+    avoidBlendRef.current = THREE.MathUtils.clamp(
+      avoidBlendRef.current +
+        avoidDirection *
+          (reducedMotion
+            ? 1
+            : frameDelta / (shouldAvoid ? 0.82 : 0.72)),
+      0,
+      1,
     );
+    const easedAvoidBlend = smoothRange(avoidBlendRef.current, 0, 1);
     const orbitAngle =
       freeAngleRef.current +
-      (compact ? 0 : tool.focusAvoidOffset ?? 0) * avoidBlendRef.current;
+      (compact ? 0 : tool.focusAvoidOffset ?? 0) * easedAvoidBlend;
 
     setOrbitPosition(
       tempPosition,
@@ -947,7 +1024,7 @@ function ToolPlanet({
           : 1.08
       : hovered
         ? 1.08
-        : focusActive
+        : focusEmphasisActive
           ? 0.84
           : categoryActive
             ? 1
@@ -959,11 +1036,11 @@ function ToolPlanet({
       1,
     );
     const depthScale = THREE.MathUtils.lerp(0.82, 1.18, depthRatio);
-    const selectedIconFade = smoothRange(focusBlendRef.current, 0.12, 0.34);
-    const iconOpacity = focusActive
-      ? focused
-        ? 1 - selectedIconFade
-        : 0.42
+    const selectedIconFade = focusBlendRef.current >= 0.18 ? 1 : 0;
+    const iconOpacity = focused
+      ? 1 - selectedIconFade
+      : focusEmphasisActive
+        ? 0.42
       : categoryActive
         ? 1
         : 0.58;
@@ -1075,36 +1152,6 @@ function ToolPlanet({
   );
 }
 
-function StarField() {
-  const geometry = useMemo(() => {
-    const positions: number[] = [];
-    for (let index = 0; index < 70; index += 1) {
-      positions.push(
-        (seededUnit(`star-x-${index}`) - 0.5) * 6.4,
-        (seededUnit(`star-y-${index}`) - 0.5) * 3.8,
-        (seededUnit(`star-z-${index}`) - 0.5) * 3.4,
-      );
-    }
-    const pointsGeometry = new THREE.BufferGeometry();
-    pointsGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(positions, 3),
-    );
-    return pointsGeometry;
-  }, []);
-
-  return (
-    <points geometry={geometry}>
-      <pointsMaterial
-        color="#ffd175"
-        opacity={0.22}
-        size={0.012}
-        transparent
-      />
-    </points>
-  );
-}
-
 function ResponsiveCamera() {
   const { camera, size } = useThree();
 
@@ -1117,16 +1164,29 @@ function ResponsiveCamera() {
       size.width < 520 ? 0.18 : 0.24,
       size.width < 520 ? 11 : 7.2,
     );
+    camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
   }, [camera, size.width]);
 
   return null;
 }
 
-function PerformanceProbe() {
+function PerformanceProbe({ compact }: { compact: boolean }) {
   const { gl } = useThree();
   const elapsedRef = useRef(0);
   const framesRef = useRef(0);
+
+  useEffect(() => {
+    const basePhaseRate = compact
+      ? mobileFreeOrbitPhaseRate
+      : desktopFreeOrbitPhaseRate;
+    gl.domElement.dataset.galaxyBasePhaseRate = basePhaseRate.toString();
+    gl.domElement.dataset.galaxyFreePhaseRate = (
+      basePhaseRate * freeOrbitSpeedMultiplier
+    ).toString();
+    gl.domElement.dataset.galaxySpeedMultiplier =
+      freeOrbitSpeedMultiplier.toString();
+  }, [compact, gl]);
 
   useFrame((_, delta) => {
     elapsedRef.current += delta;
@@ -1160,7 +1220,7 @@ function GalaxyScene({
   const projectionSpread = useMemo(
     () =>
       size.width < 520
-        ? { x: 0.94, y: 1.85, z: 0.5 }
+        ? { x: 1.03, y: 2, z: 0.5 }
         : { x: 1.2, y: 0.66, z: 0.58 },
     [size.width],
   );
@@ -1169,9 +1229,9 @@ function GalaxyScene({
       [...new Map(tools.map((tool) => [tool.orbitIndex, tool])).values()]
         .sort((a, b) => a.orbitIndex - b.orbitIndex)
         .map((tool) => ({
-          center: tool.trackCenter ?? ([0, 0, 0] as [number, number, number]),
+          center: tool.orbitCenter ?? ([0, 0, 0] as [number, number, number]),
           index: tool.orbitIndex,
-          radius: tool.trackRadius ?? tool.orbitRadius,
+          radius: tool.orbitRadius,
           tilt: tool.orbitTilt,
           active: tools.some(
             (item) =>
@@ -1186,7 +1246,7 @@ function GalaxyScene({
     <>
       <ambientLight intensity={1.3} />
       <ResponsiveCamera />
-      <PerformanceProbe />
+      <PerformanceProbe compact={size.width < 520} />
       <pointLight color="#ffd175" intensity={3.8} position={[0, 0.6, 2.6]} />
       <spotLight
         angle={0.55}
@@ -1196,7 +1256,6 @@ function GalaxyScene({
         position={[2.4, 2.2, 3.4]}
       />
       <group position={[0, 0, 0]}>
-        <StarField />
         {orbitConfigs.map((orbit) => (
           <OrbitLine
             key={orbit.index}
