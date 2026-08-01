@@ -4178,7 +4178,8 @@ main > section {
 
 .toolbox-section .tool-info-logo {
   flex: 0 0 auto;
-  opacity: var(--morph-logo-progress, 0);
+  opacity: 1;
+  visibility: var(--morph-logo-visibility, hidden);
 }
 
 .toolbox-section .tool-info-content {
@@ -4259,7 +4260,7 @@ main > section {
   }
 
   .tool-galaxy-stage {
-    height: 490px;
+    height: 620px;
   }
 
   .toolbox-section .tool-info-panel {
@@ -4269,7 +4270,7 @@ main > section {
     bottom: 26px;
     width: auto;
     min-height: 0;
-    max-height: min(49vh, 500px);
+    max-height: min(274px, 36vh);
     padding: 20px;
     overflow-y: auto;
     scrollbar-width: none;

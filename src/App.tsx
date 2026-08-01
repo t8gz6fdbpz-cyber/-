@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import { AboutSection } from "./components/sections/AboutSection";
 import { CaseStudiesPreviewSection } from "./components/sections/CaseStudiesPreviewSection";
@@ -23,6 +23,24 @@ let hashScrollRequestId = 0;
 
 const cancelPendingHashScroll = () => {
   hashScrollRequestId += 1;
+};
+
+const scrollHomeToTopImmediately = () => {
+  if (
+    typeof window === "undefined" ||
+    window.location.pathname !== "/" ||
+    window.location.hash
+  ) {
+    return;
+  }
+
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo(0, 0);
+  root.scrollTop = 0;
+  document.body.scrollTop = 0;
+  root.style.scrollBehavior = previousScrollBehavior;
 };
 
 const getCurrentRoute = (): PortfolioRoute =>
@@ -50,7 +68,7 @@ const getInitialRoute = (): PortfolioRoute => {
     route.hash === "#skills"
   ) {
     window.history.replaceState({}, "", `${route.pathname}${route.search}`);
-    window.scrollTo({ top: 0, behavior: "auto" });
+    scrollHomeToTopImmediately();
     return { ...route, hash: "" };
   }
 
@@ -111,6 +129,28 @@ export default function App() {
   const [route, setRoute] = useState(getInitialRoute);
   const path = route.pathname;
 
+  useLayoutEffect(() => {
+    const resetInitialHomeScroll = () => {
+      cancelPendingHashScroll();
+      scrollHomeToTopImmediately();
+    };
+    const handlePageShow = () => {
+      resetInitialHomeScroll();
+      window.requestAnimationFrame(resetInitialHomeScroll);
+    };
+
+    resetInitialHomeScroll();
+    const frameId = window.requestAnimationFrame(resetInitialHomeScroll);
+    const timeoutId = window.setTimeout(resetInitialHomeScroll, 120);
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(timeoutId);
+      window.removeEventListener("pageshow", handlePageShow);
+    };
+  }, []);
+
   useEffect(() => {
     const handleRouteChange = () => {
       const nextRoute = getCurrentRoute();
@@ -119,7 +159,7 @@ export default function App() {
       scrollToHash(nextRoute.hash);
 
       if (!nextRoute.hash && nextRoute.pathname === "/") {
-        window.scrollTo({ top: 0, behavior: "auto" });
+        scrollHomeToTopImmediately();
       }
     };
 
@@ -198,10 +238,10 @@ export default function App() {
     }
 
     if (path === "/") {
-      window.scrollTo({ top: 0, behavior: "auto" });
+      scrollHomeToTopImmediately();
       const frameId = window.requestAnimationFrame(() => {
         if (!window.location.hash && window.location.pathname === "/") {
-          window.scrollTo({ top: 0, behavior: "auto" });
+          scrollHomeToTopImmediately();
         }
       });
 

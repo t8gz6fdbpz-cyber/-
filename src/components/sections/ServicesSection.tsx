@@ -3,13 +3,14 @@ import {
   Component,
   lazy,
   Suspense,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import type { CSSProperties, MutableRefObject, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import type {
   GalaxyInteractionPhase,
@@ -337,57 +338,122 @@ function getToolCardTheme(tool: ToolGalaxyTool) {
   );
 }
 
+function resetToolInfoPanelPresentation(panel: HTMLElement) {
+  const canvas = panel
+    .closest<HTMLElement>(".tool-desktop-layout")
+    ?.querySelector<HTMLCanvasElement>("canvas");
+  if (canvas && panel.dataset.controllerToolId) {
+    canvas.dataset.galaxyPanelControllerCount = "0";
+    canvas.dataset.galaxyPanelController = "";
+    canvas.dataset.galaxyPanelControllerToken = "0";
+    canvas.dataset.galaxyPanelControllerValid = "true";
+  }
+
+  [
+    "border-radius",
+    "bottom",
+    "height",
+    "left",
+    "opacity",
+    "overflow",
+    "padding",
+    "pointer-events",
+    "right",
+    "top",
+    "visibility",
+    "width",
+    "z-index",
+  ].forEach((property) => panel.style.removeProperty(property));
+  [
+    "--morph-content-offset",
+    "--morph-content-progress",
+    "--morph-logo-visibility",
+    "--tool-accent",
+    "--tool-card-bg",
+    "--tool-glow",
+  ].forEach((property) => panel.style.removeProperty(property));
+  delete panel.dataset.toolId;
+  delete panel.dataset.transitionToken;
+  delete panel.dataset.controllerToolId;
+  delete panel.dataset.controllerTransitionToken;
+  delete panel.dataset.visualOwner;
+  delete panel.dataset.visualPhase;
+}
+
 function ToolInfoPanel({
+  active,
   onClose,
-  panelRef,
+  registerPanel,
   tool,
+  transitionToken,
 }: {
+  active: boolean;
   onClose: () => void;
-  panelRef: MutableRefObject<HTMLElement | null>;
+  registerPanel: (toolId: string, panel: HTMLElement | null) => void;
   tool: ToolGalaxyTool;
+  transitionToken: number;
 }) {
+  const localPanelRef = useRef<HTMLElement | null>(null);
   const theme = getToolCardTheme(tool);
   const style = {
     "--tool-accent": theme.accent,
     "--tool-card-bg": theme.background,
     "--tool-glow": theme.glow,
   } as CSSProperties;
+  const setPanelRef = useCallback(
+    (panel: HTMLElement | null) => {
+      localPanelRef.current = panel;
+      registerPanel(tool.id, panel);
+    },
+    [registerPanel, tool.id],
+  );
 
   useLayoutEffect(() => {
-    const panel = panelRef.current;
+    const panel = localPanelRef.current;
     if (!panel) return;
 
-    [
-      "bottom",
-      "height",
-      "left",
-      "opacity",
-      "overflow",
-      "padding",
-      "pointer-events",
-      "right",
-      "top",
-      "visibility",
-      "width",
-      "z-index",
-    ].forEach((property) => panel.style.removeProperty(property));
-    panel.style.setProperty("--morph-logo-progress", "0");
+    resetToolInfoPanelPresentation(panel);
+    panel.dataset.toolId = tool.id;
+    panel.dataset.transitionToken = active ? String(transitionToken) : "0";
+    panel.dataset.visualOwner = active ? "planet" : "preloaded";
+    panel.dataset.visualPhase = active ? "focusing" : "idle";
+    panel.dataset.resourceState = "ready";
+    panel.style.setProperty("--tool-accent", theme.accent);
+    panel.style.setProperty("--tool-card-bg", theme.background);
+    panel.style.setProperty("--tool-glow", theme.glow);
+    panel.style.setProperty("--morph-logo-visibility", "hidden");
     panel.style.setProperty("--morph-content-progress", "0");
     panel.style.setProperty("--morph-content-offset", "12px");
-  }, [panelRef, tool.id]);
+
+    return () => {
+      resetToolInfoPanelPresentation(panel);
+      delete panel.dataset.resourceState;
+    };
+  }, [
+    active,
+    theme.accent,
+    theme.background,
+    theme.glow,
+    tool.id,
+    transitionToken,
+  ]);
 
   return (
     <aside
-      ref={panelRef}
-      className="tool-info-panel"
+      ref={setPanelRef}
+      className={`tool-info-panel${active ? " is-active" : ""}`}
+      data-tool-id={tool.id}
+      data-transition-token={active ? transitionToken : 0}
       style={style}
-      aria-live="polite"
+      aria-hidden={!active}
+      aria-live={active ? "polite" : undefined}
     >
       <button
         type="button"
         className="tool-info-close"
         aria-label="关闭详情"
         onClick={onClose}
+        tabIndex={active ? 0 : -1}
       >
         ×
       </button>
@@ -424,18 +490,110 @@ export function SkillsMatrixSection() {
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
   const [interactionPhase, setInteractionPhase] =
     useState<GalaxyInteractionPhase>("free");
+  const [transitionToken, setTransitionToken] = useState(0);
   const [galaxySupport, setGalaxySupport] =
     useState<GalaxySupportState>("loading");
+  const [preloadRequested, setPreloadRequested] = useState(false);
+  const [rawAssetsReady, setRawAssetsReady] = useState(false);
+  const [galaxyResourcesReady, setGalaxyResourcesReady] = useState(false);
+  const [mountedPanelCount, setMountedPanelCount] = useState(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
   const detailPanelRef = useRef<HTMLElement | null>(null);
+  const panelElementsRef = useRef(new Map<string, HTMLElement>());
+  const transitionSequenceRef = useRef(0);
+  const focusStartFrameRef = useRef<number | null>(null);
+
+  const scheduleFocusStart = (token: number) => {
+    if (focusStartFrameRef.current !== null) {
+      window.cancelAnimationFrame(focusStartFrameRef.current);
+    }
+    focusStartFrameRef.current = window.requestAnimationFrame(() => {
+      focusStartFrameRef.current = null;
+      if (transitionSequenceRef.current === token) {
+        setInteractionPhase("focusing");
+      }
+    });
+  };
+
+  useEffect(
+    () => () => {
+      if (focusStartFrameRef.current !== null) {
+        window.cancelAnimationFrame(focusStartFrameRef.current);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     setGalaxySupport(canUseWebGL() ? "supported" : "unsupported");
   }, []);
 
-  const detailTool =
-    focusedToolId === null
-      ? null
-      : tools.find((tool) => tool.id === focusedToolId) ?? null;
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || preloadRequested) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setPreloadRequested(true);
+        observer.disconnect();
+      },
+      { rootMargin: "240px 0px" },
+    );
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, [preloadRequested]);
+
+  useEffect(() => {
+    if (!preloadRequested) return;
+
+    let active = true;
+    const preloadTasks = tools.map(
+      (tool) =>
+        new Promise<void>((resolve) => {
+          if (!tool.icon) {
+            resolve();
+            return;
+          }
+
+          const image = new Image();
+          image.decoding = "async";
+          image.onload = () => {
+            image
+              .decode()
+              .catch(() => undefined)
+              .finally(resolve);
+          };
+          image.onerror = () => resolve();
+          image.src = tool.icon;
+        }),
+    );
+
+    Promise.all(preloadTasks).then(() => {
+      if (active) setRawAssetsReady(true);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [preloadRequested]);
+
+  const registerToolPanel = useCallback(
+    (toolId: string, panel: HTMLElement | null) => {
+      if (panel) {
+        panelElementsRef.current.set(toolId, panel);
+      } else {
+        panelElementsRef.current.delete(toolId);
+      }
+      setMountedPanelCount(panelElementsRef.current.size);
+    },
+    [],
+  );
+  const cardResourcesReady =
+    preloadRequested &&
+    rawAssetsReady &&
+    mountedPanelCount === tools.length;
 
   const categoryCounts = useMemo(
     () =>
@@ -447,12 +605,15 @@ export function SkillsMatrixSection() {
   );
 
   const selectTool = (tool: ToolGalaxyTool, focus = true) => {
-    setSelectedToolId(tool.id);
+    if (!galaxyResourcesReady) return;
+
     if (!focus) {
-      setFocusedToolId(null);
-      setInteractionPhase("free");
+      if (focusedToolId !== null && interactionPhase !== "releasing") {
+        setInteractionPhase("releasing");
+      }
       return;
     }
+
     if (
       focusedToolId === tool.id &&
       (interactionPhase === "focusing" || interactionPhase === "focused")
@@ -460,8 +621,21 @@ export function SkillsMatrixSection() {
       return;
     }
 
+    const nextPanel = panelElementsRef.current.get(tool.id) ?? null;
+    if (!nextPanel) return;
+
+    if (detailPanelRef.current && detailPanelRef.current !== nextPanel) {
+      resetToolInfoPanelPresentation(detailPanelRef.current);
+    }
+
+    detailPanelRef.current = nextPanel;
+    transitionSequenceRef.current += 1;
+    const nextToken = transitionSequenceRef.current;
+    setTransitionToken(nextToken);
+    setSelectedToolId(tool.id);
     setFocusedToolId(tool.id);
-    setInteractionPhase("focusing");
+    setInteractionPhase("free");
+    scheduleFocusStart(nextToken);
   };
 
   const clearFocus = () => {
@@ -470,15 +644,31 @@ export function SkillsMatrixSection() {
     setInteractionPhase("releasing");
   };
 
-  const handleFocusSettled = (toolId: string) => {
-    if (focusedToolId !== toolId || interactionPhase !== "focusing") return;
+  const handleFocusSettled = (toolId: string, settledToken: number) => {
+    if (
+      focusedToolId !== toolId ||
+      interactionPhase !== "focusing" ||
+      settledToken !== transitionToken
+    ) {
+      return;
+    }
 
     setInteractionPhase("focused");
   };
 
-  const handleReleaseSettled = (toolId: string) => {
-    if (focusedToolId !== toolId || interactionPhase !== "releasing") return;
+  const handleReleaseSettled = (toolId: string, settledToken: number) => {
+    if (
+      focusedToolId !== toolId ||
+      interactionPhase !== "releasing" ||
+      settledToken !== transitionToken
+    ) {
+      return;
+    }
 
+    if (detailPanelRef.current) {
+      resetToolInfoPanelPresentation(detailPanelRef.current);
+    }
+    detailPanelRef.current = null;
     setSelectedToolId(null);
     setFocusedToolId(null);
     setInteractionPhase("free");
@@ -491,6 +681,7 @@ export function SkillsMatrixSection() {
 
   return (
     <section
+      ref={sectionRef}
       id="skills"
       className="toolbox-section scroll-mt-8 bg-[var(--color-bg)] px-5 py-24 text-[var(--color-text)] sm:px-8 md:px-10 md:py-36"
     >
@@ -510,6 +701,8 @@ export function SkillsMatrixSection() {
             focusedToolId ? "is-focused" : ""
           }`}
           data-galaxy-phase={interactionPhase}
+          data-resources-ready={galaxyResourcesReady}
+          data-transition-token={transitionToken}
         >
           <div className="tool-category-index" aria-label="工具分类">
             <p>分类</p>
@@ -568,28 +761,37 @@ export function SkillsMatrixSection() {
               >
                 <ToolGalaxy3D
                   activeCategory={activeCategory}
+                  cardResourcesReady={cardResourcesReady}
                   detailPanelRef={detailPanelRef}
                   focusedToolId={focusedToolId}
                   interactionPhase={interactionPhase}
+                  preloadRequested={preloadRequested}
                   reducedMotion={Boolean(shouldReduceMotion)}
                   selectedToolId={selectedToolId}
                   tools={tools}
+                  transitionToken={transitionToken}
                   onClearFocus={clearFocus}
                   onFocusSettled={handleFocusSettled}
                   onReleaseSettled={handleReleaseSettled}
+                  onResourceStateChange={setGalaxyResourcesReady}
                   onSelectTool={selectTool}
                 />
               </Suspense>
             </ToolGalaxyErrorBoundary>
           )}
 
-          {detailTool && focusedToolId ? (
+          {tools.map((tool) => (
             <ToolInfoPanel
-              panelRef={detailPanelRef}
-              tool={detailTool}
+              key={tool.id}
+              active={focusedToolId === tool.id}
+              registerPanel={registerToolPanel}
+              tool={tool}
+              transitionToken={
+                focusedToolId === tool.id ? transitionToken : 0
+              }
               onClose={clearFocus}
             />
-          ) : null}
+          ))}
         </div>
       </div>
     </section>

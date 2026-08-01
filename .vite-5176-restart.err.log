@@ -1,0 +1,402 @@
+[2m17:56:53[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\mmhm\Documents\Codex\作品\src\components\sections\ToolGalaxy3D.tsx: Unexpected keyword 'const'. (1597:8)
+
+[0m [90m 1595 |[31m         [36mconst[31m columnProgress [33m=[31m
+ [90m 1596 |[31m           columns [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m column [33m/[31m (columns [33m-[31m [35m1[31m)[33m,[31m
+[31m[1m>[22m[31m[90m 1597 |[31m         [36mconst[31m rowProgress [33m=[31m
+ [90m      |[31m         [31m[1m^[22m[31m
+ [90m 1598 |[31m           rows [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m row [33m/[31m (rows [33m-[31m [35m1[31m)[33m;[31m
+ [90m 1599 |[31m         [36mconst[31m freeSlotX [33m=[31m [33mTHREE[31m[33m.[31m[33mMathUtils[31m[33m.[31mlerp(
+ [90m 1600 |[31m           freeSlotLeft[33m,[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/mmhm/Documents/Codex/作品/src/components/sections/ToolGalaxy3D.tsx[39m:1597:8
+[33m  1630|          const driftLimitY = THREE.MathUtils.lerp(3, 1, slotBlend);
+  1631|          const orbitDriftX = THREE.MathUtils.clamp(
+  1632|            (record.point.x - size.width * 0.5) * 0.025,
+     |                                             ^
+  1633|            -driftLimitX,
+  1634|            driftLimitX,[39m
+      at constructor (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:6616:19)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12241:12)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9327:13)
+      at TypeScriptParserMixin.parseIdentifierName (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12228:12)
+      at TypeScriptParserMixin.parseIdentifier (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12198:23)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:7373:17)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9959:18)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13419:21)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9769:11)
+      at TypeScriptParserMixin.parseVar (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13400:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13247:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9425:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12868:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9525:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12784:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12764:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13333:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13326:10)
+      at TypeScriptParserMixin.parseBlock (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13314:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12117:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12092:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11704:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11348:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:4776:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11098:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10898:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10848:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9803:20)
+      at C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12443:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12510:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12192:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11269:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11203:29)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11137:19)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9289:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11111:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11102:17)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+[2m17:56:54[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\mmhm\Documents\Codex\作品\src\components\sections\ToolGalaxy3D.tsx: Unexpected keyword 'const'. (1597:8)
+
+[0m [90m 1595 |[31m         [36mconst[31m columnProgress [33m=[31m
+ [90m 1596 |[31m           columns [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m column [33m/[31m (columns [33m-[31m [35m1[31m)[33m,[31m
+[31m[1m>[22m[31m[90m 1597 |[31m         [36mconst[31m rowProgress [33m=[31m
+ [90m      |[31m         [31m[1m^[22m[31m
+ [90m 1598 |[31m           rows [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m row [33m/[31m (rows [33m-[31m [35m1[31m)[33m;[31m
+ [90m 1599 |[31m         [36mconst[31m freeSlotX [33m=[31m [33mTHREE[31m[33m.[31m[33mMathUtils[31m[33m.[31mlerp(
+ [90m 1600 |[31m           freeSlotLeft[33m,[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/mmhm/Documents/Codex/作品/src/components/sections/ToolGalaxy3D.tsx[39m:1597:8
+[33m  1630|          const driftLimitY = THREE.MathUtils.lerp(3, 1, slotBlend);
+  1631|          const orbitDriftX = THREE.MathUtils.clamp(
+  1632|            (record.point.x - size.width * 0.5) * 0.025,
+     |                                             ^
+  1633|            -driftLimitX,
+  1634|            driftLimitX,[39m
+      at constructor (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:6616:19)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12241:12)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9327:13)
+      at TypeScriptParserMixin.parseIdentifierName (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12228:12)
+      at TypeScriptParserMixin.parseIdentifier (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12198:23)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:7373:17)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9959:18)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13419:21)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9769:11)
+      at TypeScriptParserMixin.parseVar (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13400:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13247:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9425:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12868:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9525:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12784:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12764:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13333:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13326:10)
+      at TypeScriptParserMixin.parseBlock (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13314:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12117:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12092:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11704:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11348:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:4776:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11098:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10898:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10848:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9803:20)
+      at C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12443:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12510:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12192:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11269:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11203:29)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11137:19)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9289:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11111:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11102:17)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+[2m17:56:54[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\mmhm\Documents\Codex\作品\src\components\sections\ToolGalaxy3D.tsx: Unexpected keyword 'const'. (1597:8)
+
+[0m [90m 1595 |[31m         [36mconst[31m columnProgress [33m=[31m
+ [90m 1596 |[31m           columns [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m column [33m/[31m (columns [33m-[31m [35m1[31m)[33m,[31m
+[31m[1m>[22m[31m[90m 1597 |[31m         [36mconst[31m rowProgress [33m=[31m
+ [90m      |[31m         [31m[1m^[22m[31m
+ [90m 1598 |[31m           rows [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m row [33m/[31m (rows [33m-[31m [35m1[31m)[33m;[31m
+ [90m 1599 |[31m         [36mconst[31m freeSlotX [33m=[31m [33mTHREE[31m[33m.[31m[33mMathUtils[31m[33m.[31mlerp(
+ [90m 1600 |[31m           freeSlotLeft[33m,[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/mmhm/Documents/Codex/作品/src/components/sections/ToolGalaxy3D.tsx[39m:1597:8
+[33m  1630|          const driftLimitY = THREE.MathUtils.lerp(3, 1, slotBlend);
+  1631|          const orbitDriftX = THREE.MathUtils.clamp(
+  1632|            (record.point.x - size.width * 0.5) * 0.025,
+     |                                             ^
+  1633|            -driftLimitX,
+  1634|            driftLimitX,[39m
+      at constructor (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:6616:19)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12241:12)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9327:13)
+      at TypeScriptParserMixin.parseIdentifierName (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12228:12)
+      at TypeScriptParserMixin.parseIdentifier (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12198:23)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:7373:17)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9959:18)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13419:21)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9769:11)
+      at TypeScriptParserMixin.parseVar (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13400:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13247:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9425:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12868:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9525:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12784:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12764:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13333:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13326:10)
+      at TypeScriptParserMixin.parseBlock (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13314:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12117:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12092:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11704:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11348:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:4776:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11098:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10898:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10848:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9803:20)
+      at C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12443:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12510:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12192:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11269:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11203:29)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11137:19)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9289:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11111:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11102:17)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+[2m17:56:54[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\mmhm\Documents\Codex\作品\src\components\sections\ToolGalaxy3D.tsx: Unexpected keyword 'const'. (1597:8)
+
+[0m [90m 1595 |[31m         [36mconst[31m columnProgress [33m=[31m
+ [90m 1596 |[31m           columns [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m column [33m/[31m (columns [33m-[31m [35m1[31m)[33m,[31m
+[31m[1m>[22m[31m[90m 1597 |[31m         [36mconst[31m rowProgress [33m=[31m
+ [90m      |[31m         [31m[1m^[22m[31m
+ [90m 1598 |[31m           rows [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m row [33m/[31m (rows [33m-[31m [35m1[31m)[33m;[31m
+ [90m 1599 |[31m         [36mconst[31m freeSlotX [33m=[31m [33mTHREE[31m[33m.[31m[33mMathUtils[31m[33m.[31mlerp(
+ [90m 1600 |[31m           freeSlotLeft[33m,[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/mmhm/Documents/Codex/作品/src/components/sections/ToolGalaxy3D.tsx[39m:1597:8
+[33m  1630|          const driftLimitY = THREE.MathUtils.lerp(3, 1, slotBlend);
+  1631|          const orbitDriftX = THREE.MathUtils.clamp(
+  1632|            (record.point.x - size.width * 0.5) * 0.025,
+     |                                             ^
+  1633|            -driftLimitX,
+  1634|            driftLimitX,[39m
+      at constructor (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:6616:19)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12241:12)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9327:13)
+      at TypeScriptParserMixin.parseIdentifierName (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12228:12)
+      at TypeScriptParserMixin.parseIdentifier (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12198:23)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:7373:17)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9959:18)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13419:21)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9769:11)
+      at TypeScriptParserMixin.parseVar (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13400:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13247:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9425:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12868:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9525:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12784:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12764:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13333:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13326:10)
+      at TypeScriptParserMixin.parseBlock (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13314:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12117:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12092:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11704:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11348:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:4776:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11098:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10898:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10848:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9803:20)
+      at C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12443:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12510:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12192:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11269:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11203:29)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11137:19)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9289:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11111:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11102:17)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+[2m17:56:54[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\mmhm\Documents\Codex\作品\src\components\sections\ToolGalaxy3D.tsx: Unexpected keyword 'const'. (1597:8)
+
+[0m [90m 1595 |[31m         [36mconst[31m columnProgress [33m=[31m
+ [90m 1596 |[31m           columns [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m column [33m/[31m (columns [33m-[31m [35m1[31m)[33m,[31m
+[31m[1m>[22m[31m[90m 1597 |[31m         [36mconst[31m rowProgress [33m=[31m
+ [90m      |[31m         [31m[1m^[22m[31m
+ [90m 1598 |[31m           rows [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m row [33m/[31m (rows [33m-[31m [35m1[31m)[33m;[31m
+ [90m 1599 |[31m         [36mconst[31m freeSlotX [33m=[31m [33mTHREE[31m[33m.[31m[33mMathUtils[31m[33m.[31mlerp(
+ [90m 1600 |[31m           freeSlotLeft[33m,[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/mmhm/Documents/Codex/作品/src/components/sections/ToolGalaxy3D.tsx[39m:1597:8
+[33m  1630|          const driftLimitY = THREE.MathUtils.lerp(3, 1, slotBlend);
+  1631|          const orbitDriftX = THREE.MathUtils.clamp(
+  1632|            (record.point.x - size.width * 0.5) * 0.025,
+     |                                             ^
+  1633|            -driftLimitX,
+  1634|            driftLimitX,[39m
+      at constructor (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:6616:19)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12241:12)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9327:13)
+      at TypeScriptParserMixin.parseIdentifierName (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12228:12)
+      at TypeScriptParserMixin.parseIdentifier (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12198:23)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:7373:17)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9959:18)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13419:21)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9769:11)
+      at TypeScriptParserMixin.parseVar (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13400:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13247:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9425:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12868:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9525:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12784:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12764:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13333:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13326:10)
+      at TypeScriptParserMixin.parseBlock (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13314:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12117:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12092:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11704:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11348:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:4776:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11098:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10898:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10848:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9803:20)
+      at C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12443:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12510:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12192:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11269:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11203:29)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11137:19)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9289:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11111:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11102:17)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+[2m17:56:54[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\Users\mmhm\Documents\Codex\作品\src\components\sections\ToolGalaxy3D.tsx: Unexpected keyword 'const'. (1597:8)
+
+[0m [90m 1595 |[31m         [36mconst[31m columnProgress [33m=[31m
+ [90m 1596 |[31m           columns [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m column [33m/[31m (columns [33m-[31m [35m1[31m)[33m,[31m
+[31m[1m>[22m[31m[90m 1597 |[31m         [36mconst[31m rowProgress [33m=[31m
+ [90m      |[31m         [31m[1m^[22m[31m
+ [90m 1598 |[31m           rows [33m===[31m [35m1[31m [33m?[31m [35m0.5[31m [33m:[31m row [33m/[31m (rows [33m-[31m [35m1[31m)[33m;[31m
+ [90m 1599 |[31m         [36mconst[31m freeSlotX [33m=[31m [33mTHREE[31m[33m.[31m[33mMathUtils[31m[33m.[31mlerp(
+ [90m 1600 |[31m           freeSlotLeft[33m,[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/Users/mmhm/Documents/Codex/作品/src/components/sections/ToolGalaxy3D.tsx[39m:1597:8
+[33m  1630|          const driftLimitY = THREE.MathUtils.lerp(3, 1, slotBlend);
+  1631|          const orbitDriftX = THREE.MathUtils.clamp(
+  1632|            (record.point.x - size.width * 0.5) * 0.025,
+     |                                             ^
+  1633|            -driftLimitX,
+  1634|            driftLimitX,[39m
+      at constructor (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:6616:19)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12241:12)
+      at TypeScriptParserMixin.checkReservedWord (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9327:13)
+      at TypeScriptParserMixin.parseIdentifierName (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12228:12)
+      at TypeScriptParserMixin.parseIdentifier (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12198:23)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:7373:17)
+      at TypeScriptParserMixin.parseBindingAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9959:18)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13419:21)
+      at TypeScriptParserMixin.parseVarId (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9769:11)
+      at TypeScriptParserMixin.parseVar (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13400:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13247:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9425:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12868:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9525:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12784:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12764:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13333:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13326:10)
+      at TypeScriptParserMixin.parseBlock (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:13314:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12117:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12092:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11704:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11348:23)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:4776:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11098:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10898:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10848:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9803:20)
+      at C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12443:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10817:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12510:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:12192:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11269:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11203:29)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11137:19)
+      at TypeScriptParserMixin.parseSubscript (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9289:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11111:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11102:17)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11083:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:11063:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
