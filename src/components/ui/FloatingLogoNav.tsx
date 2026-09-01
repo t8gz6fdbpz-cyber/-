@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+
+import { PortfolioLink } from "../../routing";
 
 const navItems = [
   { label: "首页", href: "/" },
@@ -13,6 +16,7 @@ const navItems = [
 export function FloatingLogoNav() {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLElement | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -58,11 +62,24 @@ export function FloatingLogoNav() {
       }}
     >
       <div className="floating-logo-nav-links">
-        {navItems.map((item) => (
-          <a key={item.href} href={item.href} tabIndex={isOpen ? 0 : -1}>
-            {item.label}
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const url = new URL(item.href, window.location.origin);
+          const isCurrent =
+            location.pathname === url.pathname &&
+            location.hash === url.hash;
+
+          return (
+            <PortfolioLink
+              key={item.href}
+              to={item.href}
+              aria-current={isCurrent ? "page" : undefined}
+              tabIndex={isOpen ? 0 : -1}
+              onClick={() => setIsOpen(false)}
+            >
+              {item.label}
+            </PortfolioLink>
+          );
+        })}
       </div>
       <button
         aria-expanded={isOpen}

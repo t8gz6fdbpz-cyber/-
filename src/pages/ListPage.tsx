@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 
+import { PortfolioLink } from "../routing";
 import { contactChannels } from "../utils/portfolioData";
 
 const questions = [
@@ -34,10 +35,10 @@ export function ListPage() {
   return (
     <section className="about-page portfolio-page-shell">
       <div className="portfolio-page-header">
-        <a href="/" className="portfolio-back-link">
+        <PortfolioLink to="/" className="portfolio-back-link">
           <ArrowLeft aria-hidden="true" />
           返回首页
-        </a>
+        </PortfolioLink>
         <div>
           <p>关于我</p>
           <h1>继续了解</h1>
@@ -57,11 +58,17 @@ export function ListPage() {
       <div className="about-contact-strip">
         <p>联系我</p>
         <div>
-          {contactChannels.map((channel) => (
-            <a key={channel.label} href={channel.href}>
-              {channel.label}：{channel.value}
-            </a>
-          ))}
+          {contactChannels.map((channel) =>
+            channel.href.startsWith("#") ? (
+              <PortfolioLink key={channel.label} to={`/${channel.href}`}>
+                {channel.label}：{channel.value}
+              </PortfolioLink>
+            ) : (
+              <a key={channel.label} href={channel.href}>
+                {channel.label}：{channel.value}
+              </a>
+            ),
+          )}
         </div>
       </div>
     </section>

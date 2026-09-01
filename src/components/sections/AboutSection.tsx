@@ -1,7 +1,5 @@
 import { AnimatedText } from "../ui/AnimatedText";
-import { ContactButton } from "../ui/ContactButton";
 import { FadeIn } from "../ui/FadeIn";
-import { contactHref } from "../../utils/portfolioData";
 
 const aboutParagraphs = [
   "我是做内容运营、IP孵化、直播运营和 AI 应用的人。",
@@ -17,21 +15,6 @@ const aboutHighlights = [
   "平台增长",
   "AI 工作流",
   "复盘迭代",
-];
-
-const aboutCapabilities = [
-  {
-    title: "内容系统",
-    text: "从选题、脚本、拍摄到分发，让内容不只好看，也能推动行动。",
-  },
-  {
-    title: "人设与 IP",
-    text: "把人的优势、表达方式和平台语境合在一起，形成稳定识别度。",
-  },
-  {
-    title: "AI 应用",
-    text: "用 AI 做资料整理、脚本生成、视觉探索、自动化和网页原型搭建。",
-  },
 ];
 
 export function AboutSection() {
@@ -52,13 +35,17 @@ export function AboutSection() {
           </div>
         </FadeIn>
 
-        <div className="mt-20 grid w-full gap-14 lg:grid-cols-[minmax(0,0.95fr)_minmax(320px,0.55fr)] lg:items-start">
-          <div className="flex flex-col gap-8 sm:gap-10">
+        <div className="mt-20 flex w-full max-w-4xl flex-col items-center gap-8 text-center sm:gap-10">
+          <div className="flex w-full flex-col items-center gap-8 sm:gap-10">
             {aboutParagraphs.map((paragraph) => (
               <AnimatedText key={paragraph} text={paragraph} />
             ))}
 
-            <FadeIn delay={0.05} y={30} className="flex flex-wrap gap-3 pt-4">
+            <FadeIn
+              delay={0.05}
+              y={30}
+              className="flex justify-center flex-wrap gap-3 pt-4"
+            >
               {aboutHighlights.map((highlight) => (
                 <span
                   key={highlight}
@@ -69,19 +56,6 @@ export function AboutSection() {
               ))}
             </FadeIn>
           </div>
-
-          <FadeIn delay={0.08} y={36} className="about-capability-panel">
-            <p>我通常这样把事情做成</p>
-            <div>
-              {aboutCapabilities.map((item) => (
-                <article key={item.title}>
-                  <h3>{item.title}</h3>
-                  <span>{item.text}</span>
-                </article>
-              ))}
-            </div>
-            <ContactButton href={contactHref} label="联系我" />
-          </FadeIn>
         </div>
       </div>
     </section>

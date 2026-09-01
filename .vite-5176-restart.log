@@ -2,8 +2,8 @@
   [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m528[22m[2m[0m ms[22m
 
   [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5176[22m/[39m
-[2m11:25:35[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
-[2m11:26:11[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m11:25:35[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/se[2m09:13:05[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
+9m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
 [2m11:26:45[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
 [2m11:27:02[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
 [2m11:29:55[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
@@ -271,3 +271,54 @@
 [2m16:20:03[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
 [2m16:20:27[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
 [2m16:55:13[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m07:43:31[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m07:57:37[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m08:02:59[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m08:13:03[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m09:13:04[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m09:43:51[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m10:38:42[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m10:48:40[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m10:55:12[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m11:01:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m11:04:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/ToolGalaxy3D.tsx, /src/index.css[22m
+[2m15:11:11[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx, /src/index.css[22m
+[2m15:12:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m15:12:30[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m15:38:48[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33mreact-simple-maps[32m[39m
+[2m15:38:48[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m15:38:57[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/EditorialImage.tsx, /src/index.css[22m
+[2m15:38:59[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m15:38:59[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx, /src/index.css, /src/pages/LifeDetailPage.tsx, /src/components/life/LifePageHeader.tsx, /src/components/life/TravelMap.tsx[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LifeDetailPage.tsx, /src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx, /src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/ArticleLightbox.tsx, /src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/BackToInterestsLink.tsx, /src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/LifePageHeader.tsx, /src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/TravelMap.tsx, /src/index.css[22m
+[2m15:39:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/EditorialImage.tsx, /src/index.css[22m
+[2m15:58:12[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx[22m
+[2m09:33:38[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/utils/lifeData.ts[22m
+[2m09:35:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LifeDetailPage.tsx[22m
+[2m09:35:31[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx[22m
+[2m09:35:43[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m09:36:23[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx[22m
+[2m09:40:48[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:42:52[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:43:45[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m09:47:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:48:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx[22m
+[2m09:48:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LifeDetailPage.tsx[22m
+[2m09:48:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:48:31[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:49:19[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m09:50:02[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:54:19[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:56:04[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[2m09:56:21[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/sections/InterestsSection.tsx, /src/index.css[22m
+[2m09:56:34[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:56:41[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/life/LifeComponents.tsx, /src/index.css[22m
+[2m09:56:41[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/LifeDetailPage.tsx, /src/index.css[22m
+[2m09:56:41[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/utils/lifeData.ts[22m
+[2m09:57:10[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m

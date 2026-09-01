@@ -2,7 +2,10 @@ import { Mail } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { PortfolioLink } from "../../routing";
+
 const ease = [0.25, 0.1, 0.25, 1] as const;
+const MotionPortfolioLink = motion.create(PortfolioLink);
 
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("en-US", {
@@ -63,7 +66,7 @@ export function HeroSection() {
             <motion.h1
               className="hero-cover-title notranslate"
               translate="no"
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 34 }}
+              initial={false}
               animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ delay: 0.12, duration: 0.95, ease }}
             >
@@ -77,7 +80,7 @@ export function HeroSection() {
             style={{
               y: shouldReduceMotion ? "0%" : introY,
             }}
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+            initial={false}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.24, duration: 0.82, ease }}
           >
@@ -88,7 +91,7 @@ export function HeroSection() {
           <motion.div
             className="hero-cover-meta notranslate"
             translate="no"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+            initial={false}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ delay: 0.42, duration: 0.8, ease }}
           >
@@ -107,20 +110,20 @@ export function HeroSection() {
               y: shouldReduceMotion ? "0%" : imageY,
               scale: shouldReduceMotion ? 1 : imageScale,
             }}
-            initial={shouldReduceMotion ? false : { opacity: 0 }}
+            initial={false}
             animate={shouldReduceMotion ? undefined : { opacity: 1 }}
             transition={{ delay: 0.08, duration: 1.05, ease }}
           />
-          <motion.a
-            href="#contact"
+          <MotionPortfolioLink
+            to="/#contact"
             aria-label="Contact Jack Wu"
             className="hero-cover-email"
-            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.86 }}
+            initial={false}
             animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.75, ease }}
           >
             <Mail className="h-8 w-8" strokeWidth={2.6} />
-          </motion.a>
+          </MotionPortfolioLink>
         </div>
       </div>
     </section>

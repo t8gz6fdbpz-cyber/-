@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
+import { PortfolioLink } from "../../routing";
 import { caseStudies } from "../../utils/caseStudies";
 import { FadeIn } from "../ui/FadeIn";
 
@@ -36,9 +37,9 @@ export function CaseStudiesPreviewSection() {
         <div className="case-preview-grid">
           {caseStudies.map((item, index) => (
             <FadeIn key={item.slug} delay={index * 0.08}>
-              <a
+              <PortfolioLink
                 className="case-preview-card"
-                href={`/cases/${item.slug}`}
+                to={`/cases/${item.slug}`}
                 data-index={String(index + 1).padStart(2, "0")}
               >
                 <div className="case-preview-card-content">
@@ -84,7 +85,7 @@ export function CaseStudiesPreviewSection() {
                     </div>
                   </div>
                 </div>
-              </a>
+              </PortfolioLink>
             </FadeIn>
           ))}
         </div>

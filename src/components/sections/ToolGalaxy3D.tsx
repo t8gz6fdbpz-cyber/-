@@ -29,6 +29,8 @@ export type ToolGalaxyTool = {
   orbitIndex: number;
   orbitCenter?: [number, number, number];
   orbitRadius: number;
+  orbitRadiusX?: number;
+  orbitVerticalRatio?: number;
   orbitTilt: [number, number, number];
   baseAngle: number;
   mobileBaseAngle?: number;
@@ -108,6 +110,8 @@ const layoutPresets: Array<{
   center: [number, number, number];
   orbitIndex: number;
   radius: number;
+  radiusX: number;
+  verticalRatio: number;
   speed: number;
   tilt: [number, number, number];
   phase: number;
@@ -116,36 +120,44 @@ const layoutPresets: Array<{
     orbitIndex: 0,
     center: [0, -0.28, -0.54],
     radius: 5.35,
+    radiusX: 5.35,
+    verticalRatio: 0.46,
     speed: 0.045,
-    tilt: [0, 0, -3],
+    tilt: [14.8, -7.9, 7.6],
     phase: 0,
   },
   {
     orbitIndex: 1,
     center: [0, -0.28, -0.18],
     radius: 4.15,
+    radiusX: 4.44,
+    verticalRatio: 0.389,
     speed: 0.045,
-    tilt: [0, 0, -3],
+    tilt: [-0.8, -11.6, -1.4],
     phase: THREE.MathUtils.degToRad(300),
   },
   {
     orbitIndex: 2,
     center: [0, -0.28, 0.18],
     radius: 2.95,
+    radiusX: 3.16,
+    verticalRatio: 0.392,
     speed: 0.045,
-    tilt: [0, 0, -3],
+    tilt: [12.5, 10.7, -5.1],
     phase: THREE.MathUtils.degToRad(105),
   },
   {
     orbitIndex: 3,
     center: [0, -0.28, 0.54],
     radius: 1.75,
+    radiusX: 1.81,
+    verticalRatio: 0.399,
     speed: 0.045,
-    tilt: [0, 0, -3],
+    tilt: [7.2, 1.8, -4.2],
     phase: THREE.MathUtils.degToRad(285),
   },
 ];
-const orbitVerticalRatio = 0.365;
+const defaultOrbitVerticalRatio = 0.365;
 const orbitDepthRatio = 0.11;
 const outerOrbitRadius = layoutPresets[0].radius;
 const desktopCameraZoom = 100;
@@ -158,13 +170,15 @@ function setOrbitPoint(
   target: THREE.Vector3,
   center: [number, number, number],
   radius: number,
+  radiusX: number,
+  verticalRatio: number,
   angle: number,
   spread: typeof defaultProjectionSpread,
   rotation: THREE.Quaternion,
 ) {
   target.set(
-    Math.cos(angle) * radius,
-    Math.sin(angle) * radius * orbitVerticalRatio,
+    Math.cos(angle) * radiusX,
+    Math.sin(angle) * radius * verticalRatio,
     Math.sin(angle) * radius * orbitDepthRatio,
   );
   target.applyQuaternion(rotation);
@@ -188,6 +202,8 @@ function setOrbitPosition(
     target,
     tool.orbitCenter ?? [0, 0, 0],
     tool.orbitRadius,
+    tool.orbitRadiusX ?? tool.orbitRadius,
+    tool.orbitVerticalRatio ?? defaultOrbitVerticalRatio,
     angle,
     spread,
     rotation,
@@ -564,6 +580,8 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
         orbitIndex: preset.orbitIndex,
         orbitCenter: preset.center,
         orbitRadius: preset.radius,
+        orbitRadiusX: preset.radiusX,
+        orbitVerticalRatio: preset.verticalRatio,
         orbitTilt: preset.tilt,
         baseAngle,
         mobileBaseAngle: baseAngle,
@@ -577,6 +595,8 @@ function createStableGalaxyLayout(tools: ToolGalaxyTool[]) {
 function createOrbitPoints(
   center: [number, number, number],
   radius: number,
+  radiusX: number,
+  verticalRatio: number,
   tilt: [number, number, number],
   spread = defaultProjectionSpread,
 ) {
@@ -596,6 +616,8 @@ function createOrbitPoints(
       new THREE.Vector3(),
       center,
       radius,
+      radiusX,
+      verticalRatio,
       angle,
       spread,
       rotation,
@@ -612,6 +634,8 @@ function OrbitLine({
   center,
   occlusionState,
   radius,
+  radiusX,
+  verticalRatio,
   spread,
   tilt,
 }: {
@@ -619,31 +643,34 @@ function OrbitLine({
   center: [number, number, number];
   occlusionState: PlanetOcclusionState;
   radius: number;
+  radiusX: number;
+  verticalRatio: number;
   spread: typeof defaultProjectionSpread;
   tilt: [number, number, number];
 }) {
   const orbitGeometry = useMemo(
-    () => createOrbitPoints(center, radius, tilt, spread),
-    [center, radius, spread, tilt],
+    () => createOrbitPoints(center, radius, radiusX, verticalRatio, tilt, spread),
+    [center, radius, radiusX, spread, tilt, verticalRatio],
   );
   const geometry = useMemo(() => {
-      const minDepth = Math.min(...orbitGeometry.depths);
-      const maxDepth = Math.max(...orbitGeometry.depths);
-      const depthSpan = Math.max(maxDepth - minDepth, 0.001);
       const back = new THREE.Color(active ? "#6f4513" : "#4f3210");
       const front = new THREE.Color(active ? "#c58a31" : "#8b5b1e");
       const colors = new Float32Array(orbitGeometry.depths.length * 4);
 
       orbitGeometry.depths.forEach((depth, index) => {
-        const depthRatio = (depth - minDepth) / depthSpan;
+        const depthRatio = THREE.MathUtils.clamp(
+          (depth + 1.2) / 2.4,
+          0,
+          1,
+        );
         const color = back.clone().lerp(front, depthRatio);
         const offset = index * 4;
         colors[offset] = color.r;
         colors[offset + 1] = color.g;
         colors[offset + 2] = color.b;
         colors[offset + 3] = THREE.MathUtils.lerp(
-          active ? 0.1 : 0.06,
-          active ? 0.3 : 0.18,
+          active ? 0.045 : 0.035,
+          active ? 0.26 : 0.15,
           depthRatio,
         );
       });
@@ -662,7 +689,7 @@ function OrbitLine({
       new THREE.ShaderMaterial({
         transparent: true,
         depthTest: true,
-        depthWrite: false,
+        depthWrite: true,
         toneMapped: false,
         uniforms: {
           uOccluderCount: { value: 0 },
@@ -1320,6 +1347,12 @@ function ToolPlanet({
     }
 
     if (iconMaterialRef.current) {
+      iconMaterialRef.current.rotation = THREE.MathUtils.damp(
+        iconMaterialRef.current.rotation,
+        Math.sin(orbitAngle + tool.orbitIndex * 0.7) * 0.035,
+        5,
+        frameDelta,
+      );
       iconMaterialRef.current.opacity = THREE.MathUtils.damp(
         iconMaterialRef.current.opacity,
         iconOpacity,
@@ -1693,6 +1726,7 @@ function VisualOwnershipProbe({
 }) {
   const { gl, scene, size } = useThree();
   const previousViolationRef = useRef("");
+  const repeatedViolationFramesRef = useRef(0);
   const auditTokenRef = useRef(transitionToken);
   const transitionBoundaryViolationsRef = useRef(0);
   const transitionMinimumDistanceRef = useRef(
@@ -1973,10 +2007,15 @@ function VisualOwnershipProbe({
         sceneStats.lines === 4,
     );
 
+    repeatedViolationFramesRef.current = violationSignature
+      ? violationSignature === previousViolationRef.current
+        ? repeatedViolationFramesRef.current + 1
+        : 1
+      : 0;
     if (
       import.meta.env.DEV &&
       violationSignature &&
-      violationSignature !== previousViolationRef.current
+      repeatedViolationFramesRef.current === 3
     ) {
       console.error("[ToolGalaxy3D] Invalid visual ownership", {
         violations: violations.map(([toolId, count]) => ({
@@ -2044,6 +2083,9 @@ function GalaxyScene({
           center: tool.orbitCenter ?? ([0, 0, 0] as [number, number, number]),
           index: tool.orbitIndex,
           radius: tool.orbitRadius,
+          radiusX: tool.orbitRadiusX ?? tool.orbitRadius,
+          verticalRatio:
+            tool.orbitVerticalRatio ?? defaultOrbitVerticalRatio,
           tilt: tool.orbitTilt,
           active: tools.some(
             (item) =>
@@ -2090,6 +2132,8 @@ function GalaxyScene({
             center={orbit.center}
             occlusionState={occlusionState}
             radius={orbit.radius}
+            radiusX={orbit.radiusX}
+            verticalRatio={orbit.verticalRatio}
             spread={projectionSpread}
             tilt={orbit.tilt}
           />

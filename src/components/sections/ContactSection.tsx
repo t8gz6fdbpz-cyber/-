@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
+import { PortfolioLink } from "../../routing";
 import { contactChannels } from "../../utils/portfolioData";
 
 export function ContactSection() {
@@ -12,15 +13,27 @@ export function ContactSection() {
             <h2>可以从这里找到我</h2>
           </div>
           <div className="contact-footer-links">
-            {contactChannels.map((channel) => (
-              <a key={channel.label} href={channel.href}>
-                <span>
-                  {channel.label}
-                  <ArrowUpRight aria-hidden="true" />
-                </span>
-                <strong>{channel.value}</strong>
-              </a>
-            ))}
+            {contactChannels.map((channel) => {
+              const content = (
+                <>
+                  <span>
+                    {channel.label}
+                    <ArrowUpRight aria-hidden="true" />
+                  </span>
+                  <strong>{channel.value}</strong>
+                </>
+              );
+
+              return channel.href.startsWith("#") ? (
+                <PortfolioLink key={channel.label} to={`/${channel.href}`}>
+                  {content}
+                </PortfolioLink>
+              ) : (
+                <a key={channel.label} href={channel.href}>
+                  {content}
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

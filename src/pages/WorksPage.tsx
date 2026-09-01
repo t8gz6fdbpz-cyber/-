@@ -1,16 +1,17 @@
 import { ArrowLeft } from "lucide-react";
 
 import { MarqueeSection } from "../components/sections/MarqueeSection";
+import { PortfolioLink } from "../routing";
 
 export function WorksPage() {
   return (
     <>
       <section className="works-page-intro portfolio-page-shell">
         <div className="portfolio-page-header">
-          <a href="/" className="portfolio-back-link">
+          <PortfolioLink to="/" className="portfolio-back-link">
             <ArrowLeft aria-hidden="true" />
             返回首页
-          </a>
+          </PortfolioLink>
           <div>
             <p>作品</p>
             <h1>作品长廊</h1>

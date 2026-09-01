@@ -1,18 +1,32 @@
 import { ArrowLeft } from "lucide-react";
 
+import { DetailBackLink } from "../routing";
 import { getCaseStudy } from "../utils/caseStudies";
+import { MingmingCasePage } from "./MingmingCasePage";
+import { HengqianCasePage } from "./HengqianCasePage";
 
 export function CaseStudyPage({ slug }: { slug: string }) {
+  if (slug === "mingming") {
+    return <MingmingCasePage />;
+  }
+
+  if (slug === "hengqian") {
+    return <HengqianCasePage />;
+  }
+
   const study = getCaseStudy(slug);
 
   if (!study) {
     return (
       <section className="portfolio-page-shell">
         <div className="portfolio-page-header">
-          <a href="/" className="portfolio-back-link">
+          <DetailBackLink
+            fallback="/#case-studies"
+            className="portfolio-back-link"
+          >
             <ArrowLeft aria-hidden="true" />
-            返回首页
-          </a>
+            返回
+          </DetailBackLink>
           <h1>Case not found</h1>
           <p>这个重点经历还没有建立。</p>
         </div>
@@ -23,10 +37,13 @@ export function CaseStudyPage({ slug }: { slug: string }) {
   return (
     <section className="case-study-page portfolio-page-shell">
       <div className="portfolio-page-header">
-        <a href="/" className="portfolio-back-link">
+        <DetailBackLink
+          fallback="/#case-studies"
+          className="portfolio-back-link"
+        >
           <ArrowLeft aria-hidden="true" />
-          返回首页
-        </a>
+          返回
+        </DetailBackLink>
         <div>
           <p>重点经历</p>
           <h1>{study.title}</h1>

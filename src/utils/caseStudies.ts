@@ -37,9 +37,9 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "hengqian",
     title: "镜前时代",
-    subtitle: "IP孵化与 AI 数字人运营项目",
-    summary: "围绕 IP 定位、平台内容和数字人实验，探索更轻、更稳定的内容生产方式。",
-    keywords: ["IP孵化", "IP运营", "AI数字人", "视频号", "小红书", "抖音"],
+    subtitle: "短视频编导 / IP制作人 / AI数字人内容运营",
+    summary: "独立完成“雅姐”IP 从真人内容、AI数字人生产到全平台分发与线索转化。",
+    keywords: ["短视频编导", "IP制作人", "AI数字人", "全平台运营", "线索转化", "内容赛马"],
     modules: ["IP孵化", "IP运营", "AI数字人", "视频号", "小红书", "抖音"],
   },
 ];

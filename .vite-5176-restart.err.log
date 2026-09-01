@@ -400,3 +400,4 @@
       at TypeScriptParserMixin.parseMaybeUnary (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:9854:18)
       at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10916:61)
       at TypeScriptParserMixin.parseExprOps (C:\Users\mmhm\Documents\Codex\作品\node_modules\.pnpm\@babel+parser@7.29.7\node_modules\@babel\parser\lib\index.js:10921:23)
+[2m15:54:55[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to load url /src/components/sections/InterestsSection.tsx (resolved id: C:/Users/mmhm/Documents/Codex/作品/src/components/sections/InterestsSection.tsx) in C:/Users/mmhm/Documents/Codex/作品/src/App.tsx. Does the file exist?
