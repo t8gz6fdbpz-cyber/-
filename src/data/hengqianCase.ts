@@ -88,6 +88,37 @@ export const responsibilities = [
   "留资转化",
 ];
 
+export const independentResponsibilities = [
+  "目标客户分析",
+  "账号定位",
+  "内容策略",
+  "选题",
+  "脚本与文案",
+  "真人拍摄",
+  "现场编导",
+  "AI数字人采集与生成",
+  "AI批量内容生产",
+  "多平台内容分发",
+  "矩阵运营",
+  "数据复盘与内容赛马",
+  "线索获取与后端转化配合",
+  "培训、SOP与运营流程搭建",
+];
+
+export const accountMatrix = [
+  { platform: "视频号", count: 5, role: "主阵地" },
+  { platform: "抖音", count: 2, role: "矩阵补充" },
+  { platform: "小红书", count: 2, role: "矩阵补充" },
+  { platform: "快手", count: 2, role: "矩阵补充" },
+];
+
+export const capabilityGroups = [
+  { number: "01", title: "策略与内容", items: responsibilities.slice(0, 3) },
+  { number: "02", title: "制作与生成", items: responsibilities.slice(3, 7) },
+  { number: "03", title: "分发与运营", items: responsibilities.slice(7, 9) },
+  { number: "04", title: "增长与转化", items: responsibilities.slice(9, 11) },
+];
+
 export const productionFlow = [
   "人物与内容定位",
   "选题和脚本",

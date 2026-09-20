@@ -1,0 +1,1051 @@
+.life-page {
+  --life-gutter: clamp(22px, 5vw, 78px);
+  min-height: 100svh;
+  overflow: clip;
+  color: var(--life-ink);
+  background: var(--life-paper) !important;
+}
+
+.interest-route-stage {
+  min-height: 100svh;
+  overflow: clip;
+}
+
+.interest-route-stage--sports { background: #f3f2eb; }
+.interest-route-stage--travel { background: #ede3d4; }
+.interest-route-stage--singing { background: #241d1f; }
+.interest-route-stage--reading { background: #e8e8e2; }
+
+.interest-route-stage__content.is-leaving {
+  pointer-events: none;
+}
+
+.life-page *,
+.life-page *::before,
+.life-page *::after {
+  box-sizing: border-box;
+}
+
+.life-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  min-height: 112px;
+  padding: 24px var(--life-gutter) 0 clamp(136px, 11vw, 176px);
+  font-family: var(--font-sans, Arial, sans-serif);
+}
+
+.life-back-link,
+.life-footer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+  text-underline-offset: 5px;
+}
+
+.life-back-link svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 180ms ease;
+}
+
+.life-back-link:hover svg {
+  transform: translateX(-3px);
+}
+
+.life-chapter-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5vw, 36px);
+}
+
+.life-chapter-nav a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 0;
+  border-bottom: 1px solid transparent;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1;
+  text-decoration: none;
+  opacity: 0.48;
+  transition: border-color 180ms ease, opacity 180ms ease;
+}
+
+.life-chapter-nav a span {
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.life-chapter-nav a:hover,
+.life-chapter-nav a[aria-current="page"] {
+  border-color: currentColor;
+  opacity: 1;
+}
+
+.life-page a:focus-visible {
+  outline: 3px solid var(--life-focus);
+  outline-offset: 4px;
+}
+
+.life-page h1[tabindex="-1"]:focus {
+  outline: none;
+}
+
+.life-eyebrow,
+.reading-section-heading > span {
+  margin: 0;
+  font-family: var(--font-sans, Arial, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.life-photo {
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.life-photo--portrait { aspect-ratio: 4 / 5; }
+.life-photo--square { aspect-ratio: 1; }
+.life-photo--landscape { aspect-ratio: 3 / 2; }
+.life-photo--wide { aspect-ratio: 16 / 9; }
+
+.life-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.life-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 132px;
+  margin-top: clamp(92px, 12vw, 180px);
+  padding: 28px var(--life-gutter);
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  font-family: var(--font-sans, Arial, sans-serif);
+}
+
+.life-footer > span {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  opacity: 0.55;
+}
+
+.life-footer a {
+  text-decoration: underline;
+}
+
+.life-next-chapter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 5vw, 72px);
+  min-height: clamp(132px, 12vw, 168px);
+  margin-top: clamp(72px, 8vw, 112px);
+  padding: 30px var(--life-gutter) max(30px, env(safe-area-inset-bottom));
+  background: var(--life-next-surface);
+  font-family: var(--font-sans, Arial, sans-serif);
+}
+
+.life-next-chapter[tabindex="-1"]:focus {
+  outline: none;
+}
+
+.life-next-chapter > div {
+  display: grid;
+  gap: 8px;
+}
+
+.life-next-chapter > div > span {
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+}
+
+.life-next-chapter small {
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.58;
+}
+
+.life-next-chapter a {
+  display: inline-grid;
+  grid-template-columns: auto auto 22px;
+  gap: 12px;
+  align-items: center;
+  min-height: 48px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.life-next-chapter a > span {
+  align-self: start;
+  padding-top: 4px;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+}
+
+.life-next-chapter a strong {
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: clamp(28px, 3.2vw, 48px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.life-next-chapter a svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 180ms ease;
+}
+
+.life-next-chapter a:hover svg,
+.life-next-chapter a:focus-visible svg {
+  transform: translateY(4px);
+}
+
+/* Sports — bright, spacious and physically paced. */
+.life-page--sports {
+  --life-paper: #f3f2eb;
+  --life-ink: #17382f;
+  --life-focus: #e6632e;
+  --life-next-surface: #dfe6d8;
+}
+
+.sports-journal {
+  padding: clamp(70px, 9vw, 136px) var(--life-gutter) 0;
+}
+
+.sports-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.7fr);
+  align-items: end;
+  gap: clamp(36px, 8vw, 126px);
+  max-width: 1390px;
+  margin: 0 auto clamp(82px, 10vw, 148px);
+  padding-bottom: clamp(36px, 5vw, 72px);
+  border-bottom: 1px solid rgba(23, 56, 47, 0.32);
+}
+
+.sports-hero .life-eyebrow {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  color: #e15825;
+}
+
+.sports-hero h1 {
+  margin: 0;
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: clamp(104px, 17vw, 250px);
+  font-weight: 400;
+  line-height: 0.72;
+  letter-spacing: -0.1em;
+}
+
+.sports-intro {
+  max-width: 440px;
+  margin: 0;
+  padding-bottom: 4px;
+  font-size: clamp(19px, 2vw, 28px);
+  line-height: 1.65;
+  letter-spacing: 0.02em;
+}
+
+.sports-pulse {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  display: flex;
+  gap: 7px;
+}
+
+.sports-pulse span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e15825;
+}
+
+.sports-pulse span:nth-child(2) { opacity: 0.55; }
+.sports-pulse span:nth-child(3) { opacity: 0.22; }
+
+.sports-sequence {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  row-gap: clamp(84px, 12vw, 180px);
+  max-width: 1390px;
+  margin: 0 auto;
+}
+
+.sports-entry {
+  margin: 0;
+}
+
+.sports-entry--1 { grid-column: 1 / span 5; }
+.sports-entry--2 { grid-column: 7 / -1; margin-top: 12vw; }
+.sports-entry--3 { grid-column: 2 / span 4; }
+.sports-entry--4 { grid-column: 7 / span 5; margin-top: -4vw; }
+.sports-entry--5 { grid-column: 1 / span 5; margin-top: 6vw; }
+.sports-entry--6 { grid-column: 6 / -1; }
+
+.sports-entry .life-photo {
+  box-shadow: 16px 18px 0 #dfe5d5;
+}
+
+.sports-entry--2 .life-photo,
+.sports-entry--5 .life-photo {
+  box-shadow: -16px 18px 0 #e9ddca;
+}
+
+.sports-entry figcaption {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.sports-entry figcaption > span {
+  padding-top: 6px;
+  color: #e15825;
+  font-family: var(--font-sans, Arial, sans-serif);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.sports-entry h2 {
+  margin: 0 0 7px;
+  font-family: Georgia, "Noto Serif SC", serif;
+  font-size: clamp(29px, 3vw, 46px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.sports-entry p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.75;
+  opacity: 0.72;
+}
+
+@media (min-width: 1280px) {
+  .life-page--sports .life-chrome {
+    min-height: 72px;
+    padding-top: 0;
+  }
+
+  .sports-journal {
+    padding-top: 38px;
+  }
+
+  .sports-hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+    min-height: 188px;
+    margin-bottom: 28px;
+    padding: 26px 0 28px;
+  }
+
+  .sports-hero h1 {
+    grid-column: 1 / span 5;
+    font-size: clamp(128px, 10.5vw, 166px);
+    line-height: 0.78;
+  }
+
+  .sports-intro {
+    grid-column: 8 / -1;
+    align-self: center;
+    max-width: 500px;
+    font-size: clamp(18px, 1.55vw, 24px);
+    line-height: 1.62;
+  }
+
+  .sports-sequence {
+    position: relative;
+    display: block;
+    height: min(42vw, 590px);
+  }
+
+  .sports-entry {
+    position: absolute;
+    margin: 0;
+  }
+
+  .sports-entry--1 { top: 5%; left: 0; width: 22%; }
+  .sports-entry--2 { top: 0; left: 34%; width: 27%; }
+  .sports-entry--3 { top: 59%; left: 8%; width: 23%; }
+  .sports-entry--4 { top: 4%; left: 63%; width: 18%; }
+  .sports-entry--5 { top: 19%; right: 0; width: 17%; }
+  .sports-entry--6 { top: 62%; left: 63%; width: 20%; }
+
+  .sports-entry .life-photo {
+    box-shadow: none;
+  }
+
+  .sports-entry--1 .life-photo { aspect-ratio: 1.08; }
+  .sports-entry--2 .life-photo { aspect-ratio: 0.76; }
+  .sports-entry--3 .life-photo { aspect-ratio: 1.42; }
+  .sports-entry--4 .life-photo { aspect-ratio: 1; }
+  .sports-entry--5 .life-photo { aspect-ratio: 1.28; }
+  .sports-entry--6 .life-photo { aspect-ratio: 1.55; }
+
+  .sports-entry figcaption {
+    grid-template-columns: 27px 1fr;
+    gap: 8px;
+    margin-top: 11px;
+  }
+
+  .sports-entry figcaption > span {
+    padding-top: 3px;
+    font-size: 9px;
+  }
+
+  .sports-entry h2 {
+    margin-bottom: 3px;
+    font-size: clamp(20px, 1.75vw, 28px);
+  }
+
+  .sports-entry p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+}
+
+/* Travel — a loose, warm sequence of place notes. */
+.life-page--travel {
+  --life-paper: #ede3d4;
+  --life-ink: #382d25;
+  --life-focus: #a74428;
+  --life-next-surface: #dfd0bd;
+}
+
+.travel-notes {
+  padding: clamp(70px, 8vw, 124px) var(--life-gutter) 0;
+}
+
+.travel-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.8fr;
+  gap: clamp(28px, 8vw, 140px);
+  max-width: 1340px;
+  margin: 0 auto clamp(88px, 12vw, 168px);
+  padding: 0 clamp(0px, 4vw, 64px);
+}
+
+.travel-hero .life-eyebrow {
+  grid-column: 1 / -1;
+  color: #9c4229;
+}
+
+.travel-hero h1 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(72px, 10vw, 150px);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+}
+
+.travel-hero > p:not(.life-eyebrow) {
+  align-self: end;
+  max-width: 450px;
+  margin: 0;
+  padding-bottom: 8px;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(19px, 2vw, 27px);
+  line-height: 1.75;
+}
+
+.travel-hero > span {
+  grid-column: 2;
+  margin-top: -34px;
+  font-family: var(--font-sans, Arial, sans-serif);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  opacity: 0.52;
+}
+
+.travel-stream {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(80px, 10vw, 150px) clamp(18px, 4vw, 62px);
+  max-width: 1390px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.travel-entry { margin: 0; }
+.travel-entry--1 { grid-column: 1 / span 7; }
+.travel-entry--2 { grid-column: 9 / -1; margin-top: 16vw; }
+.travel-entry--3 { grid-column: 3 / span 8; }
+.travel-entry--4 { grid-column: 1 / span 4; }
+.travel-entry--5 { grid-column: 6 / -1; margin-top: 8vw; }
+
+.travel-entry figure { margin: 0; }
+
+.travel-entry .life-photo {
+  background: #d8c9b5;
+  filter: saturate(0.82) contrast(0.97);
+}
+
+.travel-entry figcaption {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px minmax(80px, 0.42fr) 1fr;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(56, 45, 37, 0.32);
+}
+
+.travel-entry figcaption > span {
+  padding-top: 6px;
+  color: #9c4229;
+  font: 10px/1 var(--font-sans, Arial, sans-serif);
+  letter-spacing: 0.1em;
+}
+
+.travel-entry h2 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(25px, 2.4vw, 37px);
+  font-weight: 400;
+}
+
+.travel-entry p {
+  max-width: 420px;
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.8;
+  opacity: 0.74;
+}
+
+/* Singing — a quiet rehearsal book, not a concert poster. */
+.life-page--singing {
+  --life-paper: #241d1f;
+  --life-ink: #eee7df;
+  --life-focus: #dc9b83;
+  --life-next-surface: #312629;
+  background: #241d1f;
+}
+
+.singing-book {
+  max-width: 1460px;
+  margin: 0 auto;
+  padding: clamp(62px, 8vw, 118px) var(--life-gutter) 0;
+}
+
+.singing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(360px, 0.66fr);
+  align-items: end;
+  gap: clamp(42px, 9vw, 154px);
+}
+
+.singing-copy {
+  padding-bottom: clamp(18px, 5vw, 78px);
+}
+
+.singing-copy .life-eyebrow {
+  margin-bottom: clamp(36px, 7vw, 92px);
+  color: #d79a82;
+}
+
+.singing-copy h1 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(58px, 7.4vw, 110px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.065em;
+}
+
+.singing-copy > p:not(.life-eyebrow) {
+  max-width: 540px;
+  margin: 36px 0 0;
+  color: #c8bdb5;
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.9;
+}
+
+.singing-meter {
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 0.8vw, 11px);
+  height: 52px;
+  margin-top: 42px;
+}
+
+.singing-meter span {
+  width: 2px;
+  height: calc(7px + var(--meter, 0px));
+  background: #c98b73;
+  opacity: 0.72;
+}
+
+.singing-meter span:nth-child(3n + 1) { height: 32px; }
+.singing-meter span:nth-child(3n + 2) { height: 17px; }
+.singing-meter span:nth-child(5n) { height: 44px; }
+
+.singing-book figure { margin: 0; }
+
+.singing-book .life-photo {
+  border: 1px solid rgba(238, 231, 223, 0.16);
+  background: #302628;
+}
+
+.singing-book figcaption {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 14px;
+  color: #bfb1a9;
+  font: 11px/1.6 var(--font-sans, Arial, sans-serif);
+}
+
+.singing-book figcaption span {
+  color: #e2d8d1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.singing-book figcaption p {
+  max-width: 310px;
+  margin: 0;
+  text-align: right;
+}
+
+.singing-rehearsal {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(240px, 0.52fr) minmax(220px, 0.42fr);
+  align-items: start;
+  gap: clamp(26px, 5vw, 80px);
+  margin-top: clamp(110px, 14vw, 210px);
+}
+
+.singing-side-copy {
+  align-self: center;
+  padding-right: clamp(0px, 3vw, 44px);
+}
+
+.singing-side-copy > p:first-child {
+  color: #c98b73;
+  font: 10px/1.4 var(--font-sans, Arial, sans-serif);
+  letter-spacing: 0.16em;
+}
+
+.singing-side-copy h2 {
+  margin: 24px 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1.28;
+}
+
+.singing-side-copy > p:last-child {
+  max-width: 380px;
+  margin: 0;
+  color: #bfb1a9;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.singing-side-b { margin-top: 10vw !important; }
+
+.singing-banner-photo {
+  margin-top: clamp(100px, 13vw, 188px) !important;
+}
+
+.singing-banner-photo .life-photo--wide { aspect-ratio: 16 / 7; }
+
+/* Reading — calm, rational and visibly process-led. */
+.life-page--reading {
+  --life-paper: #e8e8e2;
+  --life-ink: #172124;
+  --life-focus: #157a72;
+}
+
+.reading-workbench {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: clamp(70px, 8vw, 122px) var(--life-gutter) 0;
+}
+
+.reading-hero {
+  display: grid;
+  grid-template-columns: 1fr 0.82fr;
+  align-items: end;
+  gap: clamp(48px, 9vw, 150px);
+  padding-bottom: clamp(72px, 9vw, 132px);
+  border-bottom: 1px solid rgba(23, 33, 36, 0.28);
+}
+
+.reading-hero .life-eyebrow {
+  margin-bottom: 42px;
+  color: #147168;
+}
+
+.reading-hero h1 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(64px, 8vw, 118px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.06em;
+}
+
+.reading-hero > p {
+  max-width: 600px;
+  margin: 0;
+  padding-bottom: 8px;
+  font-size: clamp(17px, 1.55vw, 22px);
+  line-height: 1.95;
+}
+
+.learning-method,
+.reading-output,
+.reading-system {
+  padding-top: clamp(90px, 11vw, 162px);
+}
+
+.reading-section-heading {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.35fr) 1fr;
+  gap: 10px clamp(34px, 6vw, 96px);
+  margin-bottom: clamp(50px, 7vw, 94px);
+}
+
+.reading-section-heading > span {
+  grid-row: 1 / span 2;
+  padding-top: 10px;
+  color: #147168;
+}
+
+.reading-section-heading h2 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+}
+
+.reading-section-heading p {
+  max-width: 690px;
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.85;
+  opacity: 0.7;
+}
+
+.learning-method ol {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(23, 33, 36, 0.3);
+  list-style: none;
+}
+
+.learning-method li {
+  display: grid;
+  grid-template-columns: minmax(70px, 0.2fr) minmax(180px, 0.55fr) 1fr;
+  gap: 24px;
+  align-items: baseline;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(23, 33, 36, 0.22);
+}
+
+.learning-method li > span {
+  color: #147168;
+  font: 11px/1 var(--font-sans, Arial, sans-serif);
+  letter-spacing: 0.1em;
+}
+
+.learning-method h3 {
+  margin: 0;
+  font-family: "Songti SC", SimSun, serif;
+  font-size: clamp(24px, 2.6vw, 38px);
+  font-weight: 400;
+}
+
+.learning-method li p {
+  max-width: 650px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.8;
+  opacity: 0.75;
+}
+
+.learning-equation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  margin: 42px 0 0;
+  padding: 22px 0;
+  color: #145f58;
+  font: 650 13px/1.6 var(--font-sans, Arial, sans-serif);
+  letter-spacing: 0.03em;
+}
+
+.learning-equation span { opacity: 0.45; }
+
+.article-proof-grid,
+.system-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(48px, 7vw, 92px) clamp(22px, 4vw, 58px);
+}
+
+.article-proof-grid figure,
+.system-proof-grid figure { margin: 0; }
+.article-proof-grid figure:nth-child(1) { grid-column: 1 / span 7; }
+.article-proof-grid figure:nth-child(2) { grid-column: 8 / -1; margin-top: 8vw; }
+.article-proof-grid figure:nth-child(3) { grid-column: 3 / span 7; }
+.system-proof-grid figure:nth-child(1) { grid-column: 1 / span 6; }
+.system-proof-grid figure:nth-child(2) { grid-column: 8 / -1; margin-top: 7vw; }
+.system-proof-grid figure:nth-child(3) { grid-column: 2 / span 5; }
+.system-proof-grid figure:nth-child(4) { grid-column: 7 / -1; margin-top: 4vw; }
+
+.reading-workbench .life-photo {
+  border: 1px solid rgba(23, 33, 36, 0.18);
+  background: #d9dad3;
+}
+
+.reading-workbench figcaption {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(23, 33, 36, 0.25);
+  font-family: var(--font-sans, Arial, sans-serif);
+}
+
+.reading-workbench figcaption strong {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.reading-workbench figcaption span {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
+}
+
+.reading-workbench figcaption p {
+  grid-column: 1 / -1;
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.7;
+  opacity: 0.65;
+}
+
+@media (max-width: 760px) {
+  .life-page { --life-gutter: 20px; }
+
+  .life-chrome {
+    display: block;
+    min-height: auto;
+    padding: 98px var(--life-gutter) 0;
+  }
+
+  .life-chapter-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+    border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  }
+
+  .life-chapter-nav a {
+    justify-content: center;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .life-footer {
+    min-height: 110px;
+    margin-top: 96px;
+  }
+
+  .life-next-chapter {
+    align-items: flex-end;
+    min-height: 132px;
+    margin-top: 60px;
+    padding-top: 26px;
+    padding-bottom: max(26px, calc(env(safe-area-inset-bottom) + 18px));
+  }
+
+  .life-next-chapter small {
+    display: block;
+    max-width: 145px;
+  }
+
+  .life-next-chapter a {
+    gap: 8px;
+  }
+
+  .life-next-chapter a strong {
+    font-size: 30px;
+  }
+
+  .sports-journal,
+  .travel-notes,
+  .singing-book,
+  .reading-workbench {
+    padding-top: 62px;
+  }
+
+  .sports-hero {
+    display: block;
+    margin-bottom: 70px;
+    padding-top: 37px;
+  }
+
+  .sports-hero h1 {
+    font-size: clamp(96px, 36vw, 138px);
+    line-height: 0.8;
+  }
+
+  .sports-intro {
+    margin-top: 45px;
+    font-size: 18px;
+  }
+
+  .sports-sequence { display: block; }
+
+  .sports-entry {
+    width: 88%;
+    margin: 0 0 84px !important;
+  }
+
+  .sports-entry:nth-child(even) { margin-left: auto !important; }
+  .sports-entry:nth-child(3n) { width: 76%; }
+  .sports-entry:last-child { margin-bottom: 0 !important; }
+  .sports-entry .life-photo { box-shadow: 9px 11px 0 #dfe5d5; }
+  .sports-entry--2 .life-photo,
+  .sports-entry--5 .life-photo { box-shadow: -9px 11px 0 #e9ddca; }
+
+  .travel-hero {
+    display: block;
+    margin-bottom: 78px;
+    padding: 0;
+  }
+
+  .travel-hero h1 {
+    margin-top: 34px;
+    font-size: clamp(68px, 22vw, 92px);
+  }
+
+  .travel-hero > p:not(.life-eyebrow) {
+    margin-top: 36px;
+    font-size: 18px;
+  }
+
+  .travel-hero > span {
+    display: block;
+    margin-top: 26px;
+  }
+
+  .travel-stream { display: block; }
+
+  .travel-entry {
+    width: 91%;
+    margin: 0 0 90px !important;
+  }
+
+  .travel-entry:nth-child(even) { margin-left: auto !important; }
+  .travel-entry:last-child { margin-bottom: 0 !important; }
+
+  .travel-entry figcaption {
+    grid-template-columns: 30px 78px 1fr;
+    gap: 8px;
+  }
+
+  .travel-entry p { font-size: 12px; }
+
+  .singing-hero { display: block; }
+  .singing-copy { padding-bottom: 68px; }
+  .singing-copy .life-eyebrow { margin-bottom: 38px; }
+  .singing-copy h1 { font-size: clamp(52px, 16vw, 68px); }
+  .singing-copy > p:not(.life-eyebrow) { margin-top: 27px; font-size: 16px; }
+  .singing-main-photo { width: 88%; margin-left: auto !important; }
+
+  .singing-rehearsal {
+    display: grid;
+    grid-template-columns: 1fr 0.72fr;
+    gap: 64px 18px;
+    margin-top: 112px;
+  }
+
+  .singing-side-copy { grid-column: 1 / -1; }
+  .singing-side-a,
+  .singing-side-b { margin-top: 0 !important; }
+  .singing-book figcaption { display: block; }
+  .singing-book figcaption p { margin-top: 7px; text-align: left; }
+
+  .singing-banner-photo { margin-top: 100px !important; }
+  .singing-banner-photo .life-photo--wide { aspect-ratio: 16 / 9; }
+
+  .reading-hero { display: block; padding-bottom: 72px; }
+  .reading-hero .life-eyebrow { margin-bottom: 34px; }
+  .reading-hero h1 { font-size: clamp(56px, 17vw, 72px); }
+  .reading-hero > p { margin-top: 46px; font-size: 16px; }
+
+  .reading-section-heading { display: block; margin-bottom: 42px; }
+  .reading-section-heading > span { display: block; margin-bottom: 20px; }
+  .reading-section-heading h2 { font-size: 42px; }
+
+  .learning-method li {
+    grid-template-columns: 38px 1fr;
+    gap: 10px 12px;
+    padding: 24px 0;
+  }
+
+  .learning-method li p { grid-column: 2; }
+  .learning-equation { gap: 8px 10px; }
+
+  .article-proof-grid,
+  .system-proof-grid { display: block; }
+
+  .article-proof-grid figure,
+  .system-proof-grid figure {
+    width: 92%;
+    margin: 0 0 68px !important;
+  }
+
+  .article-proof-grid figure:nth-child(even),
+  .system-proof-grid figure:nth-child(even) { margin-left: auto !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .life-page *,
+  .life-page *::before,
+  .life-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

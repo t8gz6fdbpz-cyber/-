@@ -1,29 +1,27 @@
-import { Mail } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { PortfolioLink } from "../../routing";
-
 const ease = [0.25, 0.1, 0.25, 1] as const;
-const MotionPortfolioLink = motion.create(PortfolioLink);
 
 const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
+  new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
-    timeZone: "Asia/Shanghai",
-  })
-    .format(date)
-    .toUpperCase();
-
-const formatTime = (date: Date) =>
-  new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
+    month: "long",
+    day: "numeric",
     timeZone: "Asia/Shanghai",
   }).format(date);
+
+const formatTime = (date: Date) => {
+  const time = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone: "Asia/Shanghai",
+  }).format(date);
+  const hour = Number(time.slice(0, 2));
+
+  return `${time}${hour >= 12 ? "pm" : "am"}`;
+};
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -39,12 +37,18 @@ export function HeroSection() {
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.36, 1.42]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => setNow(new Date()), 1000 * 30);
-    return () => window.clearInterval(timer);
+    let timer: number;
+    const updateNow = () => {
+      setNow(new Date());
+      timer = window.setTimeout(updateNow, 60_000 - (Date.now() % 60_000) + 50);
+    };
+
+    updateNow();
+    return () => window.clearTimeout(timer);
   }, []);
 
   const meta = useMemo(
-    () => ["GUANGZHOU, CHINA", formatDate(now), formatTime(now)],
+    () => ["广州市·番禺区", formatDate(now), formatTime(now)],
     [now],
   );
 
@@ -114,16 +118,6 @@ export function HeroSection() {
             animate={shouldReduceMotion ? undefined : { opacity: 1 }}
             transition={{ delay: 0.08, duration: 1.05, ease }}
           />
-          <MotionPortfolioLink
-            to="/#contact"
-            aria-label="Contact Jack Wu"
-            className="hero-cover-email"
-            initial={false}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.75, ease }}
-          >
-            <Mail className="h-8 w-8" strokeWidth={2.6} />
-          </MotionPortfolioLink>
         </div>
       </div>
     </section>

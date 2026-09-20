@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1000" role="img" aria-labelledby="title desc">
+  <title id="title">唱歌侧拍照片占位 A</title><desc id="desc">推荐替换为三比四侧拍照片</desc>
+  <rect width="750" height="1000" fill="#302729"/><path d="M80 0v1000M0 730h750" stroke="#85645f" stroke-width="2" opacity=".5"/>
+  <path d="M190 420c106-92 226-92 332 0M230 485c82-66 168-66 252 0M286 548c44-35 91-35 140 0" fill="none" stroke="#c99c90" stroke-width="3" opacity=".48"/>
+  <text x="122" y="790" fill="#eee4dc" font-size="28" font-family="Arial, sans-serif" letter-spacing="4">SIDE PHOTO A</text>
+  <text x="122" y="838" fill="#b8938a" font-size="19" font-family="Arial, sans-serif" letter-spacing="3">PORTRAIT · 3:4</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
+  <title id="title">唱歌横幅照片占位</title><desc id="desc">推荐替换为十六比七舞台全景照片</desc>
+  <rect width="1600" height="700" fill="#302628"/><path d="M0 515h1600M238 0v700M1300 0v700" stroke="#755653" stroke-width="2" opacity=".52"/>
+  <path d="M350 330h36l22-75 42 155 40-116 28 36h62l30-50 28 50h88l28-118 42 198 44-144 34 64h74l32-44 28 44h178" fill="none" stroke="#cc9b8d" stroke-width="3" opacity=".55"/>
+  <text x="286" y="574" fill="#eee4dc" font-size="32" font-family="Arial, sans-serif" letter-spacing="6">STAGE / GROUP / SPACE</text>
+  <text x="286" y="624" fill="#b8938a" font-size="20" font-family="Arial, sans-serif" letter-spacing="4">BANNER · 16:7</text>
+</svg>

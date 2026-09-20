@@ -10,106 +10,136 @@ export type MingmingMedia = {
   isPlaceholder: boolean;
 };
 
-export type MingmingAccount = MingmingMedia & {
-  followers: number | null;
-  followersLabel: string;
-  originalIndex: number;
-};
-
 export type MingmingEvidence = MingmingMedia & {
   sourceFile: string;
-  group: "training" | "talent" | "executive-profile" | "executive-video" | "automation" | "development";
+  group: "training" | "automation" | "development";
+};
+
+export type MingmingGrowthEvidence = MingmingMedia & {
+  src: string;
+  width: number;
+  height: number;
+  sourceFile: string;
+  canonicalSource: string;
+  evidenceType: "account-profile" | "content-performance";
+  sortWeight: number;
+  followers?: number;
+  followersLabel?: string;
 };
 
 export type MingmingVideo = MingmingMedia & {
   label: string;
-  intro: string;
-  insights: string[];
+  context: string;
+  strategy: string;
+  responsibility: string;
+  delivery: string;
   videoSrc?: string;
-  temporaryAsset: boolean;
-  sourceUrl?: string;
 };
 
 const assetRoot = "/assets/cases/mingming";
 
 export const heroContent = {
-  label: "CASE 01 / IP 制作人",
-  title: "鸣鸣很忙",
-  positioning: "以AI长视频、IP孵化和自动化开发为核心，完成从内容策划到增长验证的项目交付。",
+  label: "CASE 01 / COMPANY & PERSONAL IMPACT",
+  title: "鸣鸣很忙集团",
+  role: "抖音制作人",
+  region: "华南区域",
+  tenure: "2025.03.18—2026.09.04",
+  positioning: "负责华南区域内部账号运营与 IP 增长，管理 300+ 员工账号，通过培训和内容生产让员工账号成为持续为公司传播的内容节点。",
 } as const;
 
-export const heroMetrics = [
-  { value: "2部", label: "AIGC长视频" },
-  { value: "20+", label: "万粉达人" },
-  { value: "1万+", label: "年度留资" },
-  { value: "10场", label: "线下训练营" },
+export const companyProfile = {
+  eyebrow: "THE PLATFORM",
+  title: "公司背书",
+  statement: "鸣鸣很忙集团，旗下拥有零食很忙、赵一鸣零食两大品牌，覆盖全国 3 万家门店，是量贩零食行业的龙头企业。",
+  scale: "3 万家",
+  scaleLabel: "全国门店覆盖",
+  sourceLabel: "官方公开资料：零食很忙官网「关于我们」",
+  sourceUrl: "https://www.hnlshm.com/about.html",
+  sourceNote: "官网披露：截至 2025 年 11 月 30 日，全国门店总数为 21,000+；本页“覆盖全国 3 万家门店”为本案例采用口径。",
+} as const;
+
+export const responsibilityOverview = {
+  eyebrow: "MY RESPONSIBILITY",
+  title: "我负责的事情",
+  summary: "作为抖音制作人，我主要负责华南区域的 IP 增长与内部 MCN 运营，管理约 300 多个员工账号，负责账号定位、内容生产、培训、数据复盘和宣传转化。",
+  items: [
+    "华南区域 300+ 员工账号管理",
+    "员工 IP 定位与内容策划",
+    "短视频拍摄、剪辑与发布节奏",
+    "内部媒体技能培训与训练营",
+    "账号数据复盘与增长调整",
+    "内容传播与招商/业务宣传支持",
+  ],
+} as const;
+
+export const personalResults = [
+  { value: "20+", label: "万粉达人", detail: "我直接负责或主导孵化" },
+  { value: "1 万+", label: "年度总留资", detail: "我负责的内容增长结果" },
+  { value: "1 个月", label: "最快 0→1 万粉", detail: "我主导的增长路径验证" },
+  { value: "10 场", label: "线下达人训练营", detail: "我组织并沉淀训练流程" },
+  { value: "300+", label: "员工账号管理", detail: "华南区域长期运营范围" },
 ] as const;
 
-export const videoOverview =
-  "2人协作完成2部横版AIGC招商宣传片；负责文案、编导、生成、素材统筹、剪辑与成片交付。";
+export const videoOverview = {
+  eyebrow: "AI INVESTMENT PROMOTION",
+  title: "AI 招商短片项目",
+  background: "这是服务于鸣鸣很忙招商业务的 AIGC 短片项目。我们希望降低传统招商广告的生硬感，用人物关系和区域文化把招商信息自然放进故事里。",
+  contribution: "2 人协作完成 2 部横版 AIGC 招商宣传片；我负责文案、编导、AIGC 生成、素材统筹、剪辑和成片交付，最终交付 2 部 16:9 横版招商宣传片。",
+} as const;
 
 export const videoCases: MingmingVideo[] = [
   {
     id: "zhejiang",
     label: "VIDEO A / 浙江",
     title: "浙江区域招商宣传片",
-    intro:
-      "以甲乙方对话和喜剧情节降低广告感，将品牌卖点自然嵌入区域招商故事。",
-    insights: [
-      "策划甲乙方人物关系与喜剧冲突。",
-      "负责文案、编导、AIGC生成和剪辑。",
-      "完成1部16:9区域招商宣传片交付。",
-    ],
-    alt: "浙江区域招商宣传片参考封面：两位店员在服装门店内协作",
+    context: "面向浙江区域招商，以区域传播场景为项目背景。",
+    strategy: "通过甲乙方人物关系和喜剧情节降低广告感，把品牌卖点自然嵌入故事。",
+    responsibility: "我负责文案、编导、AIGC 生成、素材统筹、剪辑和成片交付。",
+    delivery: "1 部 16:9 横版 AIGC 招商宣传片。",
+    alt: "浙江区域招商宣传片",
     caption: "项目成片",
-    poster: `${assetRoot}/video-covers/zhejiang-reference.jpg`,
+    videoSrc: `${assetRoot}/videos/zhejiang-regional-investment.mp4`,
+    poster: `${assetRoot}/video-covers/zhejiang-cover.png`,
     width: 1600,
     height: 1067,
     isPlaceholder: false,
-    temporaryAsset: true,
-    sourceUrl: "https://www.pexels.com/photo/a-man-and-a-woman-doing-business-7679473/",
   },
   {
     id: "shijiazhuang",
     label: "VIDEO B / 石家庄",
     title: "河北石家庄宣传片",
-    intro:
-      "结合石家庄摇滚文化与公司音乐节，以门店年轻人的梦想故事完成招商信息植入。",
-    insights: [
-      "提炼“摇滚之城”本地文化线索。",
-      "连接音乐节资产与门店人物故事。",
-      "完成1部16:9城市主题宣传片交付。",
-    ],
-    alt: "石家庄城市主题宣传片参考封面：乐手在演出场地内排练",
+    context: "面向河北石家庄招商，以城市文化与公司音乐节资产为项目背景。",
+    strategy: "结合摇滚文化、音乐节和门店年轻人的梦想故事，让招商信息进入人物叙事。",
+    responsibility: "我负责文案、编导、AIGC 生成、素材统筹、剪辑和成片交付。",
+    delivery: "1 部 16:9 横版 AIGC 招商宣传片。",
+    alt: "河北石家庄宣传片",
     caption: "项目成片",
-    poster: `${assetRoot}/video-covers/shijiazhuang-reference.jpg`,
+    videoSrc: `${assetRoot}/videos/shijiazhuang-city-promotion.mp4`,
+    poster: `${assetRoot}/video-covers/shijiazhuang-cover.png`,
     width: 1600,
     height: 1067,
     isPlaceholder: false,
-    temporaryAsset: true,
-    sourceUrl: "https://www.pexels.com/photo/musicians-preparing-for-concert-17513729/",
   },
 ];
 
-// REPLACE: 替换真实视频文件
-// REPLACE: 替换真实视频封面
-// 临时封面来源（Pexels）：https://www.pexels.com/photo/a-man-and-a-woman-doing-business-7679473/
-// 临时封面来源（Pexels）：https://www.pexels.com/photo/musicians-preparing-for-concert-17513729/
-// REPLACE: 核对最终数据
-// REPLACE: 补充项目发布日期
-
 export const incubationOverview = {
-  summary: "负责华南大区账号运营与达人孵化，覆盖定位、内容、培训、数据复盘和直播转化。",
+  summary: "我负责华南区域账号运营与达人孵化，把账号管理、员工培训、内容生产和数据复盘组织成可重复执行的 IP 增长流程。",
   capabilities: [
     { title: "账号增长", summary: "完成定位、选题、发布节奏和数据复盘，形成可重复执行的账号运营路径。" },
     { title: "直播与投放", summary: "结合本地推、巨量AD和企业号数据，完成观察、分析、诊断、调整。" },
     { title: "培训与SOP", summary: "组织10场线下训练营，把从0粉、无经验到万粉阶段整理成训练路径。" },
-    { title: "高管IP", summary: "围绕高管定位、内容表达和单条视频表现，建立结果证据库。" },
+    { title: "内容与复盘", summary: "用账号主页、内容表现和公开结果持续校准定位与下一轮动作。" },
   ],
-  accountSummary: "展示12组公开账号样本，最高粉丝7.1万；按粉丝量从高到低排列。",
-  accountConclusion: "12组公开样本 / 5个账号超过4万粉 / 最高7.1万粉",
-  evidenceSummary: "汇总17张普通达人和13张高管公开成绩截图，用真实结果证明账号孵化与内容运营能力。",
+  accountSummary: "在职期间，我独立负责17个账号的定位、内容生产、发布节奏与数据复盘，并独立产出9项代表性内容成果验证选题与表达能力。",
 } as const;
+
+export const accountGrowthFlow = [
+  { title: "IP 定位", summary: "明确人设、受众与内容方向" },
+  { title: "内容生产", summary: "将选题、拍摄与发布节奏落地" },
+  { title: "分发与投放", summary: "协同平台分发、企业号与投放动作" },
+  { title: "数据复盘", summary: "观察表现、诊断问题并迭代" },
+  { title: "增长与线索", summary: "沉淀粉丝增长、内容表现与留资结果" },
+] as const;
 
 export const incubationMetrics = [
   { value: "20+", label: "孵化万粉达人" },
@@ -118,7 +148,14 @@ export const incubationMetrics = [
   { value: "10场", label: "线下训练营" },
 ] as const;
 
-const accountEvidence = [
+export const accountGrowthSummary = [
+  { value: "17个", label: "不同账号" },
+  { value: "独立负责", label: "在职期间全链路打造" },
+  { value: "9项", label: "内容表现成果" },
+  { value: "26.7万", label: "最高公开粉丝成绩" },
+] as const;
+
+const accountFollowerEvidence = [
   [13_000, "1.3万"],
   [19_000, "1.9万"],
   [7_228, "7228"],
@@ -131,27 +168,12 @@ const accountEvidence = [
   [41_000, "4.1万"],
   [16_000, "1.6万"],
   [71_000, "7.1万"],
+  [267_000, "26.7万"],
+  [14_000, "1.4万"],
+  [13_000, "1.3万"],
+  [19_000, "1.9万"],
+  [14_000, "1.4万"],
 ] as const;
-
-export const douyinAccounts: MingmingAccount[] = accountEvidence.map(
-  ([followers, followersLabel], index) => {
-    const number = String(index + 1).padStart(2, "0");
-
-    return {
-      id: `douyin-${index + 1}`,
-      followers,
-      followersLabel,
-      originalIndex: index,
-      title: `账号增长成果 ${number}`,
-      alt: `抖音账号公开数据截图，粉丝${followersLabel}`,
-      caption: `粉丝 ${followersLabel}`,
-      src: `${assetRoot}/ip-douyin/account-${number}.webp`,
-      width: 1206,
-      height: 2622,
-      isPlaceholder: false,
-    };
-  },
-);
 
 const trainingEvidence = [
   ["147394e3-a69b-4ace-a09d-1a96902ca937.jpg", "training-01.jpg", "01 浙江达人训练营", 2880, 2160],
@@ -201,23 +223,6 @@ const talentSourceFiles = [
   "f1feb7d4-af0c-417a-9a31-6ada559dc9c1.jpg",
 ] as const;
 
-export const talentResults: MingmingEvidence[] = talentSourceFiles.map((sourceFile, index) => {
-  const number = String(index + 1).padStart(2, "0");
-
-  return {
-    id: `talent-${index + 1}`,
-    title: `普通达人成绩 ${number}`,
-    alt: `普通达人公开账号成绩截图 ${number}`,
-    caption: "公开账号成绩截图",
-    src: `${assetRoot}/ip-talent-results/talent-${number}.jpg`,
-    width: 1206,
-    height: 2622,
-    sourceFile,
-    group: "talent",
-    isPlaceholder: false,
-  };
-});
-
 const executiveSourceFiles = [
   "05b82ce2-dece-4cd9-994d-82c0382521b6.jpg",
   "0f595469-57e0-47f9-954e-add8632e0203.jpg",
@@ -234,25 +239,85 @@ const executiveSourceFiles = [
   "f1feb7d4-af0c-417a-9a31-6ada559dc9c1.jpg",
 ] as const;
 
-const executiveProfileIndexes = new Set([2, 6, 9, 12]);
+export const accountGrowthResults: MingmingGrowthEvidence[] = accountFollowerEvidence
+  .map(([followers, followersLabel], index) => {
+    const evidenceNumber = index + 1;
+    const number = String(evidenceNumber).padStart(2, "0");
+    const sourceFile = talentSourceFiles[index];
+    const src = evidenceNumber <= 12
+      ? `${assetRoot}/ip-douyin/account-${number}.webp`
+      : `${assetRoot}/ip-talent-results/talent-${number}.jpg`;
 
-export const executiveResults: MingmingEvidence[] = executiveSourceFiles.map((sourceFile, index) => {
-  const number = String(index + 1).padStart(2, "0");
-  const isProfile = executiveProfileIndexes.has(index);
+    return {
+      id: `account-growth-${number}`,
+      evidenceType: "account-profile" as const,
+      title: `账号粉丝成绩 · ${followersLabel}`,
+      caption: "在职期间独立负责打造的账号主页公开结果",
+      alt: `账号增长成果，主页公开粉丝${followersLabel}`,
+      src,
+      canonicalSource: sourceFile,
+      sourceFile,
+      width: 1206,
+      height: 2622,
+      followers,
+      followersLabel,
+      sortWeight: followers,
+      isPlaceholder: false,
+    };
+  })
+  .sort((left, right) => right.sortWeight - left.sortWeight);
 
-  return {
-    id: `executive-${index + 1}`,
-    title: isProfile ? `高管主页证据 ${number}` : `高管视频数据 ${number}`,
-    alt: isProfile ? `高管 IP 公开账号主页与内容主页截图 ${number}` : `高管 IP 公开单条视频表现截图 ${number}`,
-    caption: isProfile ? "账号主页与内容主页" : "单条视频数据",
-    src: `${assetRoot}/ip-executive-results/executive-${number}.jpg`,
-    width: 1206,
-    height: 2622,
-    sourceFile,
-    group: isProfile ? "executive-profile" : "executive-video",
-    isPlaceholder: false,
-  };
-});
+const contentPerformanceSourceIndexes = [1, 2, 4, 5, 6, 8, 9, 11, 12] as const;
+
+export const contentPerformanceResults: MingmingGrowthEvidence[] = contentPerformanceSourceIndexes.map(
+  (sourceIndex, index) => {
+    const sourceNumber = String(sourceIndex).padStart(2, "0");
+    const displayNumber = String(index + 1).padStart(2, "0");
+    const sourceFile = executiveSourceFiles[sourceIndex - 1];
+    const src = `${assetRoot}/ip-executive-results/executive-${sourceNumber}.jpg`;
+
+    return {
+      id: `content-performance-${displayNumber}`,
+      evidenceType: "content-performance",
+      title: `单条内容表现 ${displayNumber}`,
+      caption: "公开内容表现截图",
+      alt: `单条视频公开表现截图 ${displayNumber}`,
+      src,
+      canonicalSource: sourceFile,
+      sourceFile,
+      width: 1206,
+      height: 2622,
+      sortWeight: index + 1,
+      isPlaceholder: false,
+    };
+  },
+);
+
+function validateGrowthEvidenceCollections(
+  accountItems: readonly MingmingGrowthEvidence[],
+  contentItems: readonly MingmingGrowthEvidence[],
+) {
+  if (!import.meta.env.DEV) return;
+
+  const allItems = [...accountItems, ...contentItems];
+  const duplicateIds = allItems
+    .map((item) => item.id)
+    .filter((id, index, ids) => ids.indexOf(id) !== index);
+  const normalizedSources = allItems.map((item) => item.canonicalSource.replace(/\\/g, "/").toLowerCase());
+  const duplicateSources = normalizedSources.filter((source, index, sources) => sources.indexOf(source) !== index);
+  const problems = [
+    ...(accountItems.length === 17 ? [] : [`账号增长成绩应为17项，当前为${accountItems.length}项`]),
+    ...(contentItems.length === 9 ? [] : [`内容表现成绩应为9项，当前为${contentItems.length}项`]),
+    ...(duplicateIds.length ? [`重复证据ID：${[...new Set(duplicateIds)].join("、")}`] : []),
+    ...(duplicateSources.length ? [`重复规范素材：${[...new Set(duplicateSources)].join("、")}`] : []),
+  ];
+
+  if (problems.length) {
+    console.warn(`[mingmingCase] 证据唯一性校验失败：${problems.join("；")}`);
+  }
+}
+
+validateGrowthEvidenceCollections(accountGrowthResults, contentPerformanceResults);
 
 export const performanceMedia: MingmingMedia[] = [
   {
@@ -288,11 +353,11 @@ export const performanceMedia: MingmingMedia[] = [
 ];
 
 export const reviewWorkflow = {
-  summary: "结合3类运营工具建立4步复盘机制，基于12组公开账号样本持续调整内容和投放动作，年度累计留资1万+。",
+  summary: "结合3类运营工具建立4步复盘机制，围绕17个独立负责账号持续调整内容和投放动作，年度累计留资1万+。",
   metrics: [
     { value: "3类", label: "运营工具" },
     { value: "4步", label: "复盘闭环" },
-    { value: "12组", label: "公开账号样本" },
+    { value: "17个", label: "独立负责账号" },
     { value: "1万+", label: "年度总留资" },
   ],
   steps: [

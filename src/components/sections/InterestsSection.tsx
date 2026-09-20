@@ -4,31 +4,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PortfolioLink } from "../../routing";
 import { interests } from "../../utils/interestsData";
 
-const formatWatermarkDate = () =>
-  new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    timeZone: "Asia/Shanghai",
-  })
-    .format(new Date())
-    .replace(/\//g, "—");
-
 export function InterestsSection() {
   const shouldReduceMotion = useReducedMotion();
-  const watermarkDate = formatWatermarkDate();
 
   return (
     <section id="interests" className="interests-showcase-section scroll-mt-8">
-      <div className="interests-showcase-watermarks" aria-hidden="true">
-        {["01", "02", "03"].map((item) => (
-          <span key={item}>
-            {watermarkDate}
-            <small>MMHM / WORK—LIFE</small>
-          </span>
-        ))}
-      </div>
-
       <motion.header
         className="interests-showcase-heading"
         initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}

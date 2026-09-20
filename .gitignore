@@ -2,3 +2,10 @@ node_modules
 dist
 .DS_Store
 
+# Local package and design-tool working data
+.pnpm-store/
+.impeccable/build/
+.impeccable/live/
+.impeccable/mocks/
+.impeccable/review/
+/assets/

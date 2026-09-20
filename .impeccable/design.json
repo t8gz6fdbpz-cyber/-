@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-03T01:21:21.8660182Z",
+  "title": "Design System: Personal Notes — Four Chapters",
+  "extensions": {
+    "colorMeta": {
+      "sports-paper": {
+        "role": "neutral",
+        "displayName": "Breathing Chalk",
+        "canonical": "#f3f2eb",
+        "tonalRamp": ["oklch(15% 0.01 100)", "oklch(27% 0.01 100)", "oklch(39% 0.01 100)", "oklch(51% 0.01 100)", "oklch(63% 0.01 100)", "oklch(75% 0.01 100)", "oklch(87% 0.01 100)", "oklch(95% 0.01 100)"]
+      },
+      "sports-ink": {
+        "role": "neutral",
+        "displayName": "Deep Field Green",
+        "canonical": "#17382f",
+        "tonalRamp": ["oklch(15% 0.06 164)", "oklch(27% 0.06 164)", "oklch(39% 0.06 164)", "oklch(51% 0.06 164)", "oklch(63% 0.06 164)", "oklch(75% 0.06 164)", "oklch(87% 0.06 164)", "oklch(95% 0.06 164)"]
+      },
+      "sports-accent": {
+        "role": "primary",
+        "displayName": "Kinetic Persimmon",
+        "canonical": "#e15825",
+        "tonalRamp": ["oklch(15% 0.16 45)", "oklch(27% 0.16 45)", "oklch(39% 0.16 45)", "oklch(51% 0.16 45)", "oklch(63% 0.16 45)", "oklch(75% 0.16 45)", "oklch(87% 0.16 45)", "oklch(95% 0.16 45)"]
+      },
+      "sports-focus": {
+        "role": "primary",
+        "displayName": "Sports Focus Orange",
+        "canonical": "#e6632e",
+        "tonalRamp": ["oklch(15% 0.18 45)", "oklch(27% 0.18 45)", "oklch(39% 0.18 45)", "oklch(51% 0.18 45)", "oklch(63% 0.18 45)", "oklch(75% 0.18 45)", "oklch(87% 0.18 45)", "oklch(95% 0.18 45)"]
+      },
+      "travel-paper": {
+        "role": "neutral",
+        "displayName": "Warm Map Paper",
+        "canonical": "#ede3d4",
+        "tonalRamp": ["oklch(15% 0.025 75)", "oklch(27% 0.025 75)", "oklch(39% 0.025 75)", "oklch(51% 0.025 75)", "oklch(63% 0.025 75)", "oklch(75% 0.025 75)", "oklch(87% 0.025 75)", "oklch(95% 0.025 75)"]
+      },
+      "travel-ink": {
+        "role": "neutral",
+        "displayName": "Earthbound Brown",
+        "canonical": "#382d25",
+        "tonalRamp": ["oklch(15% 0.03 58)", "oklch(27% 0.03 58)", "oklch(39% 0.03 58)", "oklch(51% 0.03 58)", "oklch(63% 0.03 58)", "oklch(75% 0.03 58)", "oklch(87% 0.03 58)", "oklch(95% 0.03 58)"]
+      },
+      "travel-accent": {
+        "role": "primary",
+        "displayName": "Travel Rust",
+        "canonical": "#9c4229",
+        "tonalRamp": ["oklch(15% 0.13 38)", "oklch(27% 0.13 38)", "oklch(39% 0.13 38)", "oklch(51% 0.13 38)", "oklch(63% 0.13 38)", "oklch(75% 0.13 38)", "oklch(87% 0.13 38)", "oklch(95% 0.13 38)"]
+      },
+      "travel-focus": {
+        "role": "primary",
+        "displayName": "Travel Focus Rust",
+        "canonical": "#a74428",
+        "tonalRamp": ["oklch(15% 0.15 36)", "oklch(27% 0.15 36)", "oklch(39% 0.15 36)", "oklch(51% 0.15 36)", "oklch(63% 0.15 36)", "oklch(75% 0.15 36)", "oklch(87% 0.15 36)", "oklch(95% 0.15 36)"]
+      },
+      "singing-paper": {
+        "role": "neutral",
+        "displayName": "Warm Burgundy Black",
+        "canonical": "#241d1f",
+        "tonalRamp": ["oklch(15% 0.015 347)", "oklch(27% 0.015 347)", "oklch(39% 0.015 347)", "oklch(51% 0.015 347)", "oklch(63% 0.015 347)", "oklch(75% 0.015 347)", "oklch(87% 0.015 347)", "oklch(95% 0.015 347)"]
+      },
+      "singing-ink": {
+        "role": "neutral",
+        "displayName": "Stage Linen",
+        "canonical": "#eee7df",
+        "tonalRamp": ["oklch(15% 0.015 75)", "oklch(27% 0.015 75)", "oklch(39% 0.015 75)", "oklch(51% 0.015 75)", "oklch(63% 0.015 75)", "oklch(75% 0.015 75)", "oklch(87% 0.015 75)", "oklch(95% 0.015 75)"]
+      },
+      "singing-accent": {
+        "role": "primary",
+        "displayName": "Rehearsal Copper",
+        "canonical": "#c98b73",
+        "tonalRamp": ["oklch(15% 0.09 43)", "oklch(27% 0.09 43)", "oklch(39% 0.09 43)", "oklch(51% 0.09 43)", "oklch(63% 0.09 43)", "oklch(75% 0.09 43)", "oklch(87% 0.09 43)", "oklch(95% 0.09 43)"]
+      },
+      "singing-focus": {
+        "role": "primary",
+        "displayName": "Singing Focus Rose",
+        "canonical": "#dc9b83",
+        "tonalRamp": ["oklch(15% 0.09 35)", "oklch(27% 0.09 35)", "oklch(39% 0.09 35)", "oklch(51% 0.09 35)", "oklch(63% 0.09 35)", "oklch(75% 0.09 35)", "oklch(87% 0.09 35)", "oklch(95% 0.09 35)"]
+      },
+      "reading-paper": {
+        "role": "neutral",
+        "displayName": "Workbench Grey",
+        "canonical": "#e8e8e2",
+        "tonalRamp": ["oklch(15% 0.008 100)", "oklch(27% 0.008 100)", "oklch(39% 0.008 100)", "oklch(51% 0.008 100)", "oklch(63% 0.008 100)", "oklch(75% 0.008 100)", "oklch(87% 0.008 100)", "oklch(95% 0.008 100)"]
+      },
+      "reading-ink": {
+        "role": "neutral",
+        "displayName": "Graphite Teal",
+        "canonical": "#172124",
+        "tonalRamp": ["oklch(15% 0.015 210)", "oklch(27% 0.015 210)", "oklch(39% 0.015 210)", "oklch(51% 0.015 210)", "oklch(63% 0.015 210)", "oklch(75% 0.015 210)", "oklch(87% 0.015 210)", "oklch(95% 0.015 210)"]
+      },
+      "reading-accent": {
+        "role": "primary",
+        "displayName": "Research Teal",
+        "canonical": "#147168",
+        "tonalRamp": ["oklch(15% 0.09 175)", "oklch(27% 0.09 175)", "oklch(39% 0.09 175)", "oklch(51% 0.09 175)", "oklch(63% 0.09 175)", "oklch(75% 0.09 175)", "oklch(87% 0.09 175)", "oklch(95% 0.09 175)"]
+      },
+      "reading-focus": {
+        "role": "primary",
+        "displayName": "Reading Focus Teal",
+        "canonical": "#157a72",
+        "tonalRamp": ["oklch(15% 0.1 175)", "oklch(27% 0.1 175)", "oklch(39% 0.1 175)", "oklch(51% 0.1 175)", "oklch(63% 0.1 175)", "oklch(75% 0.1 175)", "oklch(87% 0.1 175)", "oklch(95% 0.1 175)"]
+      }
+    },
+    "typographyMeta": {
+      "sports-display": { "displayName": "Sports Display", "purpose": "The monumental sports chapter title only." },
+      "chapter-display": { "displayName": "Chapter Display", "purpose": "Primary Songti headlines in travel, singing, and reading." },
+      "section-title": { "displayName": "Section Title", "purpose": "Long-form reading and rehearsal section headings." },
+      "body": { "displayName": "Body", "purpose": "Introductions, observations, captions, and explanatory evidence." },
+      "label": { "displayName": "Archive Label", "purpose": "Eyebrows, folios, numbering, and proof metadata." }
+    },
+    "shadows": [
+      { "name": "sports-offset-right", "value": "16px 18px 0 #dfe5d5", "purpose": "Solid pale-green paper offset behind most staggered sports photographs." },
+      { "name": "sports-offset-left", "value": "-16px 18px 0 #e9ddca", "purpose": "Solid pale-sand counter-offset behind selected staggered sports photographs." },
+      { "name": "sports-offset-right-mobile", "value": "9px 11px 0 #dfe5d5", "purpose": "Reduced right offset for the mobile sports sequence." },
+      { "name": "sports-offset-left-mobile", "value": "-9px 11px 0 #e9ddca", "purpose": "Reduced left offset for the mobile sports sequence." }
+    ],
+    "motion": [
+      { "name": "link-state", "value": "180ms ease", "purpose": "Chapter underline, opacity, and return-arrow feedback." },
+      { "name": "chapter-enter", "value": "550–600ms; opacity 0→1; translateY 12–16px→0", "purpose": "A single restrained entrance for chapter hero copy." },
+      { "name": "reduced-motion", "value": "0.01ms; 1 iteration", "purpose": "Collapses animation and transition durations when reduced motion is requested." }
+    ],
+    "breakpoints": [
+      { "name": "mobile-recompose", "value": "760px" },
+      { "name": "sports-one-screen-collage", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Back Link",
+      "kind": "nav",
+      "refersTo": "back-link",
+      "description": "Shared return control with a restrained directional hover and chapter-colored focus ring.",
+      "html": "<div class=\"ds-chrome-sample\"><a class=\"ds-back-link\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M19 12H5M12 19l-7-7 7-7\"/></svg><span>返回兴趣</span></a></div>",
+      "css": ".ds-chrome-sample { color: #17382f; font-family: Arial, sans-serif; } .ds-back-link { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; color: inherit; font-size: 13px; font-weight: 650; text-decoration: none; } .ds-back-link svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 180ms ease; } .ds-back-link:hover svg { transform: translateX(-3px); } .ds-back-link:focus-visible { outline: 3px solid #e6632e; outline-offset: 4px; }"
+    },
+    {
+      "name": "Chapter Navigation",
+      "kind": "nav",
+      "refersTo": "chapter-nav-link",
+      "description": "Four numbered chapter links; the active link gains full opacity and a fine underline.",
+      "html": "<nav class=\"ds-chapter-nav\" aria-label=\"兴趣章节\"><a class=\"ds-chapter-link ds-is-current\" href=\"#\"><span>01</span>运动</a><a class=\"ds-chapter-link\" href=\"#\"><span>02</span>旅行</a><a class=\"ds-chapter-link\" href=\"#\"><span>03</span>唱歌</a><a class=\"ds-chapter-link\" href=\"#\"><span>04</span>读书</a></nav>",
+      "css": ".ds-chapter-nav { display: flex; align-items: center; gap: clamp(12px, 2.5vw, 36px); color: #17382f; font-family: Arial, sans-serif; } .ds-chapter-link { display: inline-flex; align-items: baseline; gap: 6px; min-width: 44px; min-height: 44px; padding: 12px 0; border-bottom: 1px solid transparent; color: inherit; font-size: 13px; line-height: 1; text-decoration: none; opacity: .48; transition: border-color 180ms ease, opacity 180ms ease; } .ds-chapter-link span { font-size: 9px; font-variant-numeric: tabular-nums; letter-spacing: .08em; } .ds-chapter-link:hover, .ds-chapter-link.ds-is-current { border-color: currentColor; opacity: 1; } .ds-chapter-link:focus-visible { outline: 3px solid #e6632e; outline-offset: 4px; } @media (max-width: 760px) { .ds-chapter-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); } .ds-chapter-link { justify-content: center; gap: 4px; font-size: 12px; } }"
+    },
+    {
+      "name": "Sports Entry",
+      "kind": "custom",
+      "description": "Numbered photographic entry that becomes part of the one-screen collage on wide desktop and a paper-offset sequence on mobile.",
+      "html": "<figure class=\"ds-sports-entry\"><div class=\"ds-sports-photo\" role=\"img\" aria-label=\"运动照片位置\"></div><figcaption><span>01</span><div><h3>健身</h3><p>稳住呼吸，把每一次重复做完整。</p></div></figcaption></figure>",
+      "css": ".ds-sports-entry { width: 300px; margin: 0; color: #17382f; } .ds-sports-photo { aspect-ratio: 4 / 5; background: #dfe5d5; box-shadow: 16px 18px 0 #dfe5d5; } .ds-sports-entry figcaption { display: grid; grid-template-columns: 38px 1fr; gap: 12px; margin-top: 25px; } .ds-sports-entry figcaption > span { padding-top: 6px; color: #e15825; font: 10px/1 Arial, sans-serif; letter-spacing: .12em; } .ds-sports-entry h3 { margin: 0 0 7px; font: 400 36px/1 Georgia, 'Noto Serif SC', serif; } .ds-sports-entry p { margin: 0; font: 14px/1.75 Kanit, sans-serif; opacity: .72; } @media (min-width: 1280px) { .ds-sports-photo { box-shadow: none; } } @media (max-width: 760px) { .ds-sports-entry { width: 88%; } .ds-sports-photo { box-shadow: 9px 11px 0 #dfe5d5; } }"
+    },
+    {
+      "name": "Travel Note",
+      "kind": "custom",
+      "description": "Loose archival place note built from a varied-ratio photograph, fine rule, index, place, and observation.",
+      "html": "<figure class=\"ds-travel-note\"><div class=\"ds-travel-photo\" role=\"img\" aria-label=\"旅行照片位置\"></div><figcaption><span>01</span><h3>广西</h3><p>山影落进水面，天色一慢下来，轮廓也变得很安静。</p></figcaption></figure>",
+      "css": ".ds-travel-note { width: min(620px, 100%); margin: 0; color: #382d25; } .ds-travel-photo { aspect-ratio: 3 / 2; background: #d8c9b5; filter: saturate(.82) contrast(.97); } .ds-travel-note figcaption { display: grid; grid-template-columns: 36px minmax(80px, .42fr) 1fr; gap: 12px; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(56,45,37,.32); } .ds-travel-note figcaption > span { padding-top: 6px; color: #9c4229; font: 10px/1 Arial, sans-serif; letter-spacing: .1em; } .ds-travel-note h3 { margin: 0; font: 400 32px/1.2 'Songti SC', SimSun, serif; } .ds-travel-note p { margin: 2px 0 0; font: 13px/1.8 Kanit, sans-serif; opacity: .74; } @media (max-width: 760px) { .ds-travel-note { width: 91%; } .ds-travel-note figcaption { grid-template-columns: 30px 78px 1fr; gap: 8px; } .ds-travel-note p { font-size: 12px; } }"
+    },
+    {
+      "name": "Singing Photo Placeholder",
+      "kind": "custom",
+      "description": "Neutral warm-burgundy placeholder that preserves a personal-photo slot, ratio, and replacement note.",
+      "html": "<figure class=\"ds-singing-figure\"><div class=\"ds-singing-photo\"><span>PERSONAL PHOTO</span><small>MAIN · 4:5</small></div><figcaption><span>主图 · 推荐比例 4:5</span><p>适合替换为年会舞台、排练或演唱中的个人照片。</p></figcaption></figure>",
+      "css": ".ds-singing-figure { width: min(420px, 100%); margin: 0; color: #eee7df; } .ds-singing-photo { display: flex; aspect-ratio: 4 / 5; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 28px; border: 1px solid rgba(238,231,223,.16); background: #302628; font-family: Arial, sans-serif; } .ds-singing-photo span { font-size: 14px; font-weight: 700; letter-spacing: .12em; } .ds-singing-photo small { color: #c98b73; letter-spacing: .08em; } .ds-singing-figure figcaption { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-top: 14px; color: #bfb1a9; font: 11px/1.6 Arial, sans-serif; } .ds-singing-figure figcaption span { color: #e2d8d1; letter-spacing: .08em; text-transform: uppercase; } .ds-singing-figure figcaption p { max-width: 210px; margin: 0; text-align: right; } @media (max-width: 760px) { .ds-singing-figure figcaption { display: block; } .ds-singing-figure figcaption p { margin-top: 7px; text-align: left; } }"
+    },
+    {
+      "name": "Learning Method Row",
+      "kind": "custom",
+      "description": "Ruled workbench row that exposes sequence, method name, and explanation without a card container.",
+      "html": "<ol class=\"ds-method-list\"><li><span>02</span><h3>AI 追问</h3><p>让 AI 以苏格拉底式提问持续追问依据、边界与反例，暴露理解盲区。</p></li></ol>",
+      "css": ".ds-method-list { margin: 0; padding: 0; border-top: 1px solid rgba(23,33,36,.3); color: #172124; list-style: none; } .ds-method-list li { display: grid; grid-template-columns: minmax(70px,.2fr) minmax(180px,.55fr) 1fr; gap: 24px; align-items: baseline; padding: 28px 0; border-bottom: 1px solid rgba(23,33,36,.22); } .ds-method-list li > span { color: #147168; font: 11px/1 Arial, sans-serif; letter-spacing: .1em; } .ds-method-list h3 { margin: 0; font: 400 32px/1.2 'Songti SC', SimSun, serif; } .ds-method-list p { max-width: 650px; margin: 0; font: 14px/1.8 Kanit, sans-serif; opacity: .75; } @media (max-width: 760px) { .ds-method-list li { grid-template-columns: 38px 1fr; gap: 10px 12px; padding: 24px 0; } .ds-method-list p { grid-column: 2; } }"
+    },
+    {
+      "name": "Reading Proof Figure",
+      "kind": "custom",
+      "description": "Neutral evidence frame with explicit output label, replacement ratio, and provenance note.",
+      "html": "<figure class=\"ds-proof-figure\"><div class=\"ds-proof-photo\"><span>ARTICLE OUTPUT · 01</span></div><figcaption><strong>文章截图 01</strong><span>推荐比例 4:3</span><p>替换为真实文章页面或 Obsidian 成稿截图。</p></figcaption></figure>",
+      "css": ".ds-proof-figure { width: min(620px, 100%); margin: 0; color: #172124; } .ds-proof-photo { display: flex; aspect-ratio: 3 / 2; align-items: flex-end; padding: 28px; border: 1px solid rgba(23,33,36,.18); background: #d9dad3; } .ds-proof-photo span { color: #147168; font: 700 11px/1 Arial, sans-serif; letter-spacing: .16em; } .ds-proof-figure figcaption { display: grid; grid-template-columns: 1fr auto; gap: 5px 20px; padding-top: 15px; border-top: 1px solid rgba(23,33,36,.25); font-family: Arial, sans-serif; } .ds-proof-figure figcaption strong { font-size: 13px; letter-spacing: .04em; } .ds-proof-figure figcaption span { font-size: 10px; letter-spacing: .08em; opacity: .55; } .ds-proof-figure figcaption p { grid-column: 1 / -1; margin: 5px 0 0; font-size: 12px; line-height: 1.7; opacity: .65; } @media (max-width: 760px) { .ds-proof-figure { width: 92%; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "One Archive, Four Chapter Voices",
+    "overview": "The experience is a restrained, high-end personal archive. A quiet return link, numbered chapter navigation, disciplined footer, generous page edges, and serif-led editorial typography make every route feel like part of one collected volume. Photography and whitespace carry more meaning than interface chrome.\n\nInside that frame, each interest keeps a distinct language: sports is bright and breathing, travel is warm and loosely sequenced, singing is a deep burgundy rehearsal book, and reading is a precise research workbench. These are coordinated chapters, not a repeated page template with cosmetic color swaps. Motion is light, focus is exact, and smaller screens recompose the editorial order instead of miniaturizing desktop arrangements.",
+    "keyCharacteristics": [
+      "Shared return, chapter navigation, image-ratio, and footer grammar.",
+      "Four chapter-specific paper, ink, accent, typography, and composition systems.",
+      "Photography, evidence, and whitespace before interface decoration.",
+      "Editorial sequences instead of card walls.",
+      "Quiet interaction with explicit focus and reduced-motion behavior.",
+      "Mobile compositions that reorganize rather than shrink."
+    ],
+    "rules": [
+      { "name": "The One Accent per Chapter Rule", "body": "Use the active chapter accent for labels, indices, focus, and tiny signals; do not introduce a second competing accent.", "section": "colors" },
+      { "name": "The Paper, Not Canvas Rule", "body": "Backgrounds should read as paper or a rehearsal-room field, never as glass, neon space, or a gradient spectacle.", "section": "colors" },
+      { "name": "The Serif Leads, Sans Indexes Rule", "body": "Use serif type for voice and meaning; use sans-serif type for navigation, numbering, metadata, and explanatory evidence.", "section": "typography" },
+      { "name": "The Deliberate Break Rule", "body": "Preserve authored headline breaks on large compositions, then choose new readable breaks for mobile rather than scaling the same line shape down.", "section": "typography" },
+      { "name": "The Recompose, Never Shrink Rule", "body": "At mobile width, change reading order, widths, alignment, and line breaks; never compress a desktop collage until it merely fits.", "section": "layout" },
+      { "name": "The Whitespace Is Content Rule", "body": "Large gaps establish pacing and chapter boundaries. Do not fill them with ornamental modules or extra copy.", "section": "layout" },
+      { "name": "The Flat Archive Rule", "body": "Do not add ambient card shadows. A shadow is allowed only as the established sports photo-offset device.", "section": "elevation" },
+      { "name": "The Ratio Carries Rhythm Rule", "body": "Vary photo proportions and placement to pace a chapter; do not normalize every image into the same card silhouette.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do preserve the shared return, four-chapter index, footer, and chapter-aware focus color on every interest route.",
+      "Do let real photographs, replacement-ready proof frames, and whitespace dominate the visual hierarchy.",
+      "Do keep sports as a one-screen collage at 1280px and above and a staggered sequence on mobile.",
+      "Do keep reading process evidence separate from finished article output.",
+      "Do preserve visible focus states and collapse animation and transitions under reduced-motion preferences.",
+      "Do recompose complex layouts at 760px and below so text and evidence retain their intended order."
+    ],
+    "donts": [
+      "Don't turn the archive into a repeated card grid or generic portfolio template.",
+      "Don't add glass panels, neon accents, complex gradients, ambient card shadows, or effect-heavy motion.",
+      "Don't force the four chapters into one interchangeable composition or palette.",
+      "Don't invent achievements, article titles, or screenshots where the implementation intentionally shows replacement-ready evidence placeholders.",
+      "Don't round every image, wrap text in decorative containers, or fill deliberate whitespace.",
+      "Don't shrink desktop collages into miniature mobile layouts."
+    ]
+  }
+}

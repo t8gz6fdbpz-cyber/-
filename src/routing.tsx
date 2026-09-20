@@ -10,6 +10,9 @@ import {
 
 type DetailNavigationState = {
   fromHomeKey?: string;
+  interestSequenceDepth?: number;
+  interestSequenceEntry?: boolean;
+  interestSequenceDirection?: "forward" | "backward";
 };
 
 const homeScrollPositions = new Map<string, number>();
@@ -119,7 +122,10 @@ export const DetailBackLink = forwardRef<
 
     event.preventDefault();
     if (hasValidHomeEntry) {
-      navigate(-1);
+      const sequenceDepth = Number.isInteger(state?.interestSequenceDepth)
+        ? Math.max(0, state?.interestSequenceDepth ?? 0)
+        : 0;
+      navigate(-(sequenceDepth + 1));
     } else {
       navigate(fallback, { replace: true });
     }
@@ -154,6 +160,25 @@ export function RouteEffects() {
         setInstantScroll(savedHomeScroll);
       });
       return () => window.cancelAnimationFrame(frameId);
+    }
+
+    const detailState = location.state as DetailNavigationState | null;
+    if (
+      location.pathname.startsWith("/interests/") &&
+      detailState?.interestSequenceEntry
+    ) {
+      const isBackwardEntry =
+        detailState.interestSequenceDirection === "backward";
+      const targetTop = isBackwardEntry
+        ? document.documentElement.scrollHeight - window.innerHeight
+        : 0;
+      setInstantScroll(targetTop);
+
+      const focusTarget = isBackwardEntry
+        ? document.querySelector<HTMLElement>("[data-interest-bottom-focus]")
+        : document.querySelector<HTMLElement>("main h1");
+      if (focusTarget) focusElement(focusTarget);
+      return;
     }
 
     if (location.hash) {

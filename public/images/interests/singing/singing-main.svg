@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">唱歌主图占位</title><desc id="desc">推荐替换为四比五个人舞台照片</desc>
+  <rect width="800" height="1000" fill="#342a2c"/><path d="M0 810h800M126 0v1000" stroke="#7b5a58" stroke-width="2" opacity=".55"/>
+  <circle cx="518" cy="366" r="168" fill="none" stroke="#a9766d" stroke-width="2" opacity=".45"/>
+  <path d="M400 760V276m-40 156h80M360 760h80" stroke="#d0aba0" stroke-width="4" opacity=".55"/>
+  <text x="170" y="862" fill="#efe5dd" font-size="30" font-family="Arial, sans-serif" letter-spacing="5">PERSONAL PHOTO</text>
+  <text x="170" y="912" fill="#b9968d" font-size="20" font-family="Arial, sans-serif" letter-spacing="3">MAIN · 4:5</text>
+</svg>

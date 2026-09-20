@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
+  <title id="title">唱歌侧拍照片占位 B</title><desc id="desc">推荐替换为一比一舞台细节照片</desc>
+  <rect width="800" height="800" fill="#382d30"/><circle cx="400" cy="330" r="176" fill="none" stroke="#9f746c" stroke-width="2" opacity=".48"/>
+  <path d="M130 598h540M200 630h400" stroke="#c49b90" stroke-width="2" opacity=".5"/>
+  <text x="164" y="680" fill="#eee4dc" font-size="29" font-family="Arial, sans-serif" letter-spacing="4">SIDE PHOTO B</text>
+  <text x="164" y="725" fill="#b8938a" font-size="18" font-family="Arial, sans-serif" letter-spacing="3">DETAIL · 1:1</text>
+</svg>

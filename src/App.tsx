@@ -7,6 +7,7 @@ import { HeroSection } from "./components/sections/HeroSection";
 import { InterestsSection } from "./components/sections/InterestsSection";
 import { MarqueeSection } from "./components/sections/MarqueeSection";
 import { SkillsMatrixSection } from "./components/sections/ServicesSection";
+import { FloatingEmailButton } from "./components/ui/FloatingEmailButton";
 import { FloatingLogoNav } from "./components/ui/FloatingLogoNav";
 import { CaseStudyPage } from "./pages/CaseStudyPage";
 import { InterestPage } from "./pages/InterestPage";
@@ -36,7 +37,7 @@ function CaseStudyRoute() {
 
 function InterestRoute() {
   const { slug = "" } = useParams();
-  return <InterestPage slug={slug} />;
+  return <InterestPage key={slug} slug={slug} />;
 }
 
 function PortfolioApp() {
@@ -44,6 +45,7 @@ function PortfolioApp() {
     <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[var(--color-bg)]">
       <RouteEffects />
       <FloatingLogoNav />
+      <FloatingEmailButton />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/works" element={<WorksPage />} />

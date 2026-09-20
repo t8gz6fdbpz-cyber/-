@@ -710,6 +710,7 @@ export function SkillsMatrixSection() {
               type="button"
               className="tool-category-item"
               data-active={activeCategory === null}
+              aria-pressed={activeCategory === null}
               onClick={() => selectCategory(null)}
             >
               <span style={{ backgroundColor: "#ffd175" }} />
@@ -724,6 +725,7 @@ export function SkillsMatrixSection() {
                 type="button"
                 className="tool-category-item"
                 data-active={activeCategory === category.name}
+                aria-pressed={activeCategory === category.name}
                 onClick={() => selectCategory(category.name)}
               >
                 <span style={{ backgroundColor: category.accent }} />
