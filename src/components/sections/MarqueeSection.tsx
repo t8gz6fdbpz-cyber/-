@@ -30,11 +30,13 @@ function MarqueeRow({
   accounts,
   rowRef,
   x,
+  preloadImages,
 }: {
   direction: "left" | "right";
   accounts: MarqueeAccount[];
   rowRef: RefObject<HTMLDivElement>;
   x: MotionValue<number>;
+  preloadImages: boolean;
 }) {
   return (
     <motion.div
@@ -51,6 +53,7 @@ function MarqueeRow({
         <MemoizedMarqueeImage
           key={`${account.image}-${index}`}
           account={account}
+          preloadImages={preloadImages}
         />
       ))}
     </motion.div>
@@ -65,7 +68,10 @@ function wrapSequence(value: number, width: number) {
   return ((value % width) + width) % width - width;
 }
 
-function MarqueeImage({ account }: { account: MarqueeAccount }) {
+function MarqueeImage({ account, preloadImages }: {
+  account: MarqueeAccount;
+  preloadImages: boolean;
+}) {
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const handlePointerMove = (
@@ -116,7 +122,7 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
           alt={`抖音账号记录，${account.followers}粉丝，${account.likes}获赞`}
           width={432}
           height={282}
-          loading="lazy"
+          loading={preloadImages ? "eager" : "lazy"}
           decoding="async"
           draggable={false}
           className="marquee-card-image h-full w-full object-cover object-[center_18%]"
@@ -137,6 +143,8 @@ export function MarqueeSection() {
   const shouldReduceMotion = useReducedMotion();
   const idleOffset = useMotionValue(0);
   const isVisible = useInView(sectionRef, { margin: "80px" });
+  // Observe the section, not clipped offscreen cards, to warm the whole row.
+  const preloadImages = useInView(sectionRef, { margin: "1000px", once: true });
   // The entire showcase rises into the split cover's wake, without individual card motion.
   const { scrollYProgress: entryProgress } = useScroll({
     target: sectionRef,
@@ -223,12 +231,14 @@ export function MarqueeSection() {
             accounts={repeatedMarqueeRowOne}
             rowRef={rowOneRef}
             x={rowOneX}
+            preloadImages={preloadImages}
           />
           <MarqueeRow
             direction="left"
             accounts={repeatedMarqueeRowTwo}
             rowRef={rowTwoRef}
             x={rowTwoX}
+            preloadImages={preloadImages}
           />
         </motion.div>
       </div>

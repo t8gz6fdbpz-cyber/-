@@ -246,7 +246,7 @@ const toolSources: ToolGalaxyTool[] = [
   },
 ];
 
-const tools: ToolGalaxyTool[] = toolSources.map((tool) => ({
+const initialTools: ToolGalaxyTool[] = toolSources.map((tool) => ({
   ...tool,
   icon: tool.icon ? mediaUrl(tool.icon) : undefined,
 }));
@@ -492,6 +492,7 @@ function ToolInfoPanel({
 
 export function SkillsMatrixSection() {
   const shouldReduceMotion = useReducedMotion();
+  const [tools, setTools] = useState(initialTools);
   const [activeCategory, setActiveCategory] = useState<ToolCategory | null>(null);
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
@@ -574,30 +575,44 @@ export function SkillsMatrixSection() {
     if (!preloadRequested) return;
 
     let active = true;
-    const preloadTasks = tools.map(
-      (tool) =>
-        new Promise<void>((resolve) => {
-          if (!tool.icon) {
-            resolve();
-            return;
-          }
+    // Fetch the library and one compact icon module in parallel, rather than
+    // waiting for twelve separate network responses before the scene is usable.
+    void import("./ToolGalaxy3D").catch(() => undefined);
+    const prepareIcons = async () => {
+      const iconModule = await import("../../data/toolIcons.json").catch(() => ({ default: {} }));
+      const icons: Record<string, string> = iconModule.default;
+      const preparedTools = initialTools.map((tool) => ({
+        ...tool,
+        icon: icons[tool.id] ?? tool.icon,
+      }));
+      const preloadTasks = preparedTools.map(
+        (tool) =>
+          new Promise<void>((resolve) => {
+            if (!tool.icon) {
+              resolve();
+              return;
+            }
 
-          const image = new Image();
-          image.decoding = "async";
-          image.onload = () => {
-            image
-              .decode()
-              .catch(() => undefined)
-              .finally(resolve);
-          };
-          image.onerror = () => resolve();
-          image.src = tool.icon;
-        }),
-    );
+            const image = new Image();
+            image.decoding = "async";
+            image.onload = () => {
+              image
+                .decode()
+                .catch(() => undefined)
+                .finally(resolve);
+            };
+            image.onerror = () => resolve();
+            image.src = tool.icon;
+          }),
+      );
 
-    Promise.all(preloadTasks).then(() => {
-      if (active) setRawAssetsReady(true);
-    });
+      await Promise.all(preloadTasks);
+      if (active) {
+        setTools(preparedTools);
+        setRawAssetsReady(true);
+      }
+    };
+    void prepareIcons();
 
     return () => {
       active = false;
@@ -764,7 +779,7 @@ export function SkillsMatrixSection() {
             ))}
           </div>
 
-          {!preloadRequested || galaxySupport === "loading" ? (
+          {!preloadRequested || !rawAssetsReady || galaxySupport === "loading" ? (
             <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
               正在加载 3D 星系
             </div>
@@ -808,7 +823,7 @@ export function SkillsMatrixSection() {
             </ToolGalaxyErrorBoundary>
           )}
 
-          {preloadRequested ? tools.map((tool) => (
+          {preloadRequested && rawAssetsReady ? tools.map((tool) => (
             <ToolInfoPanel
               key={tool.id}
               active={focusedToolId === tool.id}

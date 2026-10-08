@@ -21,6 +21,10 @@ export function ViewportImage({
   useEffect(() => {
     const image = ref.current;
     if (!image || requested) return;
+    if (loading === "eager") {
+      setRequested(true);
+      return;
+    }
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
       setRequested(true);
@@ -28,7 +32,7 @@ export function ViewportImage({
     }, { rootMargin: preloadMargin });
     observer.observe(image);
     return () => observer.disconnect();
-  }, [requested, preloadMargin]);
+  }, [requested, preloadMargin, loading]);
 
   return (
     <img
