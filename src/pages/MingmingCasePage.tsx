@@ -1,407 +1,276 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowLeft, ArrowRight, BookOpen, ChevronRight, Clapperboard, ClipboardList, Layers, MapPin, Sparkles } from "lucide-react";
 
+import { AccountOrbit } from "../components/ui/AccountOrbit";
+import { TrainingDepthGallery } from "../components/ui/TrainingDepthGallery";
 import {
-  agentAutomation,
-  agentCapabilities,
-  agentDevelopment,
-  agentOverview,
-  agentWorkflow,
-  accountGrowthFlow,
   accountGrowthResults,
-  accountGrowthSummary,
-  companyProfile,
+  aigcMethod,
   contentPerformanceResults,
   heroContent,
-  incubationMetrics,
-  incubationOverview,
-  incubationStages,
+  incubationResults,
+  ipMethod,
   performanceMedia,
-  personalResults,
-  reviewWorkflow,
+  summaryContent,
   trainingGallery,
-  trainingSummary,
   videoCases,
   videoOverview,
-  type MingmingEvidence,
   type MingmingMedia,
   type MingmingVideo,
 } from "../data/mingmingCase";
-import { EvidenceFoldDeck, type EvidenceFoldDeckItem } from "../components/ui/EvidenceFoldDeck";
-import { Carousel } from "../components/ui/ReactBitsEvidence";
 import { DetailBackLink, PortfolioLink } from "../routing";
 
-function SectionHeading({ index, eyebrow, title, summary }: {
-  index: string;
-  eyebrow: string;
-  title: ReactNode;
-  summary: string;
-}) {
-  return (
-    <header className="mm-section-heading">
-      <span>{index}</span>
-      <div>
-        <p>{eyebrow}</p>
-        <h2>{title}</h2>
-      </div>
-      <p>{summary}</p>
-    </header>
-  );
+const productionIcons = [ClipboardList, MapPin, BookOpen, Sparkles, Layers, Clapperboard] as const;
+
+function OpeningSequence() {
+  const reducedMotion = useReducedMotion();
+  const [phase, setPhase] = useState<"opening" | "revealing" | "done">("opening");
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    // 开屏按时间播放一次，不随滚动反复覆盖正文；离开页面时清理计时器。
+    const revealTimer = window.setTimeout(() => setPhase("revealing"), 1600);
+    const finishTimer = window.setTimeout(() => setPhase("done"), 2300);
+    return () => {
+      window.clearTimeout(revealTimer);
+      window.clearTimeout(finishTimer);
+    };
+  }, [reducedMotion]);
+
+  if (reducedMotion || phase === "done") return null;
+  return <motion.div className="mm-preloader" aria-hidden="true"
+    initial={{ y: "0%" }} animate={{ y: phase === "revealing" ? "-100%" : "0%" }}
+    transition={{ duration: .65, ease: [.76, 0, .24, 1] }}>
+    <div className="mm-loader-name">{Array.from("鸣鸣很忙").map((letter, index) =>
+      <span key={index}><i style={{ animationDelay: `${index * .14}s` }}>{letter}</i></span>
+    )}</div>
+  </motion.div>;
 }
 
-function MediaCard({ media }: {
-  media: MingmingMedia;
-}) {
-  if (!media.src) return null;
-
-  return (
-    <figure className="mm-media-card">
-      <div className="mm-media-visual">
-        <img
-          src={media.src}
-          alt={media.alt}
-          width={media.width}
-          height={media.height}
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-        />
-      </div>
-      <figcaption>
-        <strong>{media.title}</strong>
-        <span>{media.caption}</span>
-      </figcaption>
-    </figure>
-  );
+function LayeredText({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start .94", "start .7"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["24%", "0%"]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [.45, 1]);
+  return <span ref={ref} className="mm-text-mask"><motion.span style={reducedMotion ? undefined : { y, opacity }}>{children}</motion.span></span>;
 }
 
-function EvidenceCard({ media, showCaption = media.group === "training" }: {
-  media: MingmingEvidence;
-  showCaption?: boolean;
-}) {
-  const isLandscape = media.group === "training" || media.group === "automation" || media.group === "development";
-
-  return (
-    <figure
-      className={`mm-evidence-card${isLandscape ? " is-landscape" : " is-portrait"}`}
-      data-evidence-id={media.id}
-    >
-      <span className="mm-media-frame">
-        <img
-          src={media.src}
-          alt={media.alt}
-          width={media.width}
-          height={media.height}
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-        />
-      </span>
-      {showCaption && (
-        <figcaption className="mm-evidence-caption">
-          <strong>{media.title}</strong>
-          <span>{media.caption}</span>
-        </figcaption>
-      )}
-    </figure>
-  );
+function SectionIntro({ title, id }: { title: string; id: string }) {
+  return <header className="mm-section-intro"><h2 id={id}><LayeredText>{title}</LayeredText></h2></header>;
 }
 
-function VideoStory({ video, index }: { video: MingmingVideo; index: number }) {
-  const projectDetails = [
-    ["项目背景", video.context],
-    ["叙事策略", video.strategy],
-    ["我的职责", video.responsibility],
-    ["最终交付", video.delivery],
-  ] as const;
-
+function VideoResult({ video }: { video: MingmingVideo }) {
   return (
-    <article className={`mm-video-story${index % 2 ? " is-reversed" : ""}`}>
+    <article className="mm-video-result" id={`mm-video-${video.id}`}>
       <div className="mm-video-copy">
-        <p className="mm-kicker">{video.label}</p>
         <h3>{video.title}</h3>
         <dl className="mm-video-details">
-          {projectDetails.map(([label, content]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd>{content}</dd>
-            </div>
-          ))}
+          <div><dt>业务目标</dt><dd>{video.businessGoal}</dd></div>
+          <div><dt>区域洞察</dt><dd>{video.regionalInsight}</dd></div>
+          <div><dt>创意策略</dt><dd>{video.creativeStrategy}</dd></div>
+          <div><dt>我的职责</dt><dd>{video.responsibility}</dd></div>
         </dl>
       </div>
-      <figure className="mm-video-column">
-        <div className="mm-video-frame">
-          {video.videoSrc ? (
-            <video controls playsInline preload="metadata" src={video.videoSrc} poster={video.poster} aria-label={`${video.title}视频播放器`} />
-          ) : (
-            <img src={video.poster} alt={video.alt} width={video.width} height={video.height} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
-          )}
-        </div>
-      </figure>
-    </article>
-  );
-}
-
-function AgentProject({ media, eyebrow, title, summary, tags, reverse = false }: {
-  media: MingmingEvidence;
-  eyebrow: string;
-  title: string;
-  summary: string;
-  tags: readonly string[];
-  reverse?: boolean;
-}) {
-  return (
-    <article className={`mm-agent-project${reverse ? " is-reversed" : ""}`}>
-      <div className="mm-agent-project-copy">
-        <p>{eyebrow}</p>
-        <h3>{title}</h3>
-        <p>{summary}</p>
-        <ul>{tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
+      <div className="mm-video-frame">
+        <video controls playsInline preload="metadata" src={video.videoSrc} poster={video.poster} aria-label={`${video.title}视频播放器`} />
       </div>
-      <EvidenceCard media={media} />
     </article>
   );
 }
 
-const growthEvidenceDecks: readonly EvidenceFoldDeckItem[] = [
-  {
-    id: "account-growth-results",
-    indexLabel: "01",
-    title: "账号增长成绩",
-    countLabel: "17个不同账号",
-    description: "17个不同账号的主页与粉丝成绩，证明账号定位、内容节奏和持续运营最终沉淀为稳定增长。",
-    items: accountGrowthResults,
-  },
-  {
-    id: "content-performance-results",
-    indexLabel: "02",
-    title: "内容表现成绩",
-    countLabel: "9项代表性成果",
-    description: "9项单条视频与公开内容表现，证明选题、拍摄和表达如何转化为具体传播结果。",
-    items: contentPerformanceResults,
-  },
-] as const;
+function EvidenceImage({ media, className = "" }: { media: MingmingMedia; className?: string }) {
+  if (!media.src) return null;
+  return (
+    <figure className={`mm-evidence-image ${className}`} data-evidence-id={media.id}>
+      <div className="mm-evidence-image-frame"><img src={media.src} alt={media.alt} loading="lazy" decoding="async" draggable={false} width={media.width} height={media.height} /></div>
+      <figcaption><strong>{media.title}</strong><span>{media.caption}</span></figcaption>
+    </figure>
+  );
+}
+
+function ChapterTransition() {
+  const ref = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+  const [radius, setRadius] = useState(1);
+  useEffect(() => {
+    const update = () => setRadius(Math.max(window.innerWidth, window.innerHeight) * 1.15);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start .7", "end end"] });
+  const reveal = useTransform(scrollYProgress, value => {
+    const t = Math.min(1, Math.max(0, (value - .05) / .8));
+    return t * t * (3 - 2 * t);
+  });
+  // 大面积底色只做合成层缩放；文字独立裁切，揭幕完成后移除裁切。
+  const clipPath = useTransform(reveal, value => value >= .999 ? "none" : `circle(${value * radius}px at 50% 100%)`);
+  const content = (decorative = false) => <div className="mm-transition-content mm-shell" aria-hidden={decorative || undefined}>
+    <div className="mm-transition-intro"><h2 id={decorative ? undefined : "mm-ip-title"}>全民 IP<br />孵化</h2><p>{incubationResults.summary}</p></div>
+    <dl className="mm-impact-grid" aria-label={decorative ? undefined : "全民 IP 核心业务成果"}>{incubationResults.metrics.map(metric => <div key={metric.label}><dt>{metric.value}</dt><dd><strong>{metric.label}</strong><span>{metric.detail}</span></dd></div>)}</dl>
+  </div>;
+  if (reducedMotion) return <section className="mm-transition-reduced" aria-labelledby="mm-ip-title">{content()}</section>;
+  return (
+    <section ref={ref} className="mm-transition" aria-labelledby="mm-ip-title">
+      <div className="mm-transition-stage">
+        <motion.div className="mm-transition-circle" style={{ scale: reveal }} aria-hidden="true" />
+        {content()}
+        <motion.div className="mm-transition-gold" style={{ clipPath }} aria-hidden="true">{content(true)}</motion.div>
+      </div>
+    </section>
+  );
+}
+
+function RailSegment({ target, label }: { target: React.RefObject<HTMLElement>; label: string }) {
+  const [length, setLength] = useState(1);
+  useEffect(() => {
+    const element = target.current;
+    if (!element) return;
+    const update = () => setLength(element.getBoundingClientRect().height);
+    const observer = new ResizeObserver(update);
+    observer.observe(element); update();
+    return () => observer.disconnect();
+  }, [target]);
+  const { scrollYProgress } = useScroll({ target, offset: ["start start", "end start"] });
+  const labelOpacity = useTransform(scrollYProgress, p => p > 0 && p < 1 ? 1 : 0);
+  const labelTop = useTransform(scrollYProgress, p => `${p * 100}%`);
+  return <div className="mm-rail-segment" style={{ flexGrow: length }}><motion.i style={{ scaleY: scrollYProgress }} /><motion.span style={{ opacity: labelOpacity, top: labelTop }}>{label}</motion.span></div>;
+}
 
 export function MingmingCasePage() {
+  const aigcRef = useRef<HTMLElement>(null);
+  const ipRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const operationRef = useRef<HTMLDivElement>(null);
+  const trainingRef = useRef<HTMLDivElement>(null);
+  const operationTrainingRef = useRef<HTMLDivElement>(null);
+  const summaryRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+  // 首屏保持正常文档滚动；进度线只跟随下一章进入，不控制首屏可见度。
+  const { scrollYProgress: contentProgress } = useScroll({ target: aigcRef, offset: ["start end", "start start"] });
+  const railOpacity = useTransform(contentProgress, [0, .7, 1], [0, 0, 1]);
+
+  useEffect(() => {
+    document.documentElement.classList.add("mm-route-active");
+    document.body.classList.add("mm-route-active");
+    return () => {
+      document.documentElement.classList.remove("mm-route-active");
+      document.body.classList.remove("mm-route-active");
+    };
+  }, []);
+
   return (
     <article className="mingming-case">
-      <section className="mm-hero" aria-labelledby="mingming-title">
-        <div className="mm-hero-inner">
-          <DetailBackLink fallback="/#case-studies" className="mm-back-link">
-            <ArrowLeft aria-hidden="true" />
-            返回重点经历
-          </DetailBackLink>
-          <div className="mm-hero-content">
-            <p className="mm-hero-label">{heroContent.label}</p>
-            <div className="mm-hero-company-intro">
-              <h1 id="mingming-title">{heroContent.title}</h1>
-              <p className="mm-hero-company-statement">{companyProfile.statement}</p>
-              <div className="mm-hero-scale" aria-label="公司规模">
-                <strong>{companyProfile.scale}</strong>
-                <span>{companyProfile.scaleLabel}</span>
+      <OpeningSequence />
+      <motion.div className="mm-scroll-progress" style={reducedMotion ? undefined : { opacity: railOpacity }} aria-hidden="true">
+        <RailSegment target={aigcRef} label="AIGC" />
+        <RailSegment target={ipRef} label="全民 IP" />
+        <RailSegment target={contentRef} label="内容表现" />
+        <RailSegment target={operationTrainingRef} label="运营与培训" />
+        <RailSegment target={summaryRef} label="经历总结" />
+      </motion.div>
+
+      <header id="mm-overview" className="mm-hero">
+        <div className="mm-shell">
+          <DetailBackLink fallback="/#case-studies" className="mm-back-link"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink>
+          <div className="mm-cover-meta"><p>职业经历 / CASE STUDY</p><span>创意生产 · 内容运营 · 业务增长</span></div>
+          <div className="mm-hero-main">
+            <div className="mm-hero-title">
+              <p className="mm-index">鸣鸣很忙集团 · 华南区域</p>
+              <h1 className="mm-hero-name" aria-label="鸣鸣很忙">{Array.from("鸣鸣很忙").map((letter, index) => <span className="mm-name-char" key={index}><i style={{ animationDelay: `${index * .09}s` }}>{letter}</i></span>)}</h1>
+              <p className="mm-hero-tagline">让内容成为<br />增长的起点<span>。</span></p>
+              <p className="mm-hero-introduction">主导 AIGC 招商影片与全民 IP 孵化，连接创意生产、账号运营和线下培训。</p>
+            </div>
+            <div className="mm-hero-aside">
+              <div className="mm-company-details">
+                <p className="mm-company-name"><span>鸣鸣很忙集团</span><span>赵一鸣商业有限公司</span></p>
+                <dl className="mm-role-details"><div><dt>岗位</dt><dd>{heroContent.role}</dd></div><div><dt>负责区域</dt><dd>{heroContent.region}</dd></div><div className="mm-tenure-detail"><dt>任职时间</dt><dd>{heroContent.tenure}</dd></div></dl>
               </div>
-              <p className="mm-hero-source">
-                <a href={companyProfile.sourceUrl} target="_blank" rel="noreferrer">{companyProfile.sourceLabel}</a>
-                <span>{companyProfile.sourceNote}</span>
-              </p>
             </div>
-            <div className="mm-hero-role-summary">
-              <p className="mm-hero-role-label">MY ROLE &amp; SCOPE</p>
-              <p className="mm-hero-identity">{heroContent.role}｜{heroContent.region}｜{heroContent.tenure}</p>
-              <p className="mm-hero-subtitle">{heroContent.positioning}</p>
-            </div>
-            <dl className="mm-hero-results" aria-label="我直接负责或主导的量化成绩">
-              {personalResults.map((result) => (
-                <div key={result.label}>
-                  <dt>{result.value}</dt>
-                  <dd>
-                    <strong>{result.label}</strong>
-                    <span>{result.detail}</span>
-                  </dd>
-                </div>
-              ))}
+          </div>
+          <div className="mm-hero-bottom">
+            <p className="mm-cover-project-label">核心项目<span>SELECTED WORK</span></p>
+            <div className="mm-cover-project"><span>AIGC 内容生产</span><h2>区域招商影片</h2><p>浙江 × 石家庄 · 从创意到完整成片</p></div>
+            <div className="mm-cover-project"><span>账号与内容增长</span><h2>全民 IP 孵化</h2><p>账号运营 · 投流复盘 · 线下培训</p></div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section ref={aigcRef} id="mm-aigc" className="mm-section mm-aigc" aria-labelledby="mm-aigc-title">
+          <div className="mm-shell">
+            <SectionIntro id="mm-aigc-title" title={videoOverview.title} />
+            <dl className="mm-film-facts" aria-label="AIGC 招商影片项目摘要">
+              {videoOverview.facts.map((fact) => <div key={fact.label}><dt>{fact.value}</dt><dd>{fact.label}</dd></div>)}
             </dl>
-          </div>
-        </div>
-      </section>
+            <div className="mm-video-list">{videoCases.map((video) => <VideoResult key={video.id} video={video} />)}</div>
 
-      <section id="mm-ai-video" className="mm-section mm-section-dark mm-video-section">
-        <div className="mm-section-inner">
-          <SectionHeading
-            index="01"
-            eyebrow={videoOverview.eyebrow}
-            title={videoOverview.title}
-            summary={videoOverview.background}
-          />
-          <div className="mm-video-brief">
-            <span>我的完整链路</span>
-            <p>{videoOverview.contribution}</p>
+            <div className="mm-aigc-method" id="mm-production-process" aria-labelledby="mm-production-title">
+              <header className="mm-process-heading">
+                <h3 id="mm-production-title"><LayeredText>我的制作流程</LayeredText></h3>
+                <p>{aigcMethod.processSummary}</p>
+              </header>
+              <ol className="mm-process-steps" aria-label="招商影片的六步制作流程">
+                {aigcMethod.steps.map((step, index) => {
+                  const Icon = productionIcons[index];
+                  return <li className="mm-process-card" key={step.title} tabIndex={0}>
+                    <p className="mm-process-number"><span>{String(index + 1).padStart(2, "0")}</span><span aria-hidden="true">·</span><span>{step.phase}</span></p>
+                    <div className="mm-process-icon"><Icon size={26} strokeWidth={1.5} aria-hidden="true" /></div>
+                    <h4>{step.title}</h4>
+                    <p className="mm-process-description">{step.summary}</p>
+                    {index < aigcMethod.steps.length - 1 && <ChevronRight className="mm-process-connector" size={24} strokeWidth={1.5} aria-hidden="true" />}
+                  </li>;
+                })}
+              </ol>
+            </div>
           </div>
-          <div className="mm-video-list">
-            {videoCases.map((video, index) => <VideoStory key={video.id} video={video} index={index} />)}
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="mm-ip-incubation" className="mm-section mm-section-light">
-        <div className="mm-section-inner">
-          <SectionHeading
-            index="02"
-            eyebrow="PEOPLE-POWERED IP"
-            title={<span className="mm-section-title"><span>全民IP</span><span>孵化项目</span></span>}
-            summary={incubationOverview.summary}
-          />
-          <dl className="mm-result-strip">
-            {incubationMetrics.map((metric) => (
-              <div key={metric.label}><dt>{metric.value}</dt><dd>{metric.label}</dd></div>
-            ))}
-          </dl>
-          <div className="mm-ip-method" aria-label="IP孵化业务能力">
-            {incubationOverview.capabilities.map((item, index) => (
-              <div key={item.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{item.title}</strong>
-                <p>{item.summary}</p>
-              </div>
-            ))}
+        <ChapterTransition />
+
+        <section id="mm-ip" className="mm-section mm-ip" aria-labelledby="mm-ip-title">
+          <div ref={ipRef}>
+          <AccountOrbit items={accountGrowthResults} />
           </div>
 
-          <section className="mm-subsection" aria-labelledby="mm-douyin-heading">
-            <div className="mm-subheading mm-subheading-split">
-              <h3 id="mm-douyin-heading">账号增长</h3>
-              <p>{incubationOverview.accountSummary}</p>
+          <div className="mm-shell mm-ip-details">
+            <div ref={contentRef}>
+            <div className="mm-evidence-heading mm-content-heading"><div><span>内容表现成果</span><h3><LayeredText>单条内容的传播与互动</LayeredText></h3></div><p>与账号主页的粉丝规模分开呈现，记录单条内容的公开表现。</p></div>
+            <div className="mm-content-sequence" aria-label="内容表现成果">{contentPerformanceResults.map(media => <EvidenceImage key={media.id} media={media} />)}</div>
             </div>
-            <ol className="mm-account-growth-flow" aria-label="账号增长完整链路">
-              {accountGrowthFlow.map((stage, index) => (
-                <li key={stage.title}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{stage.title}</strong>
-                  <p>{stage.summary}</p>
-                </li>
-              ))}
-            </ol>
-            <dl className="mm-growth-summary" aria-label="账号增长核心成绩">
-              {accountGrowthSummary.map((result) => (
-                <div key={result.label}>
-                  <dt>{result.value}</dt>
-                  <dd>{result.label}</dd>
-                </div>
-              ))}
-            </dl>
-            <EvidenceFoldDeck decks={growthEvidenceDecks} defaultDeckId="account-growth-results" />
-          </section>
 
-          <section className="mm-subsection mm-performance" aria-labelledby="mm-performance-heading">
-            <div className="mm-subheading mm-subheading-split">
-              <h3 id="mm-performance-heading">直播与投放复盘</h3>
-              <p>{reviewWorkflow.summary}</p>
+            <div ref={operationTrainingRef}>
+            <div ref={operationRef} className="mm-ip-method">
+              <div className="mm-subhead"><span>运营与投放</span><h3><LayeredText>{ipMethod.title}</LayeredText></h3></div>
+              <p className="mm-method-lead">{ipMethod.scopeSummary}</p>
+              <ol className="mm-growth-stages">
+                {ipMethod.operationStages.map((stage, index) => <li key={stage}><span>0{index + 1}</span><h4>{stage}</h4><dl>{ipMethod.operations.slice(index * 2, index * 2 + 2).map((step) => <div key={step.title}><dt>{step.title}</dt><dd>{step.summary}</dd></div>)}</dl></li>)}
+              </ol>
+              <div className="mm-evidence-heading"><div><span>运营证据 / 03</span><h3>从内容表现到投流复盘</h3></div><p>{ipMethod.operationsSummary}</p></div>
+              <div className="mm-performance-grid">{performanceMedia.map((media) => <EvidenceImage key={media.id} media={media} />)}</div>
             </div>
-            <dl className="mm-review-metrics" aria-label="直播与投放复盘结果">
-              {reviewWorkflow.metrics.map((metric) => (
-                <div key={metric.label}>
-                  <dt>{metric.value}</dt>
-                  <dd>{metric.label}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="mm-performance-grid mm-performance-real">
-              {performanceMedia.map((media) => <MediaCard key={media.id} media={media} />)}
+
+            <div ref={trainingRef} className="mm-training">
+              <div className="mm-subhead"><span>培训孵化</span><h3><LayeredText>10 场线下达人训练营</LayeredText></h3></div>
+              <p className="mm-method-lead">{ipMethod.trainingSummary}</p>
+              <ol className="mm-training-path">{ipMethod.trainingStages.map((stage, index) => <li key={stage.title}><span>0{index + 1}</span><h4>{stage.title}</h4><p>{stage.details}</p></li>)}</ol>
+              <div className="mm-evidence-heading"><div><span>现场记录 / 10</span><h3>培训在现场发生</h3></div></div>
+          <TrainingDepthGallery items={trainingGallery} />
             </div>
-            <ol className="mm-review-loop">
-              {reviewWorkflow.steps.map((step, index) => (
-                <li key={step.title}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{step.title}</strong>
-                  <p>{step.summary}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className="mm-subsection" aria-labelledby="mm-training-heading">
-            <div className="mm-subheading mm-subheading-split">
-              <h3 id="mm-training-heading">培训与SOP：0→10k</h3>
-              <p>{trainingSummary}</p>
             </div>
-            <ol className="mm-training-path" aria-label="培训孵化四阶段">
-              {incubationStages.map((stage, index) => (
-                <li key={stage.title}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{stage.title}</strong>
-                  <p>{stage.details}</p>
-                </li>
-              ))}
-            </ol>
-            <div className="mm-training-records">
-              <div className="mm-evidence-heading">
-                <h4>训练营记录</h4>
-                <p>10场现场记录；拖动、滑动或使用方向键浏览。</p>
-              </div>
-              <Carousel
-                items={trainingGallery}
-                label="训练营记录"
-                statusLabel="训练营"
-                desktopPageSize={5}
-                desktopColumns={5}
-                renderItem={(media) => <EvidenceCard key={media.id} media={media} />}
-              />
-            </div>
-          </section>
-
-        </div>
-      </section>
-
-      <section id="mm-agent-development" className="mm-section mm-section-dark mm-agent-section">
-        <div className="mm-section-inner">
-          <SectionHeading
-            index="03"
-            eyebrow="HUMAN × AGENT"
-            title={(
-              <span className="mm-agent-title">
-                <span>AI AGENT</span>
-                <span>协作开发</span>
-              </span>
-            )}
-            summary={agentOverview.summary}
-          />
-
-          <div className="mm-agent-projects">
-            <AgentProject media={agentDevelopment} {...agentOverview.development} />
-            <ol className="mm-agent-flow" aria-label="AI协作开发路径">
-              {agentWorkflow.map((step, index) => (
-                <li key={step}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <p>{step}</p>
-                  {index < agentWorkflow.length - 1 && <ArrowRight aria-hidden="true" />}
-                </li>
-              ))}
-            </ol>
-            <AgentProject media={agentAutomation} {...agentOverview.automation} reverse />
           </div>
+        </section>
+      </main>
 
-          <div className="mm-agent-capability-block">
-            <div className="mm-agent-block-heading">
-              <span>PROVEN CAPABILITIES</span>
-              <h3>AI能力矩阵</h3>
-              <p>只呈现当前项目代码、浏览器验收或真实工作流可以证明的能力。</p>
-            </div>
-            <ul className="mm-agent-capabilities">
-              {agentCapabilities.map((capability, index) => (
-                <li key={capability}><span>{String(index + 1).padStart(2, "0")}</span>{capability}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <footer className="mm-closing">
-        <div className="mm-closing-inner">
-          <p>从内容生产到IP增长，再到AI Agent协作开发，我把想法组织成可以交付、复盘和继续增长的项目。</p>
-          <nav aria-label="案例后续操作">
-            <DetailBackLink fallback="/#case-studies"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink>
-            <PortfolioLink to="/cases/hengqian">查看下一个案例<ArrowRight aria-hidden="true" /></PortfolioLink>
-            <PortfolioLink to="/#contact">联系我<ArrowRight aria-hidden="true" /></PortfolioLink>
-          </nav>
+      <footer ref={summaryRef} id="mm-summary" className="mm-closing" aria-labelledby="mm-summary-title">
+        <div className="mm-shell">
+          <p className="mm-index">经历总结 / WHAT I BUILT</p>
+          <h2 id="mm-summary-title"><LayeredText>我交付的不只是内容，</LayeredText><br /><em><LayeredText>也是一套可以持续运行的增长方法。</LayeredText></em></h2>
+          <p className="mm-closing-statement">{summaryContent.statement}</p>
+          <div className="mm-summary-abilities">{summaryContent.abilities.map((ability, index) => <div key={ability.title}><span>0{index + 1}</span><h3>{ability.title}</h3><p>{ability.summary}</p></div>)}</div>
+          <nav aria-label="案例后续操作"><DetailBackLink fallback="/#case-studies"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink><PortfolioLink to="/cases/hengqian">查看下一个案例<ArrowRight aria-hidden="true" /></PortfolioLink><PortfolioLink to="/#contact">联系我<ArrowRight aria-hidden="true" /></PortfolioLink></nav>
         </div>
       </footer>
     </article>

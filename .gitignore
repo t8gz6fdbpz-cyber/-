@@ -9,3 +9,9 @@ dist
 .impeccable/mocks/
 .impeccable/review/
 /assets/
+
+# Local visual QA captures and preview-server logs
+/artifacts/home-scroll-motion-*/
+/artifacts/mingming-*/
+/artifacts/react-bits-*/
+/vite-restart.*.log

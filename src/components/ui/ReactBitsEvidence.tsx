@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 const easeOutQuint = [0.22, 1, 0.36, 1] as const;
 
@@ -149,7 +149,7 @@ export function Carousel<T extends { id: string }>({
                 className="mm-carousel-grid"
                 style={{ "--mm-carousel-columns": columns } as CSSProperties}
               >
-                {itemsOnPage.map((item, itemIndex) => renderItem(item, pageIndex * pageSize + itemIndex))}
+                {itemsOnPage.map((item, itemIndex) => <Fragment key={item.id}>{renderItem(item, pageIndex * pageSize + itemIndex)}</Fragment>)}
               </div>
             </div>
           ))}

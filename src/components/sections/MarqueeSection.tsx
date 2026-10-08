@@ -2,7 +2,10 @@ import {
   motion,
   useAnimationFrame,
   useMotionValue,
+  useInView,
   useReducedMotion,
+  useScroll,
+  useSpring,
   useTransform,
   type MotionValue,
 } from "framer-motion";
@@ -133,6 +136,17 @@ export function MarqueeSection() {
   const progress = useMarqueeOffset(sectionRef);
   const shouldReduceMotion = useReducedMotion();
   const idleOffset = useMotionValue(0);
+  const isVisible = useInView(sectionRef, { margin: "80px" });
+  // The entire showcase rises into the split cover's wake, without individual card motion.
+  const { scrollYProgress: entryProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 0.96", "start 0.3"],
+  });
+  const smoothEntry = useSpring(entryProgress, {
+    stiffness: 110, damping: 22, mass: 0.65, restDelta: 0.0001,
+  });
+  const entryOpacity = useTransform(smoothEntry, [0, 0.18, 0.78, 1], [0, 0.08, 1, 1]);
+  const entryY = useTransform(smoothEntry, [0, 0.85, 1], [120, 0, 0]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -167,11 +181,11 @@ export function MarqueeSection() {
   }, []);
 
   useAnimationFrame((_, delta) => {
-    if (shouldReduceMotion || rowWidths.one === 0 || rowWidths.two === 0) {
+    if (shouldReduceMotion || !isVisible || rowWidths.one === 0 || rowWidths.two === 0) {
       return;
     }
 
-    const nextOffset = idleOffset.get() + (delta / 1000) * 6;
+    const nextOffset = idleOffset.get() + (Math.min(delta, 64) / 1000) * 6;
     idleOffset.set(nextOffset);
   });
 
@@ -212,22 +226,11 @@ export function MarqueeSection() {
     [0, rowWidths.two * 0.72],
   );
   const rowOneX = useTransform(() =>
-    wrapSequence(rowOneScrollX.get() + idleOffset.get(), rowWidths.one),
+    wrapSequence(shouldReduceMotion ? 0 : rowOneScrollX.get() - idleOffset.get(), rowWidths.one),
   );
   const rowTwoX = useTransform(() =>
-    wrapSequence(rowTwoScrollX.get() - idleOffset.get(), rowWidths.two),
+    wrapSequence(shouldReduceMotion ? 0 : rowTwoScrollX.get() + idleOffset.get(), rowWidths.two),
   );
-  const canvasScale = useTransform(
-    progress,
-    [0, 0.2, 0.82, 1],
-    [0.97, 1, 1, 0.985],
-  );
-  const canvasY = useTransform(
-    progress,
-    [0, 0.82, 1],
-    ["7vh", "-2vh", "-5vh"],
-  );
-
   return (
     <section
       id="works-gallery"
@@ -243,9 +246,8 @@ export function MarqueeSection() {
           className="flex w-full flex-col gap-8"
           data-marquee-canvas
           style={{
-            scale: shouldReduceMotion ? 1 : canvasScale,
-            y: shouldReduceMotion ? 0 : canvasY,
-            willChange: "transform",
+            opacity: shouldReduceMotion ? 1 : entryOpacity,
+            y: shouldReduceMotion ? 0 : entryY,
           }}
         >
           <MarqueeRow

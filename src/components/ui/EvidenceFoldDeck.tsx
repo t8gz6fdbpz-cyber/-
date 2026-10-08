@@ -84,7 +84,7 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
   }
 
   function handlePointerDown(event: PointerEvent<HTMLElement>) {
-    if (!event.isPrimary || (event.target as Element).closest("button")) return;
+    if (!event.isPrimary || (event.target as Element).closest("button, a")) return;
     swipeStartX.current = event.clientX;
     event.currentTarget.setPointerCapture(event.pointerId);
   }
@@ -128,6 +128,7 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
               id={`${deck.id}-toggle`}
               type="button"
               className={`mm-fold-cover${isExpanded ? " is-active" : ""}`}
+              data-deck-id={deck.id}
               aria-expanded={isExpanded}
               aria-controls={`${deck.id}-panel`}
               onClick={() => showDeck(deck.id)}
@@ -144,7 +145,7 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
                   alt=""
                   width={coverItem.width}
                   height={coverItem.height}
-                  loading={deck.id === defaultDeckId ? "eager" : "lazy"}
+                  loading="lazy"
                   decoding="async"
                 />
               </span>
@@ -156,15 +157,17 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
 
       <AnimatePresence initial={false} mode="wait">
         {activeDeck && activeItem && (
-          <motion.section
+          <motion.div
             key={activeDeck.id}
             id={`${activeDeck.id}-panel`}
             className="mm-fold-panel"
+            role="region"
             aria-labelledby={`${activeDeck.id}-toggle`}
+            tabIndex={0}
             initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -10 }}
-            transition={{ duration: shouldReduceMotion ? 0.16 : 0.46, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: shouldReduceMotion ? 0 : 0.46, ease: [0.22, 1, 0.36, 1] }}
             onKeyDown={handlePanelKeyDown}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
@@ -177,12 +180,12 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
             <div className="mm-fold-stage">
               {previousItem && (
                 <figure className="mm-fold-preview is-previous" aria-hidden="true">
-                  <img src={previousItem.src} alt="" width={previousItem.width} height={previousItem.height} decoding="async" />
+                  <img src={previousItem.src} alt="" width={previousItem.width} height={previousItem.height} loading="lazy" decoding="async" />
                 </figure>
               )}
               {nextItem && (
                 <figure className="mm-fold-preview is-next" aria-hidden="true">
-                  <img src={nextItem.src} alt="" width={nextItem.width} height={nextItem.height} decoding="async" />
+                  <img src={nextItem.src} alt="" width={nextItem.width} height={nextItem.height} loading="lazy" decoding="async" />
                 </figure>
               )}
 
@@ -203,7 +206,7 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
                     x: shouldReduceMotion ? 0 : direction * -22,
                     rotateY: shouldReduceMotion ? 0 : direction * -10,
                   }}
-                  transition={{ duration: shouldReduceMotion ? 0.16 : 0.48, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: shouldReduceMotion ? 0 : 0.48, ease: [0.22, 1, 0.36, 1] }}
                   style={{ transformOrigin: direction > 0 ? "left center" : "right center" }}
                 >
                   <span className="mm-fold-main-frame">
@@ -212,14 +215,14 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
                       alt={activeItem.alt}
                       width={activeItem.width}
                       height={activeItem.height}
-                      loading={activeIndex === 0 ? "eager" : "lazy"}
+                      loading="lazy"
                       decoding="async"
                       draggable="false"
                     />
                   </span>
                   <figcaption>
                     <strong>{activeItem.title}</strong>
-                    <span>{activeItem.caption}</span>
+                    <span>{activeDeck.title} · {String(activeIndex + 1).padStart(2, "0")} / {activeDeck.items.length}</span>
                   </figcaption>
                 </motion.figure>
               </AnimatePresence>
@@ -239,7 +242,8 @@ export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps
                 <ChevronRight aria-hidden="true" />
               </button>
             </div>
-          </motion.section>
+            <a className="mm-evidence-original" href={activeItem.src} target="_blank" rel="noreferrer">查看当前原图（新窗口）</a>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

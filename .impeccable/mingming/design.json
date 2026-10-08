@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-06T17:05:50.265Z",
+  "title": "Design System: 鸣鸣很忙案例页",
+  "extensions": {
+    "scope": {
+      "routeComponent": "MingmingCasePage",
+      "designDocument": ".impeccable/mingming/DESIGN.md",
+      "cssTokenScope": ".mingming-case",
+      "rootDesignFilesUntouched": true,
+      "sources": [
+        "src/pages/MingmingCasePage.tsx",
+        "src/components/ui/AccountOrbit.tsx",
+        "src/styles/mingming-hierarchy.css",
+        ".impeccable/mingming/direction.md",
+        "PRODUCT.md",
+        "src/data/mingmingCase.ts"
+      ],
+      "sourceAuthority": "Implementation values; direction for confirmed visual language. Current page instance, not site-wide defaults.",
+      "preview": "Each ds-world wrapper declares the exact route-scoped CSS variables; component CSS references var(--mm-*). Static HTML/CSS previews require no React/Tailwind. Media assets and scroll runtime are not packaged.",
+      "review": "Ship status supplied by parent implementation/reviewer; documentation-only pass, no detector rerun."
+    },
+    "colorMeta": {
+      "mm-black": {
+        "role": "neutral",
+        "displayName": "近黑",
+        "canonical": "#050505",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.000)",
+          "oklch(25% 0.00000 0.000)",
+          "oklch(35% 0.00000 0.000)",
+          "oklch(45% 0.00000 0.000)",
+          "oklch(55% 0.00000 0.000)",
+          "oklch(65% 0.00000 0.000)",
+          "oklch(80% 0.00000 0.000)",
+          "oklch(95% 0.00000 0.000)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-raised": {
+        "role": "neutral",
+        "displayName": "暖黑",
+        "canonical": "#0b0a08",
+        "tonalRamp": [
+          "oklch(15% 0.00482 85.920)",
+          "oklch(25% 0.00482 85.920)",
+          "oklch(35% 0.00482 85.920)",
+          "oklch(45% 0.00482 85.920)",
+          "oklch(55% 0.00482 85.920)",
+          "oklch(65% 0.00482 85.920)",
+          "oklch(80% 0.00482 85.920)",
+          "oklch(95% 0.00482 85.920)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-gold": {
+        "role": "primary",
+        "displayName": "亮金",
+        "canonical": "#f2c15b",
+        "tonalRamp": [
+          "oklch(15% 0.13146 83.410)",
+          "oklch(25% 0.13146 83.410)",
+          "oklch(35% 0.13146 83.410)",
+          "oklch(45% 0.13146 83.410)",
+          "oklch(55% 0.13146 83.410)",
+          "oklch(65% 0.13146 83.410)",
+          "oklch(80% 0.13146 83.410)",
+          "oklch(95% 0.13146 83.410)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-gold-deep": {
+        "role": "primary",
+        "displayName": "深金",
+        "canonical": "#c9973e",
+        "tonalRamp": [
+          "oklch(15% 0.12044 78.834)",
+          "oklch(25% 0.12044 78.834)",
+          "oklch(35% 0.12044 78.834)",
+          "oklch(45% 0.12044 78.834)",
+          "oklch(55% 0.12044 78.834)",
+          "oklch(65% 0.12044 78.834)",
+          "oklch(80% 0.12044 78.834)",
+          "oklch(95% 0.12044 78.834)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-champagne": {
+        "role": "primary",
+        "displayName": "香槟金",
+        "canonical": "#c8ae78",
+        "tonalRamp": [
+          "oklch(15% 0.07726 84.949)",
+          "oklch(25% 0.07726 84.949)",
+          "oklch(35% 0.07726 84.949)",
+          "oklch(45% 0.07726 84.949)",
+          "oklch(55% 0.07726 84.949)",
+          "oklch(65% 0.07726 84.949)",
+          "oklch(80% 0.07726 84.949)",
+          "oklch(95% 0.07726 84.949)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-text": {
+        "role": "neutral",
+        "displayName": "暖白",
+        "canonical": "#e8dfcc",
+        "tonalRamp": [
+          "oklch(15% 0.02722 85.667)",
+          "oklch(25% 0.02722 85.667)",
+          "oklch(35% 0.02722 85.667)",
+          "oklch(45% 0.02722 85.667)",
+          "oklch(55% 0.02722 85.667)",
+          "oklch(65% 0.02722 85.667)",
+          "oklch(80% 0.02722 85.667)",
+          "oklch(95% 0.02722 85.667)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-muted": {
+        "role": "neutral",
+        "displayName": "暖灰",
+        "canonical": "#8f846f",
+        "tonalRamp": [
+          "oklch(15% 0.03323 83.570)",
+          "oklch(25% 0.03323 83.570)",
+          "oklch(35% 0.03323 83.570)",
+          "oklch(45% 0.03323 83.570)",
+          "oklch(55% 0.03323 83.570)",
+          "oklch(65% 0.03323 83.570)",
+          "oklch(80% 0.03323 83.570)",
+          "oklch(95% 0.03323 83.570)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      },
+      "mm-rule": {
+        "role": "neutral",
+        "displayName": "金色透明分隔",
+        "canonical": "rgba(200,174,120,.2)",
+        "tonalRamp": [
+          "oklch(15% 0.07726 84.949 / .2)",
+          "oklch(25% 0.07726 84.949 / .2)",
+          "oklch(35% 0.07726 84.949 / .2)",
+          "oklch(45% 0.07726 84.949 / .2)",
+          "oklch(55% 0.07726 84.949 / .2)",
+          "oklch(65% 0.07726 84.949 / .2)",
+          "oklch(80% 0.07726 84.949 / .2)",
+          "oklch(95% 0.07726 84.949 / .2)"
+        ],
+        "rampPurpose": "Synthetic panel display only; not implemented CSS tokens."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "首屏大标题",
+        "purpose": "第一行；第二行为 .7em"
+      },
+      "headline": {
+        "displayName": "章节标题",
+        "purpose": "章节 SectionIntro h2"
+      },
+      "title": {
+        "displayName": "子标题",
+        "purpose": "制作、运营、培训 subheading"
+      },
+      "body": {
+        "displayName": "正文",
+        "purpose": "默认正文；特定 lead 为 18px"
+      },
+      "label": {
+        "displayName": "栏目索引",
+        "purpose": "香槟金 12px 索引"
+      },
+      "orbit-statement": {
+        "displayName": "中央句子",
+        "purpose": "回环三行句子；移动 24px/1.5"
+      },
+      "film-title": {
+        "displayName": "影片标题",
+        "purpose": "VideoResult h3"
+      },
+      "film-fact": {
+        "displayName": "影片事实",
+        "purpose": "film-facts dt"
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "loader-exit",
+        "value": "1.6s; 0%,76% opacity:1/visibility:visible; 100% opacity:0/visibility:hidden",
+        "purpose": "一次加载遮罩，pointer-events:none"
+      },
+      {
+        "name": "loader-letter",
+        "value": ".65s cubic-bezier(.22,1,.36,1); translateY(110%) → translateY(0)",
+        "purpose": "初字；字组内 .32s 起，末组 .44s/.52s"
+      },
+      {
+        "name": "loader-expand",
+        "value": ".55s cubic-bezier(.76,0,.24,1); delays .28s/.42s; max-width:0 → 2.1em",
+        "purpose": "字组遮罩展开"
+      },
+      {
+        "name": "hero-rise",
+        "value": ".72s cubic-bezier(.22,1,.36,1); delays 1.15s/1.3s; clip-path:inset(100% 0 0) → inset(0); translateY(24px) → 0; opacity .35 → 1",
+        "purpose": "首屏首次进入"
+      },
+      {
+        "name": "hero-soft-in",
+        "value": "index .55s/1.03s; aside .7s/1.43s; bottom .7s/1.53s; opacity 0→1; translateY(16px)→0",
+        "purpose": "首屏索引、岗位、底部"
+      },
+      {
+        "name": "hero-scroll",
+        "value": "offset start/start,end/start; p=[0,.25,.5,.75,1]; titleX=[0,-10,-33,-70,-125]vw; subtitleX=[0,10,33,70,125]vw; Y=p*window.innerHeight; opacity p=[0,.3,.9]→[1,1,0]",
+        "purpose": "两行相向加速退场与纵向补偿"
+      },
+      {
+        "name": "text-reveal",
+        "value": "offset start .94,start .65; Y p=[0,1]→[104%,0%]; opacity p=[0,.7,1]→[.25,1,1]",
+        "purpose": "章节、影片与总结遮罩文字"
+      },
+      {
+        "name": "chapter-transition",
+        "value": "190svh; fixed stage 100svh; wrap top:-10svh,height:110svh,bottom radius:50px; circle 300vmax centered at bottom; scale p=[0,(mobile?1.14851:1.1488)/1.9,1]→[0,1,1]; Y=-max(0,p*1.9-(mobile?1.14851:1.18889))*(mobile?156.6693:159.0556)svh",
+        "purpose": "香槟圆形章节过渡；本页校准参数"
+      },
+      {
+        "name": "orbit-geometry",
+        "value": "stage perspective:1200px; imageWidth=max(120,viewportWidth*.14); imageHeight=imageWidth/1.5; xRadius=viewportWidth*.34; yRadius=mobile?80:viewportHeight*.2; zRadius=mobile?180:500",
+        "purpose": "34% 视口宽 X、20% 视口高桌面 Y；方向简写按代码纠正"
+      },
+      {
+        "name": "orbit-timeline",
+        "value": "offset start/start,end/end; lane i start=i*.05521648; entry=.07361087; turn=.46626288; exit=.07361963; entry x=-viewportWidth*.85*(1-t), y=yRadius,z=zRadius*t; ring x=sin(theta)*xRadius,y=cos(theta)*yRadius,z=cos(theta)*zRadius,rotateY=theta degrees; exit x=viewportWidth*.85*t,y=yRadius,z=zRadius*(1-t); theta=(local-entry)/turn*2π; opacity=min(clamp((p-start)/(entry/2)),clamp((start+entry+turn+exit-p)/(exit/2)))",
+        "purpose": "八条独立错峰通道，单圈后离场；余四自然展示"
+      },
+      {
+        "name": "orbit-curvature",
+        "value": "10 slices; angle=((slice+.5)/10-.5)*.40724349 rad; radius=imageWidth*2.454365; sliceWidth=imageWidth/10+1.5; transform-origin:center center -radius px",
+        "purpose": "同一真实账号纹理切片，不复制证据序列"
+      },
+      {
+        "name": "orbit-statement",
+        "value": "14 units/3 lines; unit opacity p=[.255+i*.01,.285+i*.01]→[0,1]; overall opacity p=[.27,.30,.625,.75]→[0,1,1,0]; Y p=[.285,.5,.715]→[86,0,-86]px",
+        "purpose": "唯一中央句子"
+      },
+      {
+        "name": "progress-rail",
+        "value": "hero opacity p=[0,.7,1]→[0,0,1]; each segment scaleY=local p; label opacity=0<p<1?1:0; label top=p*100%; flexGrow=measured target height",
+        "purpose": "五段章节实际高度分配；不是导航"
+      },
+      {
+        "name": "reduced-motion",
+        "value": "CSS animations/transitions:none!important; hide preloader and transition; hero initial mask disabled; React hero/reveal motion styles omitted; no transition motion nodes; AccountOrbit→static phrase + all 12 profiles; no sticky orbit stage",
+        "purpose": "保留证据和文字。进度线填充/标签仍跟随滚动；不声称完全无滚动关联变化。验证来自实际组件分支 + CSS规则检查，无真实系统降低动态浏览器截图。"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "video-and-offset-collapse",
+        "value": "1100px"
+      },
+      {
+        "name": "mobile",
+        "value": "700px"
+      }
+    ],
+    "details": {
+      "tonalRamps": "8 synthetic OKLCH steps at 15/25/35/45/55/65/80/95% lightness, source hue/chroma; mm-rule preserves alpha .2. Display strips only; no implemented tokens or gamut guarantee.",
+      "focus": "outline:2px solid var(--mm-gold);outline-offset:5px",
+      "progressTrack": "rgba(200,174,120,.16)",
+      "progressGeometry": "top:10vh;right:32px;width:2px;height:80vh;gap:6px;label right:16px,translateY(6px);pointer-events:none",
+      "orbitHeight": "desktop 600svh/sticky travel500svh; mobile450svh/travel350svh",
+      "profileCrop": "02=.93;04=.98;05=.9;06=.86;07=.88;11=.93;12=.88;16=.85;otherwise1; object-position=50% crop*100%; per-instance evidence crop, not a global image rule"
+    }
+  },
+  "components": [
+    {
+      "name": "返回重点经历",
+      "kind": "nav",
+      "refersTo": "back-link",
+      "description": "现有返回链接；hover 与 focus 保留，最小触达高度 44px。",
+      "html": "<div class=\"ds-world\"><a class=\"ds-back\" href=\"/#case-studies\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m12 19-7-7 7-7M5 12h14\"/></svg>返回重点经历</a></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-back{display:inline-flex;align-items:center;gap:12px;align-self:flex-start;min-height:44px;color:var(--mm-text);font-size:13px;text-decoration:none}.ds-back svg{width:17px;height:17px}.ds-back:hover{color:var(--mm-gold)}.ds-back:focus-visible{outline:2px solid var(--mm-gold);outline-offset:5px}"
+    },
+    {
+      "name": "章节引导",
+      "kind": "custom",
+      "refersTo": "section-intro",
+      "description": "索引、章节标题与说明；无新增互动状态。",
+      "html": "<div class=\"ds-world\"><header class=\"ds-intro\"><span>01 / AIGC</span><div><h2>AIGC 区域招商影片</h2><p>这是服务于鸣鸣很忙招商业务的 AIGC 短片项目。我们希望降低传统招商广告的生硬感，用人物关系和区域文化把招商信息自然放进故事里。</p></div></header></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-intro{display:grid;grid-template-columns:minmax(140px,.27fr) 1fr;gap:32px;margin-bottom:46px}.ds-intro>span{color:var(--mm-champagne);font-size:12px;letter-spacing:.1em}.ds-intro h2{margin:0;color:var(--mm-gold);font:400 clamp(60px,7.6vw,116px)/1.12 \"Songti SC\",SimSun,serif;letter-spacing:-.025em;text-wrap:balance}.ds-intro p{margin:36px 0 0;max-width:58ch;font-size:18px;text-wrap:pretty}@media(max-width:700px){.ds-intro{display:block}.ds-intro h2{margin-top:15px;font-size:clamp(44px,11vw,74px)}.ds-intro p{margin-top:22px;font-size:17px}}"
+    },
+    {
+      "name": "影片项目事实",
+      "kind": "custom",
+      "refersTo": "film-fact",
+      "description": "从实际四个影片 facts 提取；开放 dl，不是卡片。",
+      "html": "<div class=\"ds-world\"><dl class=\"ds-facts\"><div><dt>2 部</dt><dd>完整区域招商影片</dd></div><div><dt>2 人</dt><dd>项目协作规模</dd></div><div><dt>16:9</dt><dd>横版最终交付</dd></div><div><dt>全链路</dt><dd>个人负责范围</dd></div></dl></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-facts{display:flex;gap:40px;justify-content:space-between;margin:80px 0 130px;border-top:1px solid var(--mm-rule);padding-top:28px}.ds-facts dt{color:var(--mm-gold);font-size:clamp(32px,3.3vw,48px);line-height:1.15}.ds-facts dd{margin:14px 0 0;color:var(--mm-muted);font-size:14px}@media(max-width:700px){.ds-facts{flex-wrap:wrap;gap:36px 20px;margin:54px 0 100px}.ds-facts>div{flex-basis:45%}.ds-facts dt{font-size:34px}}"
+    },
+    {
+      "name": "原生影片框",
+      "kind": "custom",
+      "refersTo": "video-frame",
+      "description": "实际原生控件和 16:9 框体；静态预览不打包视频或 poster。",
+      "html": "<div class=\"ds-world\"><div class=\"ds-video-frame\"><video class=\"ds-video\" controls playsinline preload=\"metadata\" aria-label=\"浙江区域招商宣传片视频播放器\"></video></div></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-video-frame{min-width:0;aspect-ratio:16/9;background:var(--mm-raised)}.ds-video{display:block;width:100%;height:100%;object-fit:contain}.ds-video:focus-visible{outline:2px solid var(--mm-gold);outline-offset:5px}"
+    },
+    {
+      "name": "制作方法步骤",
+      "kind": "custom",
+      "refersTo": "method-row",
+      "description": "实际制作方法第一步；文案来自 aigcMethod.steps。",
+      "html": "<div class=\"ds-world\"><ol class=\"ds-method\"><li><span>01</span><div><h4>需求提炼</h4><p>把招商目标、受众和必须传递的信息整理成创作边界。</p></div></li></ol></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-method{list-style:none;padding:0;margin:0 0 0 198px;border-top:1px solid var(--mm-rule)}.ds-method li{display:grid;grid-template-columns:70px 1fr;gap:28px;padding:30px 0;border-bottom:1px solid var(--mm-rule)}.ds-method li>span{color:var(--mm-gold-deep);font-size:13px}.ds-method li>div{display:grid;grid-template-columns:180px 1fr;gap:30px}.ds-method h4{margin:0;font-size:21px;line-height:1.22;letter-spacing:-.025em;font-weight:500;text-wrap:balance}.ds-method p{margin:0;max-width:54ch;color:var(--mm-muted)}@media(max-width:1100px){.ds-method{margin-left:0}}@media(max-width:700px){.ds-method li{grid-template-columns:40px 1fr;gap:15px}.ds-method li>div{display:block}.ds-method p{margin-top:12px}}"
+    },
+    {
+      "name": "证据栏目标题",
+      "kind": "custom",
+      "refersTo": "evidence-heading",
+      "description": "实际证据 heading；保留其细线、索引与宋体标题，不合成截图或媒体。",
+      "html": "<div class=\"ds-world\"><header class=\"ds-evidence\"><div><span>03 / 内容表现成果</span><h3>单条内容的传播与互动</h3></div></header></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-evidence{display:flex;align-items:end;justify-content:space-between;gap:32px;border-top:1px solid var(--mm-rule);padding-top:24px;margin-bottom:80px}.ds-evidence span{color:var(--mm-champagne);font-size:12px;letter-spacing:.1em}.ds-evidence h3{color:var(--mm-gold);font:400 clamp(34px,5vw,76px)/1.2 \"Songti SC\",SimSun,serif;letter-spacing:-.025em;text-wrap:balance;margin:14px 0 0}@media(max-width:700px){.ds-evidence{display:block;margin-bottom:50px}.ds-evidence h3{font-size:40px}}"
+    },
+    {
+      "name": "回环中央句子",
+      "kind": "custom",
+      "refersTo": "orbit-statement",
+      "description": "现有十四单元、三行中央句子的可读静态快照；JS 时间轴在 extensions.motion 中记录。",
+      "html": "<div class=\"ds-world\"><p class=\"ds-statement\" aria-label=\"从定位、内容、投流到培训，建立一套可复制的 IP 孵化系统。\"><span class=\"ds-line\"><span>从定位、</span><span>内容、</span><span>投流</span><span>到</span><span>培训，</span></span><span class=\"ds-line\"><span>建立</span><span>一套</span><span>可</span><span>复制</span><span>的 </span></span><span class=\"ds-line\"><span>IP </span><span>孵化</span><span>系统</span><span>。</span></span></p></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-statement{display:flex;flex-direction:column;justify-content:center;align-items:center;width:min(900px,85vw);height:max-content;margin:auto;color:var(--mm-text);font:600 clamp(24px,3.5vw,64px)/1.3 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;text-align:center;pointer-events:none}.ds-line{display:block;overflow:hidden}.ds-line>span{display:inline;white-space:pre}@media(max-width:700px){.ds-statement{width:85vw;font-size:24px;line-height:1.5}}"
+    },
+    {
+      "name": "结尾后续操作",
+      "kind": "nav",
+      "refersTo": "closing-nav",
+      "description": "实际三个结尾链接，内联 SVG 图标，hover 与焦点取自路由 CSS。",
+      "html": "<div class=\"ds-world\"><nav class=\"ds-nav\" aria-label=\"案例后续操作\"><a href=\"/#case-studies\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m12 19-7-7 7-7M5 12h14\"/></svg>返回重点经历</a><a href=\"/cases/hengqian\">查看下一个案例<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></a><a href=\"/#contact\">联系我<svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></a></nav></div>",
+      "css": ".ds-world{--mm-black:#050505;--mm-raised:#0b0a08;--mm-gold:#f2c15b;--mm-gold-deep:#c9973e;--mm-champagne:#c8ae78;--mm-text:#e8dfcc;--mm-muted:#8f846f;--mm-rule:rgba(200,174,120,.2);--mm-gutter:clamp(24px,5.2vw,88px);background:var(--mm-black);color:var(--mm-text);font:400 16px/1.7 \"Kanit\",\"PingFang SC\",\"Microsoft YaHei\",sans-serif;font-variant-numeric:tabular-nums}.ds-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;border-top:1px solid var(--mm-rule);margin-top:110px;padding-top:24px}.ds-nav a{display:inline-flex;align-items:center;gap:9px;min-height:44px;font-size:13px;color:var(--mm-text);text-decoration:none}.ds-nav svg{width:16px;height:16px}.ds-nav a:hover{color:var(--mm-gold)}.ds-nav a:focus-visible{outline:2px solid var(--mm-gold);outline-offset:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "鸣鸣很忙案例页：参考行为复刻",
+    "overview": "这是已经在 `direction.md` 确认的方向名称；本文件不另命名新世界。用户指定黑金配色，以真实项目作品和增长证据为主体，保留参考运动的结构、时间关系与空间层次。大尺度宋体标题、不对称岗位栏和长段黑色留白共同组织阅读，香槟金用于结构，亮金用于标题与关键结果。\n\n本文件只约束 `MingmingCasePage` 及其 `AccountOrbit` 和 `mingming-hierarchy.css` 路由范围，不替代项目根 `DESIGN.md` 或其他页面的视觉身份。来自 `PRODUCT.md` 的持久约束是温暖、精确、有把握的表达，以及运动有序、键盘可达、降低动态和手机可读。具体内容顺序、账号数量及参考时间轴属于此详情页实例，不是全站通用规则。",
+    "keyCharacteristics": [
+      "黑色连续画布，亮金标题，香槟金结构线与编号。",
+      "宋体标题搭配无衬线正文，真实媒体保留自身色彩。",
+      "大留白、不对称排布、原生影片控件与开放式证据序列。",
+      "滚动驱动的八张空间回环，随后自然展示四张账号证据。",
+      "降低动态时完整保留十二张账号证据和可读正文。"
+    ],
+    "rules": [
+      {
+        "name": "The Route Scope Rule",
+        "body": "黑金变量只在鸣鸣很忙详情路由生效；离开路由时移除根元素的背景覆盖类，不向其他页面传播视觉身份。",
+        "section": "colors"
+      },
+      {
+        "name": "The Ordered Motion Rule",
+        "body": "八张账号每张只经历左入、完整一周、右出；位置和可见度由局部 scroll progress 决定，禁止自动计时循环、滚轮拦截和随机轨道。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do 将黑金 token 和背景覆盖限制在鸣鸣很忙详情路由。",
+      "Do 保留原生 16:9 影片控件、真实证据比例及有意义的 alt。",
+      "Do 保留八张完整回环与四张后续自然展示，并在降低动态时展示十二张唯一账号。",
+      "Do 以对应元素的局部 progress 校准运动，并区分整页与回环百分比。",
+      "Do 保留金色键盘焦点、44px 链接触达尺度和手机单列阅读。",
+      "Do 将参考校准值、账号裁切与具体证据数量视为本页实例参数。"
+    ],
+    "donts": [
+      "Don't 覆盖根 DESIGN.md 或将这个路由的黑金身份替换到其他页面。",
+      "Don't 引入卡片墙、轮播、折叠、可点击章节轨道、自动循环或滚轮拦截。",
+      "Don't 添加参考流体背景或借用参考图片、文案、字体文件和源代码。",
+      "Don't 把 X 半径写成 0.34vw，或把桌面 Y 半径写成 0.2vh。",
+      "Don't 为不存在的输入框、chips 或按钮系统生成应用 token。",
+      "Don't 将预览用 tonalRamp 当作实现色板，或把静态 sidecar 片段当作完整运动组件。"
+    ]
+  }
+}

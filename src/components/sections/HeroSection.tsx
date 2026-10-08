@@ -1,7 +1,5 @@
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-
-const ease = [0.25, 0.1, 0.25, 1] as const;
 
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("zh-CN", {
@@ -31,10 +29,17 @@ export function HeroSection() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "-9%"]);
-  const introY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "3%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.36, 1.42]);
+  // Smooth the element motion, not the document scroll, so native input stays responsive.
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 110,
+    damping: 22,
+    mass: 0.65,
+    restDelta: 0.0001,
+  });
+  // One split-cover handoff: typography exits first, while the portrait lingers.
+  // Keep children together and the portrait crop fixed throughout the sequence.
+  const leftY = useTransform(progress, [0, 0.12, 0.68, 1], ["0vh", "-3vh", "-32vh", "-42vh"]);
+  const rightY = useTransform(progress, [0, 0.16, 0.72, 1], ["0vh", "0vh", "12vh", "16vh"]);
 
   useEffect(() => {
     let timer: number;
@@ -60,65 +65,42 @@ export function HeroSection() {
       style={{ minHeight: "100vh" }}
     >
       <div className="hero-cover-grid">
-        <div className="hero-cover-left">
-          <motion.div
-            className="hero-cover-title-wrap"
-            style={{
-              y: shouldReduceMotion ? "0%" : titleY,
-            }}
-          >
-            <motion.h1
+        <motion.div className="hero-cover-left" style={{ y: shouldReduceMotion ? 0 : leftY }}>
+          <div className="hero-cover-title-wrap">
+            <h1
               className="hero-cover-title notranslate"
               translate="no"
-              initial={false}
-              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ delay: 0.12, duration: 0.95, ease }}
             >
               <span>WU</span>
               <span>JIAHAO</span>
-            </motion.h1>
-          </motion.div>
+            </h1>
+          </div>
 
-          <motion.p
-            className="hero-cover-intro"
-            style={{
-              y: shouldReduceMotion ? "0%" : introY,
-            }}
-            initial={false}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ delay: 0.24, duration: 0.82, ease }}
-          >
+          <p className="hero-cover-intro">
             Building content systems where business, AI, and creator growth
             become repeatable practice.
-          </motion.p>
+          </p>
 
-          <motion.div
+          <div
             className="hero-cover-meta notranslate"
             translate="no"
-            initial={false}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={{ delay: 0.42, duration: 0.8, ease }}
           >
             {meta.map((item) => (
               <p key={item}>{item}</p>
             ))}
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
-        <div className="hero-cover-right">
+        <motion.div className="hero-cover-right" style={{ y: shouldReduceMotion ? 0 : rightY }}>
           <motion.img
             src="/assets/hero-portrait.png"
             alt="Jack Wu portrait"
             className="hero-cover-image"
             style={{
-              y: shouldReduceMotion ? "0%" : imageY,
-              scale: shouldReduceMotion ? 1 : imageScale,
+              scale: 1.36,
             }}
-            initial={false}
-            animate={shouldReduceMotion ? undefined : { opacity: 1 }}
-            transition={{ delay: 0.08, duration: 1.05, ease }}
           />
-        </div>
+        </motion.div>
       </div>
     </section>
   );
