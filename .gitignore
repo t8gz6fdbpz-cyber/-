@@ -15,3 +15,4 @@ dist
 /artifacts/mingming-*/
 /artifacts/react-bits-*/
 /vite-restart.*.log
+/.sites-checkout/
