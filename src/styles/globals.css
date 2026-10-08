@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -4154,6 +4152,23 @@ main > section {
   place-items: center;
   color: var(--color-text-muted);
   text-align: center;
+}
+
+.viewport-image {
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.viewport-image[data-decoded="true"] { opacity: 1; }
+
+.route-loading {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport-image { transition: none; }
 }
 
 .toolbox-section .tool-category-index {

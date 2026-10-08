@@ -3,6 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowLeft, ArrowRight, BookOpen, ChevronRight, Clapperboard, ClipboardList, Layers, MapPin, Sparkles } from "lucide-react";
 
 import { AccountOrbit } from "../components/ui/AccountOrbit";
+import { ViewportImage } from "../components/ui/ViewportImage";
 import { TrainingDepthGallery } from "../components/ui/TrainingDepthGallery";
 import {
   accountGrowthResults,
@@ -84,7 +85,7 @@ function EvidenceImage({ media, className = "" }: { media: MingmingMedia; classN
   if (!media.src) return null;
   return (
     <figure className={`mm-evidence-image ${className}`} data-evidence-id={media.id}>
-      <div className="mm-evidence-image-frame"><img src={media.src} alt={media.alt} loading="lazy" decoding="async" draggable={false} width={media.width} height={media.height} /></div>
+      <div className="mm-evidence-image-frame"><ViewportImage src={media.src} alt={media.alt} loading="lazy" draggable={false} width={media.width} height={media.height} /></div>
       <figcaption><strong>{media.title}</strong><span>{media.caption}</span></figcaption>
     </figure>
   );

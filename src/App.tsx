@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 import { AboutSection } from "./components/sections/AboutSection";
 import { CaseStudiesPreviewSection } from "./components/sections/CaseStudiesPreviewSection";
@@ -9,12 +10,13 @@ import { MarqueeSection } from "./components/sections/MarqueeSection";
 import { SkillsMatrixSection } from "./components/sections/ServicesSection";
 import { FloatingEmailButton } from "./components/ui/FloatingEmailButton";
 import { FloatingLogoNav } from "./components/ui/FloatingLogoNav";
-import { CaseStudyPage } from "./pages/CaseStudyPage";
-import { InterestPage } from "./pages/InterestPage";
-import { ListPage } from "./pages/ListPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
-import { WorksPage } from "./pages/WorksPage";
 import { RouteEffects } from "./routing";
+
+const CaseStudyPage = lazy(() => import("./pages/CaseStudyPage").then(m => ({ default: m.CaseStudyPage })));
+const InterestPage = lazy(() => import("./pages/InterestPage").then(m => ({ default: m.InterestPage })));
+const ListPage = lazy(() => import("./pages/ListPage").then(m => ({ default: m.ListPage })));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
+const WorksPage = lazy(() => import("./pages/WorksPage").then(m => ({ default: m.WorksPage })));
 
 function HomePage() {
   return (
@@ -43,9 +45,10 @@ function InterestRoute() {
 function PortfolioApp() {
   return (
     <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[var(--color-bg)]">
-      <RouteEffects />
       <FloatingLogoNav />
       <FloatingEmailButton />
+      <Suspense fallback={<div className="route-loading" role="status">正在打开页面…</div>}>
+      <RouteEffects />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/works" element={<WorksPage />} />
@@ -56,6 +59,7 @@ function PortfolioApp() {
         <Route path="/interests/:slug" element={<InterestRoute />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </Suspense>
     </main>
   );
 }

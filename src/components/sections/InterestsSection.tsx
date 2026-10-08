@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import { PortfolioLink } from "../../routing";
 import { interests } from "../../utils/interestsData";
+import { ViewportImage } from "../ui/ViewportImage";
 
 export function InterestsSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -47,7 +48,7 @@ export function InterestsSection() {
               data-image-status={interest.imageStatus}
             >
               <figure className="interests-showcase-poster">
-                <img
+                <ViewportImage
                   className="interests-showcase-image"
                   src={interest.image}
                   alt={interest.imageAlt}

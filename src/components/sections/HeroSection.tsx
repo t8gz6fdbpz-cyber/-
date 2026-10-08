@@ -1,6 +1,8 @@
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { heroPortrait } from "../../utils/portfolioData";
+
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
@@ -93,8 +95,13 @@ export function HeroSection() {
 
         <motion.div className="hero-cover-right" style={{ y: shouldReduceMotion ? 0 : rightY }}>
           <motion.img
-            src="/assets/hero-portrait.png"
-            alt="Jack Wu portrait"
+            src={heroPortrait}
+            alt="吴嘉豪身着深色西装的正面肖像"
+            width={1400}
+            height={1042}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="hero-cover-image"
             style={{
               scale: 1.36,

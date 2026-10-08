@@ -39,6 +39,7 @@ export type ToolGalaxyTool = {
 };
 
 type ToolGalaxy3DProps = {
+  renderingActive: boolean;
   activeCategory: ToolCategory | null;
   cardResourcesReady: boolean;
   focusedToolId: string | null;
@@ -74,6 +75,7 @@ const compactMorphOwnershipHandoff = 0.02;
 const returnMorphOwnershipHandoff = 0.02;
 const iconTextureCache = new Map<string, THREE.Texture>();
 const iconTextureRequests = new Map<string, Promise<THREE.Texture>>();
+const galaxyDiagnostics = import.meta.env.DEV || import.meta.env.VITE_GALAXY_DEBUG === "true";
 const maxPlanetOccluders = 12;
 let iconTextureLoader: THREE.TextureLoader | null = null;
 type LoadedIconImage = CanvasImageSource & {
@@ -1459,6 +1461,22 @@ function PlanetProjectionObserver({
   const recordsRef = useRef<PlanetProjectionRecord[]>([]);
   const bufferSizeRef = useRef(new THREE.Vector2());
   const worldPositionRef = useRef(new THREE.Vector3());
+  const filterBottomRef = useRef(0);
+
+  useLayoutEffect(() => {
+    const filter = gl.domElement.closest(".tool-desktop-layout")
+      ?.querySelector<HTMLElement>(".tool-category-index");
+    const measure = () => {
+      filterBottomRef.current = filter
+        ? Math.max(0, filter.getBoundingClientRect().bottom - gl.domElement.getBoundingClientRect().top)
+        : 0;
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (filter) observer.observe(filter);
+    observer.observe(gl.domElement);
+    return () => observer.disconnect();
+  }, [gl, size.width, size.height]);
 
   const refreshRecords = () => {
     const groups = new Map<string, THREE.Group>();
@@ -1494,13 +1512,7 @@ function PlanetProjectionObserver({
     );
     if (visibleRecords.length === 0) return;
 
-    const canvasRect = gl.domElement.getBoundingClientRect();
-    const filter = gl.domElement
-      .closest(".tool-desktop-layout")
-      ?.querySelector<HTMLElement>(".tool-category-index");
-    const filterBottom = filter
-      ? Math.max(0, filter.getBoundingClientRect().bottom - canvasRect.top)
-      : 0;
+    const filterBottom = filterBottomRef.current;
     const safetyGap = compact ? 8 : 32;
     let boundaryViolations = 0;
 
@@ -2046,7 +2058,7 @@ function GalaxyScene({
   onSelectTool,
 }: Omit<
   ToolGalaxy3DProps,
-  "cardResourcesReady" | "onResourceStateChange" | "preloadRequested"
+  "cardResourcesReady" | "onResourceStateChange" | "preloadRequested" | "renderingActive"
 > & {
   interactionReady: boolean;
 }) {
@@ -2066,7 +2078,7 @@ function GalaxyScene({
     return {
       x: THREE.MathUtils.clamp(
         safeHorizontalScale,
-        compact ? 0.32 : 0.4,
+        compact ? 0.12 : 0.4,
         1,
       ),
       y: compact ? 1.35 : 1,
@@ -2100,17 +2112,17 @@ function GalaxyScene({
     <>
       <ambientLight intensity={1.3} />
       <ResponsiveCamera />
-      <PerformanceProbe
+      {galaxyDiagnostics ? <PerformanceProbe
         interactionPhase={interactionPhase}
         transitionToken={transitionToken}
-      />
-      <VisualOwnershipProbe
+      /> : null}
+      {galaxyDiagnostics ? <VisualOwnershipProbe
         detailPanelRef={detailPanelRef}
         focusedToolId={focusedToolId}
         interactionPhase={interactionPhase}
         tools={tools}
         transitionToken={transitionToken}
-      />
+      /> : null}
       <PlanetProjectionObserver
         compact={size.width < 520}
         occlusionState={occlusionState}
@@ -2173,6 +2185,7 @@ function GalaxyScene({
 }
 
 export const ToolGalaxy3D = memo(function ToolGalaxy3D({
+  renderingActive,
   activeCategory,
   cardResourcesReady,
   detailPanelRef,
@@ -2238,13 +2251,15 @@ export const ToolGalaxy3D = memo(function ToolGalaxy3D({
       className="tool-galaxy-stage"
       data-resources-ready={interactionReady}
       data-texture-preload-ms={preloadDuration.toFixed(1)}
+      data-rendering-active={renderingActive}
       aria-busy={!interactionReady}
       aria-label="3D 原子轨道式工具星系"
     >
       <Canvas
+        frameloop={renderingActive ? "always" : "never"}
         orthographic
         camera={{ far: 30, near: 0.1, position: [0, 0, 10], zoom: 100 }}
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         onPointerMissed={onClearFocus}
       >

@@ -18,8 +18,8 @@ import {
 } from "react";
 
 import { useMarqueeOffset } from "../../hooks/useMarqueeOffset";
+import { ViewportImage } from "../ui/ViewportImage";
 import {
-  marqueeAccounts,
   repeatedMarqueeRowOne,
   repeatedMarqueeRowTwo,
   type MarqueeAccount,
@@ -109,9 +109,11 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
         onPointerMove={handlePointerMove}
         onPointerLeave={resetTilt}
       >
-        <img
+        <ViewportImage
           src={account.image}
-          alt={`Douyin account card, ${account.followers} followers, ${account.likes} likes`}
+          srcSet={account.imageSrcSet}
+          sizes="(max-width: 767px) 300px, 432px"
+          alt={`抖音账号记录，${account.followers}粉丝，${account.likes}获赞`}
           width={432}
           height={282}
           loading="lazy"
@@ -125,8 +127,6 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
 }
 
 const MemoizedMarqueeImage = memo(MarqueeImage);
-
-const prewarmedImages = new Set<string>();
 
 export function MarqueeSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -148,38 +148,6 @@ export function MarqueeSection() {
   const entryOpacity = useTransform(smoothEntry, [0, 0.18, 0.78, 1], [0, 0.08, 1, 1]);
   const entryY = useTransform(smoothEntry, [0, 0.85, 1], [120, 0, 0]);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) {
-      return;
-    }
-
-    const preloadObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        marqueeAccounts.forEach(({ image }) => {
-          if (prewarmedImages.has(image)) {
-            return;
-          }
-
-          prewarmedImages.add(image);
-          const img = new Image();
-          img.decoding = "async";
-          img.src = image;
-          void img.decode?.().catch(() => undefined);
-        });
-        preloadObserver.disconnect();
-      },
-      { rootMargin: "1400px 0px" },
-    );
-
-    preloadObserver.observe(section);
-    return () => preloadObserver.disconnect();
-  }, []);
-
   useAnimationFrame((_, delta) => {
     if (shouldReduceMotion || !isVisible || rowWidths.one === 0 || rowWidths.two === 0) {
       return;
@@ -195,12 +163,12 @@ export function MarqueeSection() {
         return 0;
       }
 
-      const sequenceLength = row.children.length / 3;
+      const sequenceLength = row.children.length / 2;
       const nextSequence = row.children.item(sequenceLength) as
         | HTMLElement
         | null;
 
-      return nextSequence?.offsetLeft ?? row.scrollWidth / 3;
+      return nextSequence?.offsetLeft ?? row.scrollWidth / 2;
     };
 
     const measureRows = () => {

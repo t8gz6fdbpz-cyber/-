@@ -4,13 +4,12 @@ const MEDIA_KEY_PREFIX = "portfolio-v1--";
 const LOCAL_MEDIA_PREFIXES = ["/assets/", "/images/", "/toolbox/"];
 const BITMAP_EXTENSION = /\.(?:png|jpe?g)$/i;
 
-const mediaOrigin = (
-  import.meta.env.VITE_MEDIA_ORIGIN || DEFAULT_MEDIA_ORIGIN
-).replace(/\/$/, "");
+const mediaOrigin = (import.meta.env.VITE_MEDIA_ORIGIN || "").replace(/\/$/, "");
 
 /**
- * Maps replaceable local media paths to the optimized, public COS objects.
- * Original source files stay in /public as an editing and replacement fallback.
+ * Images use same-origin WebP files so EdgeOne caches and serves them alongside
+ * the site. Large videos stay on COS. VITE_MEDIA_ORIGIN optionally opts images
+ * back into the existing flat COS object layout.
  */
 export function mediaUrl(source: string): string {
   if (
@@ -24,11 +23,12 @@ export function mediaUrl(source: string): string {
   }
 
   const optimizedPath = source.replace(BITMAP_EXTENSION, ".webp");
+  if (!mediaOrigin && !/\.mp4$/i.test(source)) return optimizedPath;
   const objectKey = `${MEDIA_KEY_PREFIX}${optimizedPath
     .replace(/^\//, "")
     .replace(/\//g, "--")}`;
 
-  return `${mediaOrigin}/${objectKey}`;
+  return `${mediaOrigin || DEFAULT_MEDIA_ORIGIN}/${objectKey}`;
 }
 
 export const mediaOriginUrl = mediaOrigin;

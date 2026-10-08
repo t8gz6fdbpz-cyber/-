@@ -12,6 +12,8 @@ import {
 } from "react";
 import type { CSSProperties, ReactNode } from "react";
 
+import { mediaUrl } from "../../utils/media";
+
 import type {
   GalaxyInteractionPhase,
   ToolCategory,
@@ -70,7 +72,7 @@ const categoryMeta: Array<{
   { name: "平台运营", note: "分发、直播、社群和增长", accent: "#8a5a18" },
 ];
 
-const tools: ToolGalaxyTool[] = [
+const toolSources: ToolGalaxyTool[] = [
   {
     id: "chatgpt",
     name: "ChatGPT",
@@ -243,6 +245,11 @@ const tools: ToolGalaxyTool[] = [
     phase: 0,
   },
 ];
+
+const tools: ToolGalaxyTool[] = toolSources.map((tool) => ({
+  ...tool,
+  icon: tool.icon ? mediaUrl(tool.icon) : undefined,
+}));
 
 type GalaxySupportState = "loading" | "supported" | "unsupported";
 type ToolCardTheme = {
@@ -497,6 +504,7 @@ export function SkillsMatrixSection() {
   const [rawAssetsReady, setRawAssetsReady] = useState(false);
   const [galaxyResourcesReady, setGalaxyResourcesReady] = useState(false);
   const [mountedPanelCount, setMountedPanelCount] = useState(0);
+  const [galaxyVisible, setGalaxyVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const detailPanelRef = useRef<HTMLElement | null>(null);
   const panelElementsRef = useRef(new Map<string, HTMLElement>());
@@ -538,12 +546,29 @@ export function SkillsMatrixSection() {
         setPreloadRequested(true);
         observer.disconnect();
       },
-      { rootMargin: "240px 0px" },
+      { rootMargin: "1000px 0px" },
     );
     observer.observe(section);
 
     return () => observer.disconnect();
   }, [preloadRequested]);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    let inViewport = false;
+    const update = () => setGalaxyVisible(inViewport && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      inViewport = entry.isIntersecting;
+      update();
+    });
+    observer.observe(section);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
 
   useEffect(() => {
     if (!preloadRequested) return;
@@ -739,7 +764,7 @@ export function SkillsMatrixSection() {
             ))}
           </div>
 
-          {galaxySupport === "loading" ? (
+          {!preloadRequested || galaxySupport === "loading" ? (
             <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
               正在加载 3D 星系
             </div>
@@ -762,6 +787,7 @@ export function SkillsMatrixSection() {
                 }
               >
                 <ToolGalaxy3D
+                  renderingActive={galaxyVisible}
                   activeCategory={activeCategory}
                   cardResourcesReady={cardResourcesReady}
                   detailPanelRef={detailPanelRef}
@@ -782,7 +808,7 @@ export function SkillsMatrixSection() {
             </ToolGalaxyErrorBoundary>
           )}
 
-          {tools.map((tool) => (
+          {preloadRequested ? tools.map((tool) => (
             <ToolInfoPanel
               key={tool.id}
               active={focusedToolId === tool.id}
@@ -793,7 +819,7 @@ export function SkillsMatrixSection() {
               }
               onClose={clearFocus}
             />
-          ))}
+          )) : null}
         </div>
       </div>
     </section>

@@ -1,3 +1,5 @@
+import { mediaUrl } from "../utils/media";
+
 export type LocalPhoto = {
   src: string;
   alt: string;
@@ -34,7 +36,7 @@ export const sportsRecords = [
     name: "健身",
     note: "稳住呼吸，把每一次重复做完整。",
     photo: {
-      src: "/images/interests/sports/fitness.jpg",
+      src: mediaUrl("/images/interests/sports/fitness.jpg"),
       alt: "训练者在明亮健身房里进行力量训练",
       ratio: "portrait",
       replacementNote: "建议替换为 4:5 竖幅健身照片",
@@ -44,7 +46,7 @@ export const sportsRecords = [
     name: "骑行",
     note: "路面向前展开，速度让思绪慢慢变轻。",
     photo: {
-      src: "/images/interests/sports/cycling.jpg",
+      src: mediaUrl("/images/interests/sports/cycling.jpg"),
       alt: "骑行者沿开阔山路向前骑行",
       ratio: "landscape",
       replacementNote: "建议替换为 3:2 横幅骑行照片",
@@ -54,7 +56,7 @@ export const sportsRecords = [
     name: "登山",
     note: "一步一步向上，身体会找到自己的节拍。",
     photo: {
-      src: "/images/interests/sports/hiking.jpg",
+      src: mediaUrl("/images/interests/sports/hiking.jpg"),
       alt: "登山者背着背包走在山间小径上",
       ratio: "portrait",
       replacementNote: "建议替换为 4:5 竖幅登山照片",
@@ -64,7 +66,7 @@ export const sportsRecords = [
     name: "攀岩",
     note: "专注落在手脚之间，下一处支点自然出现。",
     photo: {
-      src: "/images/interests/sports/climbing.jpg",
+      src: mediaUrl("/images/interests/sports/climbing.jpg"),
       alt: "攀岩者在自然岩壁上寻找支点",
       ratio: "landscape",
       replacementNote: "建议替换为 3:2 横幅攀岩照片",
@@ -74,7 +76,7 @@ export const sportsRecords = [
     name: "羽毛球",
     note: "轻快的来回里，反应与默契同时醒来。",
     photo: {
-      src: "/images/interests/sports/badminton.jpg",
+      src: mediaUrl("/images/interests/sports/badminton.jpg"),
       alt: "羽毛球运动员在球场上挥拍击球",
       ratio: "square",
       replacementNote: "建议替换为 1:1 或 4:3 羽毛球照片",
@@ -84,7 +86,7 @@ export const sportsRecords = [
     name: "游泳",
     note: "水声包住呼吸，动作回到最直接的节奏。",
     photo: {
-      src: "/images/interests/sports/swimming.jpg",
+      src: mediaUrl("/images/interests/sports/swimming.jpg"),
       alt: "游泳者在泳池水面划水前进",
       ratio: "wide",
       replacementNote: "建议替换为 16:9 横幅游泳照片",
@@ -112,7 +114,7 @@ export const travelRecords = travelRecordRows.map(([place, story, filename, alt,
   place,
   story,
   photo: {
-    src: `/images/interests/travel/${filename}`,
+    src: mediaUrl(`/images/interests/travel/${filename}`),
     alt,
     ratio,
     replacementNote: `建议保持${ratio === "portrait" ? "竖幅" : ratio === "square" ? "方幅" : "横幅"}构图`,
@@ -124,22 +126,22 @@ export const singingPhotos = [
   {
     label: "主图",
     note: "适合替换为年会舞台、排练或演唱中的个人照片。",
-    photo: { src: "/images/interests/singing/singing-main.svg", alt: "唱歌主图照片占位，推荐四比五竖幅", ratio: "portrait", replacementNote: "推荐比例 4:5" },
+    photo: { src: mediaUrl("/images/interests/singing/singing-main.svg"), alt: "唱歌主图照片占位，推荐四比五竖幅", ratio: "portrait", replacementNote: "推荐比例 4:5" },
   },
   {
     label: "侧拍 A",
     note: "适合替换为侧身、候场或调试麦克风的照片。",
-    photo: { src: "/images/interests/singing/singing-side-a.svg", alt: "唱歌辅助照片占位，推荐三比四竖幅", ratio: "portrait", replacementNote: "推荐比例 3:4" },
+    photo: { src: mediaUrl("/images/interests/singing/singing-side-a.svg"), alt: "唱歌辅助照片占位，推荐三比四竖幅", ratio: "portrait", replacementNote: "推荐比例 3:4" },
   },
   {
     label: "侧拍 B",
     note: "适合替换为舞台细节或近距离表情照片。",
-    photo: { src: "/images/interests/singing/singing-side-b.svg", alt: "唱歌辅助照片占位，推荐一比一方幅", ratio: "square", replacementNote: "推荐比例 1:1" },
+    photo: { src: mediaUrl("/images/interests/singing/singing-side-b.svg"), alt: "唱歌辅助照片占位，推荐一比一方幅", ratio: "square", replacementNote: "推荐比例 1:1" },
   },
   {
     label: "横幅",
     note: "适合替换为完整舞台、合唱或环境全景。",
-    photo: { src: "/images/interests/singing/singing-banner.svg", alt: "唱歌横幅照片占位，推荐十六比七横幅", ratio: "wide", replacementNote: "推荐比例 16:7" },
+    photo: { src: mediaUrl("/images/interests/singing/singing-banner.svg"), alt: "唱歌横幅照片占位，推荐十六比七横幅", ratio: "wide", replacementNote: "推荐比例 16:7" },
   },
 ] satisfies readonly PlaceholderRecord[];
 
@@ -155,7 +157,7 @@ export const readingArticles = [1, 2, 3].map((index) => ({
   label: `文章截图 ${String(index).padStart(2, "0")}`,
   note: "替换为真实文章页面或 Obsidian 成稿截图。",
   photo: {
-    src: `/images/interests/reading/article-0${index}.svg`,
+    src: mediaUrl(`/images/interests/reading/article-0${index}.svg`),
     alt: `文章输出截图占位 ${index}`,
     ratio: "landscape" as const,
     replacementNote: "推荐比例 4:3",
@@ -166,7 +168,7 @@ export const readingSystemShots = [1, 2, 3, 4].map((index) => ({
   label: `学习系统 ${String(index).padStart(2, "0")}`,
   note: "替换为真实的 AI 对话、学习 Skill、Obsidian 或学习过程截图。",
   photo: {
-    src: `/images/interests/reading/system-0${index}.svg`,
+    src: mediaUrl(`/images/interests/reading/system-0${index}.svg`),
     alt: `交互式学习系统截图占位 ${index}`,
     ratio: "wide" as const,
     replacementNote: "推荐比例 16:10",

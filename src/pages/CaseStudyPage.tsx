@@ -1,4 +1,6 @@
 import { ArrowLeft } from "lucide-react";
+import "../styles/mingming-hierarchy.css";
+import "../styles/hengqian-case.css";
 
 import { DetailBackLink } from "../routing";
 import { getCaseStudy } from "../utils/caseStudies";

@@ -1,4 +1,5 @@
 import { repeatItems } from "./repeatItems";
+import { mediaUrl } from "./media";
 
 export type NavItem = {
   label: string;
@@ -22,6 +23,7 @@ export type Project = {
 
 export type MarqueeAccount = {
   image: string;
+  imageSrcSet?: string;
   likes: string;
   followers: string;
 };
@@ -35,8 +37,7 @@ export const navItems: NavItem[] = [
   { label: "联系我", href: "#contact" },
 ];
 
-export const heroPortrait =
-  "https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png";
+export const heroPortrait = mediaUrl("/assets/hero-portrait.png");
 
 export const aboutCopy =
   "I am building a personal growth system around content, business, and AI creation. Through continuous practice, structured reflection, and collaborative experiments, I turn ideas into repeatable methods and long-term value.";
@@ -64,7 +65,7 @@ const sortAccountsByReach = (items: MarqueeAccount[]) =>
     return parseMetric(b.likes) - parseMetric(a.likes);
   });
 
-export const marqueeAccounts: MarqueeAccount[] = [
+const marqueeAccountSources: MarqueeAccount[] = [
   { image: "/assets/daren-gallery-01.jpg", likes: "1128", followers: "1.3万" },
   { image: "/assets/daren-gallery-02.jpg", likes: "2433", followers: "1.9万" },
   { image: "/assets/daren-gallery-03.jpg", likes: "773", followers: "1.8万" },
@@ -82,6 +83,12 @@ export const marqueeAccounts: MarqueeAccount[] = [
   { image: "/assets/daren-gallery-15.jpg", likes: "3.9万", followers: "1.9万" },
   { image: "/assets/daren-gallery-16.jpg", likes: "21.2万", followers: "26.7万" },
 ];
+
+export const marqueeAccounts = marqueeAccountSources.map((account) => ({
+  ...account,
+  image: account.image.replace(/\.jpg$/, ".thumb-864.webp"),
+  imageSrcSet: `${account.image.replace(/\.jpg$/, ".thumb-432.webp")} 432w, ${account.image.replace(/\.jpg$/, ".thumb-864.webp")} 864w`,
+}));
 
 export const sortedMarqueeAccounts = sortAccountsByReach(marqueeAccounts);
 
@@ -119,8 +126,8 @@ const growthVisualRowTwo = [
   "https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif",
 ];
 
-export const repeatedMarqueeRowOne = repeatItems(marqueeRowOne, 3);
-export const repeatedMarqueeRowTwo = repeatItems(marqueeRowTwo, 3);
+export const repeatedMarqueeRowOne = repeatItems(marqueeRowOne, 2);
+export const repeatedMarqueeRowTwo = repeatItems(marqueeRowTwo, 2);
 
 export const skills: Skill[] = [
   {
