@@ -1,7 +1,9 @@
 import {
   motion,
-  useAnimationFrame,
+  frame,
+  cancelFrame,
   useMotionValue,
+  useMotionValueEvent,
   useInView,
   useReducedMotion,
   useScroll,
@@ -155,15 +157,21 @@ export function MarqueeSection() {
   });
   const entryOpacity = useTransform(smoothEntry, [0, 0.18, 0.78, 1], [0, 0.08, 1, 1]);
   const entryY = useTransform(smoothEntry, [0, 0.85, 1], [120, 0, 0]);
-
-  useAnimationFrame((_, delta) => {
-    if (shouldReduceMotion || !isVisible || rowWidths.one === 0 || rowWidths.two === 0) {
-      return;
-    }
-
-    const nextOffset = idleOffset.get() + (Math.min(delta, 64) / 1000) * 6;
-    idleOffset.set(nextOffset);
+  const [hasVisibleContent, setHasVisibleContent] = useState(false);
+  useMotionValueEvent(entryOpacity, "change", (opacity) => {
+    setHasVisibleContent((visible) => visible === (opacity > 0) ? visible : opacity > 0);
   });
+
+  useEffect(() => {
+    // The observer margin includes the gallery below the hero. Do not advance
+    // its invisible rows until the existing entry fade actually starts.
+    if (shouldReduceMotion || !isVisible || !hasVisibleContent || !rowWidths.one || !rowWidths.two) return;
+    const advance = ({ delta }: { delta: number }) => {
+      idleOffset.set(idleOffset.get() + (Math.min(delta, 64) / 1000) * 6);
+    };
+    frame.update(advance, true);
+    return () => cancelFrame(advance);
+  }, [idleOffset, isVisible, hasVisibleContent, rowWidths.one, rowWidths.two, shouldReduceMotion]);
 
   useEffect(() => {
     const getSequenceWidth = (row: HTMLDivElement | null) => {

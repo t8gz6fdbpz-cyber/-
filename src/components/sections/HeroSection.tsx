@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { heroPortrait } from "../../utils/portfolioData";
 
-const formatDate = (date: Date) =>
+export const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
     month: "long",
@@ -11,7 +11,7 @@ const formatDate = (date: Date) =>
     timeZone: "Asia/Shanghai",
   }).format(date);
 
-const formatTime = (date: Date) => {
+export const formatTime = (date: Date) => {
   const time = new Intl.DateTimeFormat("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
@@ -23,10 +23,10 @@ const formatTime = (date: Date) => {
   return `${time}${hour >= 12 ? "pm" : "am"}`;
 };
 
-export function HeroSection() {
+export function HeroSection({ initialTimestamp }: { initialTimestamp?: number }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(() => new Date(initialTimestamp ?? Date.now()));
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],

@@ -309,16 +309,17 @@ function writeMorphPanelFrame(
   target: MorphPanelTarget,
   worldPosition: THREE.Vector3,
   camera: THREE.Camera,
-  canvas: HTMLCanvasElement,
+  viewportWidth: number,
+  viewportHeight: number,
   progress: number,
   compact: boolean,
   returning: boolean,
 ) {
   const projected = tempProjectedPosition.copy(worldPosition).project(camera);
   const centerX =
-    target.canvasOffsetX + ((projected.x + 1) / 2) * canvas.clientWidth;
+    target.canvasOffsetX + ((projected.x + 1) / 2) * viewportWidth;
   const centerY =
-    target.canvasOffsetY + ((1 - projected.y) / 2) * canvas.clientHeight;
+    target.canvasOffsetY + ((1 - projected.y) / 2) * viewportHeight;
   const ownershipHandoff = returning
     ? returnMorphOwnershipHandoff
     : compact
@@ -1277,10 +1278,6 @@ function ToolPlanet({
         : categoryActive
             ? 1
             : 0.88;
-    tempCameraSpacePosition
-      .copy(tempPosition)
-      .applyMatrix4(camera.matrixWorldInverse);
-    const cameraDepth = -tempCameraSpacePosition.z;
     const depthRatio = THREE.MathUtils.clamp(
       (tempPosition.z + 1.2) / 2.4,
       0,
@@ -1302,7 +1299,10 @@ function ToolPlanet({
     if (groupRef.current) {
       groupRef.current.visible = !cardOwnsVisual;
       groupRef.current.userData.visualPhase = visualPhase;
-      groupRef.current.userData.cameraDepth = cameraDepth;
+      if (galaxyDiagnostics) {
+        tempCameraSpacePosition.copy(tempPosition).applyMatrix4(camera.matrixWorldInverse);
+        groupRef.current.userData.cameraDepth = -tempCameraSpacePosition.z;
+      }
       groupRef.current.userData.depthScale = depthScale;
       groupRef.current.userData.iconOpacity = iconOpacity;
       groupRef.current.userData.iconWorldScale = compact ? 0.88 : 0.72;
@@ -1311,12 +1311,8 @@ function ToolPlanet({
       groupRef.current.userData.panelTransitionToken = ownsPanel
         ? transitionToken
         : 0;
-      if (!initializedRef.current) {
-        groupRef.current.position.copy(tempPosition);
-        initializedRef.current = true;
-      } else {
-        groupRef.current.position.copy(tempPosition);
-      }
+      groupRef.current.position.copy(tempPosition);
+      initializedRef.current = true;
 
       const nextScale = THREE.MathUtils.damp(
         groupRef.current.scale.x,
@@ -1330,14 +1326,16 @@ function ToolPlanet({
     if (
       ownsPanel &&
       panel &&
-      panelTargetRef.current
+      panelTargetRef.current &&
+      (interactionPhase !== "focused" || focusBlendRef.current < 1)
     ) {
       writeMorphPanelFrame(
         panel,
         panelTargetRef.current,
         tempPosition,
         camera,
-        gl.domElement,
+        Math.round(size.width),
+        Math.round(size.height),
         focusBlendRef.current,
         compact,
         returning,
@@ -1467,6 +1465,7 @@ function PlanetProjectionObserver({
     const filter = gl.domElement.closest(".tool-desktop-layout")
       ?.querySelector<HTMLElement>(".tool-category-index");
     const measure = () => {
+      if (!galaxyDiagnostics) return;
       filterBottomRef.current = filter
         ? Math.max(0, filter.getBoundingClientRect().bottom - gl.domElement.getBoundingClientRect().top)
         : 0;
@@ -1542,24 +1541,17 @@ function PlanetProjectionObserver({
         compact ? 26 : 30,
         compact ? 46 : 52,
       );
-      const safeTop = Math.max(
-        radius + safetyGap,
-        filterBottom + safetyGap + radius,
-      );
-      const safeBottom = size.height - safetyGap - radius;
-      const safeLeft = safetyGap + radius;
-      const safeRight = size.width - safetyGap - radius;
-      const outside =
-        screenX < safeLeft ||
-        screenX > safeRight ||
-        screenY < safeTop ||
-        screenY > safeBottom;
-
-      if (outside) boundaryViolations += 1;
-      record.group.userData.screenX = screenX;
-      record.group.userData.screenY = screenY;
-      record.group.userData.screenRadius = radius;
-      record.group.userData.boundaryViolation = outside;
+      if (galaxyDiagnostics) {
+        const safeTop = Math.max(radius + safetyGap, filterBottom + safetyGap + radius);
+        const outside = screenX < safetyGap + radius ||
+          screenX > size.width - safetyGap - radius || screenY < safeTop ||
+          screenY > size.height - safetyGap - radius;
+        if (outside) boundaryViolations += 1;
+        record.group.userData.screenX = screenX;
+        record.group.userData.screenY = screenY;
+        record.group.userData.screenRadius = radius;
+        record.group.userData.boundaryViolation = outside;
+      }
 
       if (index < maxPlanetOccluders) {
         occlusionState.centers[index].set(
@@ -1570,6 +1562,7 @@ function PlanetProjectionObserver({
       }
     });
 
+    if (!galaxyDiagnostics) return;
     gl.domElement.dataset.galaxyBoundaryViolations =
       boundaryViolations.toString();
     gl.domElement.dataset.galaxySafeBounds = JSON.stringify({

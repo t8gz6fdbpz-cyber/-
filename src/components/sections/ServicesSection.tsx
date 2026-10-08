@@ -263,9 +263,12 @@ function canUseWebGL() {
 
   try {
     const canvas = document.createElement("canvas");
-    const context =
-      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    return Boolean(context);
+    const context = (canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+    const supported = Boolean(context);
+    // This disposable probe must not retain a second GPU context.
+    context?.getExtension("WEBGL_lose_context")?.loseContext();
+    return supported;
   } catch (error) {
     console.error("[ToolGalaxy3D] WebGL capability check failed", error);
     return false;
@@ -534,8 +537,9 @@ export function SkillsMatrixSection() {
   );
 
   useEffect(() => {
+    if (!preloadRequested) return;
     setGalaxySupport(canUseWebGL() ? "supported" : "unsupported");
-  }, []);
+  }, [preloadRequested]);
 
   useEffect(() => {
     const section = sectionRef.current;

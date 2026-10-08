@@ -92,7 +92,8 @@ export function FloatingLogoNav() {
         aria-hidden={!isOpen}
       >
         {navItems.map((item) => {
-          const url = new URL(item.href, window.location.origin);
+          const url = new URL(item.href, typeof window === "undefined"
+            ? "https://www.wujiahao.top" : window.location.origin);
           const isCurrent =
             location.pathname === url.pathname &&
             location.hash === url.hash;

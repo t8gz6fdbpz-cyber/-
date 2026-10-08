@@ -704,7 +704,6 @@ img {
   transform: scale(var(--card-scale)) translateZ(var(--card-depth));
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  will-change: transform;
   transition:
     transform 520ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -744,10 +743,13 @@ img {
     rotateY(var(--tilt-y)) scale(var(--hover-scale));
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  will-change: transform;
   transition:
     transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 360ms ease;
+}
+
+.marquee-card[data-hovered="true"] {
+  will-change: transform;
 }
 
 .marquee-card,

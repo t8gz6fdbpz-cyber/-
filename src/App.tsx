@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, startTransition, useEffect, useState } from "react";
 
 import { AboutSection } from "./components/sections/AboutSection";
 import { CaseStudiesPreviewSection } from "./components/sections/CaseStudiesPreviewSection";
@@ -18,10 +18,10 @@ const ListPage = lazy(() => import("./pages/ListPage").then(m => ({ default: m.L
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 const WorksPage = lazy(() => import("./pages/WorksPage").then(m => ({ default: m.WorksPage })));
 
-function HomePage() {
+function HomePage({ initialTimestamp }: { initialTimestamp?: number }) {
   return (
     <>
-      <HeroSection />
+      <HeroSection initialTimestamp={initialTimestamp} />
       <MarqueeSection />
       <AboutSection />
       <CaseStudiesPreviewSection />
@@ -42,15 +42,15 @@ function InterestRoute() {
   return <InterestPage key={slug} slug={slug} />;
 }
 
-function PortfolioApp() {
+export function PortfolioApp({ initialTimestamp }: { initialTimestamp?: number }) {
   return (
     <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[var(--color-bg)]">
       <FloatingLogoNav />
       <FloatingEmailButton />
       <Suspense fallback={<div className="route-loading" role="status">正在打开页面…</div>}>
-      <RouteEffects />
+      {typeof window !== "undefined" ? <RouteEffects /> : null}
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage initialTimestamp={initialTimestamp} />} />
         <Route path="/works" element={<WorksPage />} />
         <Route path="/about" element={<ListPage />} />
         <Route path="/list" element={<ListPage />} />
@@ -64,10 +64,15 @@ function PortfolioApp() {
   );
 }
 
-export default function App() {
+export default function App({ initialTimestamp }: { initialTimestamp?: number }) {
+  const [hydrationTimestamp, setHydrationTimestamp] = useState(initialTimestamp);
+  // Consume the static markup's clock only once. Later home visits use now.
+  useEffect(() => {
+    startTransition(() => setHydrationTimestamp(undefined));
+  }, []);
   return (
     <BrowserRouter>
-      <PortfolioApp />
+      <PortfolioApp initialTimestamp={hydrationTimestamp} />
     </BrowserRouter>
   );
 }
