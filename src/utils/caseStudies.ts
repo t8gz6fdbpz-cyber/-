@@ -1,4 +1,4 @@
-export type CaseSlug = "mingming" | "hengqian";
+export type CaseSlug = "wujiahao" | "hengqian";
 
 export type CaseStudy = {
   slug: CaseSlug;
@@ -11,7 +11,7 @@ export type CaseStudy = {
 
 export const caseStudies: CaseStudy[] = [
   {
-    slug: "mingming",
+    slug: "wujiahao",
     title: "鸣鸣很忙",
     subtitle: "本地生活达人 / IP孵化 / 直播运营项目",
     summary: "围绕达人、内容、直播和 AI 工具，把本地生活项目做成可执行的运营系统。",

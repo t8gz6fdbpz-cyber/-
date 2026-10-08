@@ -154,7 +154,7 @@ export function HengqianCasePage() {
         <details className="hq-disclosure"><summary>查看协作项目补充证据 <span>保留原有大型 IP 制作协作截图</span></summary><div className="hq-disclosure-body"><p>以下为成熟 IP 项目的内容制作协作记录，仅作为补充能力证明，不将账号全部成绩归为个人独立主导。</p><div className="hq-support-media">{douyinEvidence.map((item) => <EvidenceImage key={item.id} item={item} />)}</div></div></details>
       </div></section>
 
-      <footer className="hq-next hq-archive-next"><div className="hq-shell"><div><span>项目总结</span><h2>我把目标客户、内容生产、AI矩阵、平台分发、数据赛马和线索获取连接成一套可持续运行的增长系统。</h2></div><nav aria-label="案例后续操作"><DetailBackLink fallback="/#case-studies"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink><PortfolioLink to="/cases/mingming">查看另一个案例<ArrowRight aria-hidden="true" /></PortfolioLink><a href={contactHref}>联系我<ArrowRight aria-hidden="true" /></a></nav></div></footer>
+      <footer className="hq-next hq-archive-next"><div className="hq-shell"><div><span>项目总结</span><h2>我把目标客户、内容生产、AI矩阵、平台分发、数据赛马和线索获取连接成一套可持续运行的增长系统。</h2></div><nav aria-label="案例后续操作"><DetailBackLink fallback="/#case-studies"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink><PortfolioLink to="/cases/wujiahao">查看另一个案例<ArrowRight aria-hidden="true" /></PortfolioLink><a href={contactHref}>联系我<ArrowRight aria-hidden="true" /></a></nav></div></footer>
     </article>
   );
 }

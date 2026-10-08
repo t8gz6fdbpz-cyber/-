@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
 
 import { AboutSection } from "./components/sections/AboutSection";
 import { CaseStudiesPreviewSection } from "./components/sections/CaseStudiesPreviewSection";
@@ -51,6 +51,7 @@ function PortfolioApp() {
         <Route path="/works" element={<WorksPage />} />
         <Route path="/about" element={<ListPage />} />
         <Route path="/list" element={<ListPage />} />
+        <Route path="/cases/mingming" element={<Navigate replace to="/cases/wujiahao" />} />
         <Route path="/cases/:slug" element={<CaseStudyRoute />} />
         <Route path="/interests/:slug" element={<InterestRoute />} />
         <Route path="*" element={<NotFoundPage />} />

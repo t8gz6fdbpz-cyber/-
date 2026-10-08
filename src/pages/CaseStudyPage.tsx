@@ -6,7 +6,7 @@ import { MingmingCasePage } from "./MingmingCasePage";
 import { HengqianCasePage } from "./HengqianCasePage";
 
 export function CaseStudyPage({ slug }: { slug: string }) {
-  if (slug === "mingming") {
+  if (slug === "wujiahao") {
     return <MingmingCasePage />;
   }
 

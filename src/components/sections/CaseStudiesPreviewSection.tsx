@@ -5,7 +5,7 @@ import { caseStudies } from "../../utils/caseStudies";
 import { FadeIn } from "../ui/FadeIn";
 
 const caseVisuals = {
-  mingming: {
+  wujiahao: {
     label: "Local Life Engine",
     metric: "达人 / 直播 / 投流",
     points: ["IP孵化", "直播运营", "AI提效"],
