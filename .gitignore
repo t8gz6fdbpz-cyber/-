@@ -16,3 +16,6 @@ dist
 /artifacts/react-bits-*/
 /vite-restart.*.log
 /.sites-checkout/
+
+# Large portfolio videos are served from Tencent COS.
+/public/assets/cases/mingming/videos/*.mp4
