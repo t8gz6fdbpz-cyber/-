@@ -10,6 +10,7 @@ import {
 } from "../hooks/useSequentialInterestNavigation";
 import { getInterest } from "../utils/interestsData";
 import { ReadingInterestPage } from "./interests/ReadingInterestPage";
+import { useNearbyImageLoading } from "../hooks/useNearbyImageLoading";
 import { SingingInterestPage } from "./interests/SingingInterestPage";
 import { SportsInterestPage } from "./interests/SportsInterestPage";
 import { TravelInterestPage } from "./interests/TravelInterestPage";
@@ -25,6 +26,7 @@ type SequentialNavigationState = {
 };
 
 export function InterestPage({ slug }: { slug: string }) {
+  useNearbyImageLoading(slug, ".interest-route-stage");
   const interest = getInterest(slug);
   const location = useLocation();
   const navigate = useNavigate();

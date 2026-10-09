@@ -6,8 +6,10 @@ import { DetailBackLink } from "../routing";
 import { getCaseStudy } from "../utils/caseStudies";
 import { MingmingCasePage } from "./MingmingCasePage";
 import { HengqianCasePage } from "./HengqianCasePage";
+import { useNearbyImageLoading } from "../hooks/useNearbyImageLoading";
 
 export function CaseStudyPage({ slug }: { slug: string }) {
+  useNearbyImageLoading(slug, ".mingming-case, .hengqian-case, .case-study-page");
   if (slug === "wujiahao") {
     return <MingmingCasePage />;
   }
