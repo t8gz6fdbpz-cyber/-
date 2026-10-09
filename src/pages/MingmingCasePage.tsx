@@ -3,7 +3,9 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowLeft, ArrowRight, BookOpen, ChevronRight, Clapperboard, ClipboardList, Layers, MapPin, Sparkles } from "lucide-react";
 
 import { AccountOrbit } from "../components/ui/AccountOrbit";
+import { ViewportImage } from "../components/ui/ViewportImage";
 import { TrainingDepthGallery } from "../components/ui/TrainingDepthGallery";
+import { ContentExhibit } from "../components/ui/ContentExhibit";
 import {
   accountGrowthResults,
   aigcMethod,
@@ -84,7 +86,7 @@ function EvidenceImage({ media, className = "" }: { media: MingmingMedia; classN
   if (!media.src) return null;
   return (
     <figure className={`mm-evidence-image ${className}`} data-evidence-id={media.id}>
-      <div className="mm-evidence-image-frame"><img src={media.src} alt={media.alt} loading="lazy" decoding="async" draggable={false} width={media.width} height={media.height} /></div>
+      <div className="mm-evidence-image-frame"><ViewportImage src={media.src} alt={media.alt} loading="lazy" draggable={false} width={media.width} height={media.height} /></div>
       <figcaption><strong>{media.title}</strong><span>{media.caption}</span></figcaption>
     </figure>
   );
@@ -237,8 +239,7 @@ export function MingmingCasePage() {
 
           <div className="mm-shell mm-ip-details">
             <div ref={contentRef}>
-            <div className="mm-evidence-heading mm-content-heading"><div><span>内容表现成果</span><h3><LayeredText>单条内容的传播与互动</LayeredText></h3></div><p>与账号主页的粉丝规模分开呈现，记录单条内容的公开表现。</p></div>
-            <div className="mm-content-sequence" aria-label="内容表现成果">{contentPerformanceResults.map(media => <EvidenceImage key={media.id} media={media} />)}</div>
+            <ContentExhibit items={contentPerformanceResults} />
             </div>
 
             <div ref={operationTrainingRef}>

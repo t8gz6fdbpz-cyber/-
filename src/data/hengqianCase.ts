@@ -1,3 +1,5 @@
+import { mediaUrl } from "../utils/media";
+
 export type HengqianMedia = {
   id: string;
   src: string;
@@ -23,7 +25,7 @@ const media = (
   note: string,
 ): HengqianMedia => ({
   id,
-  src: `${root}/${folder}/${file}`,
+  src: mediaUrl(`${root}/${folder}/${file}`),
   alt,
   width,
   height,

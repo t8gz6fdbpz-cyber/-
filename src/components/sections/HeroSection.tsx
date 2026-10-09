@@ -1,7 +1,9 @@
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-const formatDate = (date: Date) =>
+import { heroPortrait } from "../../utils/portfolioData";
+
+export const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
     month: "long",
@@ -9,7 +11,7 @@ const formatDate = (date: Date) =>
     timeZone: "Asia/Shanghai",
   }).format(date);
 
-const formatTime = (date: Date) => {
+export const formatTime = (date: Date) => {
   const time = new Intl.DateTimeFormat("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
@@ -21,25 +23,19 @@ const formatTime = (date: Date) => {
   return `${time}${hour >= 12 ? "pm" : "am"}`;
 };
 
-export function HeroSection() {
+export function HeroSection({ initialTimestamp }: { initialTimestamp?: number }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(() => new Date(initialTimestamp ?? Date.now()));
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  // Smooth the element motion, not the document scroll, so native input stays responsive.
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 110,
-    damping: 22,
-    mass: 0.65,
-    restDelta: 0.0001,
-  });
-  // One split-cover handoff: typography exits first, while the portrait lingers.
-  // Keep children together and the portrait crop fixed throughout the sequence.
-  const leftY = useTransform(progress, [0, 0.12, 0.68, 1], ["0vh", "-3vh", "-32vh", "-42vh"]);
-  const rightY = useTransform(progress, [0, 0.16, 0.72, 1], ["0vh", "0vh", "12vh", "16vh"]);
+  // Track native scroll directly so motion stops as soon as scrolling stops.
+  // Move the entire portrait panel upward while keeping its image crop fixed.
+  // The text panel gets only a small downward offset to limit visual motion.
+  const leftY = useTransform(scrollYProgress, [0, 1], ["0vh", "5vh"]);
+  const rightY = useTransform(scrollYProgress, [0, 1], ["0vh", "-50vh"]);
 
   useEffect(() => {
     let timer: number;
@@ -74,12 +70,13 @@ export function HeroSection() {
               <span>WU</span>
               <span>JIAHAO</span>
             </h1>
+            <div className="hero-cover-copy">
+              <p className="hero-cover-role">吴嘉豪-AIGC内容制作</p>
+              <p className="hero-cover-tagline">
+                具备IP孵化与商业内容运营背景的AIGC视频制作人
+              </p>
+            </div>
           </div>
-
-          <p className="hero-cover-intro">
-            Building content systems where business, AI, and creator growth
-            become repeatable practice.
-          </p>
 
           <div
             className="hero-cover-meta notranslate"
@@ -93,8 +90,13 @@ export function HeroSection() {
 
         <motion.div className="hero-cover-right" style={{ y: shouldReduceMotion ? 0 : rightY }}>
           <motion.img
-            src="/assets/hero-portrait.png"
-            alt="Jack Wu portrait"
+            src={heroPortrait}
+            alt="吴嘉豪身着深色西装的正面肖像"
+            width={1400}
+            height={1042}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="hero-cover-image"
             style={{
               scale: 1.36,

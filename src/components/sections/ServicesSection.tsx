@@ -12,6 +12,8 @@ import {
 } from "react";
 import type { CSSProperties, ReactNode } from "react";
 
+import { mediaUrl } from "../../utils/media";
+
 import type {
   GalaxyInteractionPhase,
   ToolCategory,
@@ -70,7 +72,7 @@ const categoryMeta: Array<{
   { name: "平台运营", note: "分发、直播、社群和增长", accent: "#8a5a18" },
 ];
 
-const tools: ToolGalaxyTool[] = [
+const toolSources: ToolGalaxyTool[] = [
   {
     id: "chatgpt",
     name: "ChatGPT",
@@ -244,6 +246,11 @@ const tools: ToolGalaxyTool[] = [
   },
 ];
 
+const initialTools: ToolGalaxyTool[] = toolSources.map((tool) => ({
+  ...tool,
+  icon: tool.icon ? mediaUrl(tool.icon) : undefined,
+}));
+
 type GalaxySupportState = "loading" | "supported" | "unsupported";
 type ToolCardTheme = {
   accent: string;
@@ -256,9 +263,12 @@ function canUseWebGL() {
 
   try {
     const canvas = document.createElement("canvas");
-    const context =
-      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    return Boolean(context);
+    const context = (canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+    const supported = Boolean(context);
+    // This disposable probe must not retain a second GPU context.
+    context?.getExtension("WEBGL_lose_context")?.loseContext();
+    return supported;
   } catch (error) {
     console.error("[ToolGalaxy3D] WebGL capability check failed", error);
     return false;
@@ -485,6 +495,7 @@ function ToolInfoPanel({
 
 export function SkillsMatrixSection() {
   const shouldReduceMotion = useReducedMotion();
+  const [tools, setTools] = useState(initialTools);
   const [activeCategory, setActiveCategory] = useState<ToolCategory | null>(null);
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
   const [focusedToolId, setFocusedToolId] = useState<string | null>(null);
@@ -497,6 +508,7 @@ export function SkillsMatrixSection() {
   const [rawAssetsReady, setRawAssetsReady] = useState(false);
   const [galaxyResourcesReady, setGalaxyResourcesReady] = useState(false);
   const [mountedPanelCount, setMountedPanelCount] = useState(0);
+  const [galaxyVisible, setGalaxyVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const detailPanelRef = useRef<HTMLElement | null>(null);
   const panelElementsRef = useRef(new Map<string, HTMLElement>());
@@ -525,8 +537,9 @@ export function SkillsMatrixSection() {
   );
 
   useEffect(() => {
+    if (!preloadRequested) return;
     setGalaxySupport(canUseWebGL() ? "supported" : "unsupported");
-  }, []);
+  }, [preloadRequested]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -538,7 +551,7 @@ export function SkillsMatrixSection() {
         setPreloadRequested(true);
         observer.disconnect();
       },
-      { rootMargin: "240px 0px" },
+      { rootMargin: "1000px 0px" },
     );
     observer.observe(section);
 
@@ -546,33 +559,64 @@ export function SkillsMatrixSection() {
   }, [preloadRequested]);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    let inViewport = false;
+    const update = () => setGalaxyVisible(inViewport && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      inViewport = entry.isIntersecting;
+      update();
+    });
+    observer.observe(section);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!preloadRequested) return;
 
     let active = true;
-    const preloadTasks = tools.map(
-      (tool) =>
-        new Promise<void>((resolve) => {
-          if (!tool.icon) {
-            resolve();
-            return;
-          }
+    // Fetch the library and one compact icon module in parallel, rather than
+    // waiting for twelve separate network responses before the scene is usable.
+    void import("./ToolGalaxy3D").catch(() => undefined);
+    const prepareIcons = async () => {
+      const iconModule = await import("../../data/toolIcons.json").catch(() => ({ default: {} }));
+      const icons: Record<string, string> = iconModule.default;
+      const preparedTools = initialTools.map((tool) => ({
+        ...tool,
+        icon: icons[tool.id] ?? tool.icon,
+      }));
+      const preloadTasks = preparedTools.map(
+        (tool) =>
+          new Promise<void>((resolve) => {
+            if (!tool.icon) {
+              resolve();
+              return;
+            }
 
-          const image = new Image();
-          image.decoding = "async";
-          image.onload = () => {
-            image
-              .decode()
-              .catch(() => undefined)
-              .finally(resolve);
-          };
-          image.onerror = () => resolve();
-          image.src = tool.icon;
-        }),
-    );
+            const image = new Image();
+            image.decoding = "async";
+            image.onload = () => {
+              image
+                .decode()
+                .catch(() => undefined)
+                .finally(resolve);
+            };
+            image.onerror = () => resolve();
+            image.src = tool.icon;
+          }),
+      );
 
-    Promise.all(preloadTasks).then(() => {
-      if (active) setRawAssetsReady(true);
-    });
+      await Promise.all(preloadTasks);
+      if (active) {
+        setTools(preparedTools);
+        setRawAssetsReady(true);
+      }
+    };
+    void prepareIcons();
 
     return () => {
       active = false;
@@ -688,7 +732,6 @@ export function SkillsMatrixSection() {
       <div className="mx-auto max-w-7xl">
         <div className="skill-planet-heading">
           <div>
-            <p>技能</p>
             <h2>工具星系</h2>
           </div>
           <span>
@@ -739,7 +782,7 @@ export function SkillsMatrixSection() {
             ))}
           </div>
 
-          {galaxySupport === "loading" ? (
+          {!preloadRequested || !rawAssetsReady || galaxySupport === "loading" ? (
             <div className="tool-galaxy-stage tool-galaxy-fallback" role="status">
               正在加载 3D 星系
             </div>
@@ -762,6 +805,7 @@ export function SkillsMatrixSection() {
                 }
               >
                 <ToolGalaxy3D
+                  renderingActive={galaxyVisible}
                   activeCategory={activeCategory}
                   cardResourcesReady={cardResourcesReady}
                   detailPanelRef={detailPanelRef}
@@ -782,7 +826,7 @@ export function SkillsMatrixSection() {
             </ToolGalaxyErrorBoundary>
           )}
 
-          {tools.map((tool) => (
+          {preloadRequested && rawAssetsReady ? tools.map((tool) => (
             <ToolInfoPanel
               key={tool.id}
               active={focusedToolId === tool.id}
@@ -793,7 +837,7 @@ export function SkillsMatrixSection() {
               }
               onClose={clearFocus}
             />
-          ))}
+          )) : null}
         </div>
       </div>
     </section>

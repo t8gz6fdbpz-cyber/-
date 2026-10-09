@@ -1,0 +1,9 @@
+/* Kanit, Google Fonts (SIL Open Font License in /assets/fonts/Kanit-OFL.txt).
+   Latin subset only; Chinese keeps the existing system/Alimama font stack. */
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 300; font-display: swap; src: url("/assets/fonts/Kanit-Latin-300.woff2") format("woff2"); }
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 400; font-display: swap; src: url("/assets/fonts/Kanit-Latin-400.woff2") format("woff2"); }
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 500; font-display: swap; src: url("/assets/fonts/Kanit-Latin-500.woff2") format("woff2"); }
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 600; font-display: swap; src: url("/assets/fonts/Kanit-Latin-600.woff2") format("woff2"); }
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 700; font-display: swap; src: url("/assets/fonts/Kanit-Latin-700.woff2") format("woff2"); }
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 800; font-display: swap; src: url("/assets/fonts/Kanit-Latin-800.woff2") format("woff2"); }
+@font-face { font-family: "Kanit"; font-style: normal; font-weight: 900; font-display: swap; src: url("/assets/fonts/Kanit-Latin-900.woff2") format("woff2"); }

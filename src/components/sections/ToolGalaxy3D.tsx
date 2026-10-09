@@ -39,6 +39,7 @@ export type ToolGalaxyTool = {
 };
 
 type ToolGalaxy3DProps = {
+  renderingActive: boolean;
   activeCategory: ToolCategory | null;
   cardResourcesReady: boolean;
   focusedToolId: string | null;
@@ -74,6 +75,7 @@ const compactMorphOwnershipHandoff = 0.02;
 const returnMorphOwnershipHandoff = 0.02;
 const iconTextureCache = new Map<string, THREE.Texture>();
 const iconTextureRequests = new Map<string, Promise<THREE.Texture>>();
+const galaxyDiagnostics = import.meta.env.DEV || import.meta.env.VITE_GALAXY_DEBUG === "true";
 const maxPlanetOccluders = 12;
 let iconTextureLoader: THREE.TextureLoader | null = null;
 type LoadedIconImage = CanvasImageSource & {
@@ -307,16 +309,17 @@ function writeMorphPanelFrame(
   target: MorphPanelTarget,
   worldPosition: THREE.Vector3,
   camera: THREE.Camera,
-  canvas: HTMLCanvasElement,
+  viewportWidth: number,
+  viewportHeight: number,
   progress: number,
   compact: boolean,
   returning: boolean,
 ) {
   const projected = tempProjectedPosition.copy(worldPosition).project(camera);
   const centerX =
-    target.canvasOffsetX + ((projected.x + 1) / 2) * canvas.clientWidth;
+    target.canvasOffsetX + ((projected.x + 1) / 2) * viewportWidth;
   const centerY =
-    target.canvasOffsetY + ((1 - projected.y) / 2) * canvas.clientHeight;
+    target.canvasOffsetY + ((1 - projected.y) / 2) * viewportHeight;
   const ownershipHandoff = returning
     ? returnMorphOwnershipHandoff
     : compact
@@ -1275,10 +1278,6 @@ function ToolPlanet({
         : categoryActive
             ? 1
             : 0.88;
-    tempCameraSpacePosition
-      .copy(tempPosition)
-      .applyMatrix4(camera.matrixWorldInverse);
-    const cameraDepth = -tempCameraSpacePosition.z;
     const depthRatio = THREE.MathUtils.clamp(
       (tempPosition.z + 1.2) / 2.4,
       0,
@@ -1300,7 +1299,10 @@ function ToolPlanet({
     if (groupRef.current) {
       groupRef.current.visible = !cardOwnsVisual;
       groupRef.current.userData.visualPhase = visualPhase;
-      groupRef.current.userData.cameraDepth = cameraDepth;
+      if (galaxyDiagnostics) {
+        tempCameraSpacePosition.copy(tempPosition).applyMatrix4(camera.matrixWorldInverse);
+        groupRef.current.userData.cameraDepth = -tempCameraSpacePosition.z;
+      }
       groupRef.current.userData.depthScale = depthScale;
       groupRef.current.userData.iconOpacity = iconOpacity;
       groupRef.current.userData.iconWorldScale = compact ? 0.88 : 0.72;
@@ -1309,12 +1311,8 @@ function ToolPlanet({
       groupRef.current.userData.panelTransitionToken = ownsPanel
         ? transitionToken
         : 0;
-      if (!initializedRef.current) {
-        groupRef.current.position.copy(tempPosition);
-        initializedRef.current = true;
-      } else {
-        groupRef.current.position.copy(tempPosition);
-      }
+      groupRef.current.position.copy(tempPosition);
+      initializedRef.current = true;
 
       const nextScale = THREE.MathUtils.damp(
         groupRef.current.scale.x,
@@ -1328,14 +1326,16 @@ function ToolPlanet({
     if (
       ownsPanel &&
       panel &&
-      panelTargetRef.current
+      panelTargetRef.current &&
+      (interactionPhase !== "focused" || focusBlendRef.current < 1)
     ) {
       writeMorphPanelFrame(
         panel,
         panelTargetRef.current,
         tempPosition,
         camera,
-        gl.domElement,
+        Math.round(size.width),
+        Math.round(size.height),
         focusBlendRef.current,
         compact,
         returning,
@@ -1459,6 +1459,23 @@ function PlanetProjectionObserver({
   const recordsRef = useRef<PlanetProjectionRecord[]>([]);
   const bufferSizeRef = useRef(new THREE.Vector2());
   const worldPositionRef = useRef(new THREE.Vector3());
+  const filterBottomRef = useRef(0);
+
+  useLayoutEffect(() => {
+    const filter = gl.domElement.closest(".tool-desktop-layout")
+      ?.querySelector<HTMLElement>(".tool-category-index");
+    const measure = () => {
+      if (!galaxyDiagnostics) return;
+      filterBottomRef.current = filter
+        ? Math.max(0, filter.getBoundingClientRect().bottom - gl.domElement.getBoundingClientRect().top)
+        : 0;
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (filter) observer.observe(filter);
+    observer.observe(gl.domElement);
+    return () => observer.disconnect();
+  }, [gl, size.width, size.height]);
 
   const refreshRecords = () => {
     const groups = new Map<string, THREE.Group>();
@@ -1494,13 +1511,7 @@ function PlanetProjectionObserver({
     );
     if (visibleRecords.length === 0) return;
 
-    const canvasRect = gl.domElement.getBoundingClientRect();
-    const filter = gl.domElement
-      .closest(".tool-desktop-layout")
-      ?.querySelector<HTMLElement>(".tool-category-index");
-    const filterBottom = filter
-      ? Math.max(0, filter.getBoundingClientRect().bottom - canvasRect.top)
-      : 0;
+    const filterBottom = filterBottomRef.current;
     const safetyGap = compact ? 8 : 32;
     let boundaryViolations = 0;
 
@@ -1530,24 +1541,17 @@ function PlanetProjectionObserver({
         compact ? 26 : 30,
         compact ? 46 : 52,
       );
-      const safeTop = Math.max(
-        radius + safetyGap,
-        filterBottom + safetyGap + radius,
-      );
-      const safeBottom = size.height - safetyGap - radius;
-      const safeLeft = safetyGap + radius;
-      const safeRight = size.width - safetyGap - radius;
-      const outside =
-        screenX < safeLeft ||
-        screenX > safeRight ||
-        screenY < safeTop ||
-        screenY > safeBottom;
-
-      if (outside) boundaryViolations += 1;
-      record.group.userData.screenX = screenX;
-      record.group.userData.screenY = screenY;
-      record.group.userData.screenRadius = radius;
-      record.group.userData.boundaryViolation = outside;
+      if (galaxyDiagnostics) {
+        const safeTop = Math.max(radius + safetyGap, filterBottom + safetyGap + radius);
+        const outside = screenX < safetyGap + radius ||
+          screenX > size.width - safetyGap - radius || screenY < safeTop ||
+          screenY > size.height - safetyGap - radius;
+        if (outside) boundaryViolations += 1;
+        record.group.userData.screenX = screenX;
+        record.group.userData.screenY = screenY;
+        record.group.userData.screenRadius = radius;
+        record.group.userData.boundaryViolation = outside;
+      }
 
       if (index < maxPlanetOccluders) {
         occlusionState.centers[index].set(
@@ -1558,6 +1562,7 @@ function PlanetProjectionObserver({
       }
     });
 
+    if (!galaxyDiagnostics) return;
     gl.domElement.dataset.galaxyBoundaryViolations =
       boundaryViolations.toString();
     gl.domElement.dataset.galaxySafeBounds = JSON.stringify({
@@ -2046,7 +2051,7 @@ function GalaxyScene({
   onSelectTool,
 }: Omit<
   ToolGalaxy3DProps,
-  "cardResourcesReady" | "onResourceStateChange" | "preloadRequested"
+  "cardResourcesReady" | "onResourceStateChange" | "preloadRequested" | "renderingActive"
 > & {
   interactionReady: boolean;
 }) {
@@ -2100,17 +2105,17 @@ function GalaxyScene({
     <>
       <ambientLight intensity={1.3} />
       <ResponsiveCamera />
-      <PerformanceProbe
+      {galaxyDiagnostics ? <PerformanceProbe
         interactionPhase={interactionPhase}
         transitionToken={transitionToken}
-      />
-      <VisualOwnershipProbe
+      /> : null}
+      {galaxyDiagnostics ? <VisualOwnershipProbe
         detailPanelRef={detailPanelRef}
         focusedToolId={focusedToolId}
         interactionPhase={interactionPhase}
         tools={tools}
         transitionToken={transitionToken}
-      />
+      /> : null}
       <PlanetProjectionObserver
         compact={size.width < 520}
         occlusionState={occlusionState}
@@ -2173,6 +2178,7 @@ function GalaxyScene({
 }
 
 export const ToolGalaxy3D = memo(function ToolGalaxy3D({
+  renderingActive,
   activeCategory,
   cardResourcesReady,
   detailPanelRef,
@@ -2238,10 +2244,12 @@ export const ToolGalaxy3D = memo(function ToolGalaxy3D({
       className="tool-galaxy-stage"
       data-resources-ready={interactionReady}
       data-texture-preload-ms={preloadDuration.toFixed(1)}
+      data-rendering-active={renderingActive}
       aria-busy={!interactionReady}
       aria-label="3D 原子轨道式工具星系"
     >
       <Canvas
+        frameloop={renderingActive ? "always" : "never"}
         orthographic
         camera={{ far: 30, near: 0.1, position: [0, 0, 10], zoom: 100 }}
         dpr={[1, 1.5]}

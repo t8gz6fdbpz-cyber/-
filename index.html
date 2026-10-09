@@ -35,21 +35,19 @@
     />
     <meta name="theme-color" content="#FFD175" />
     <title>吴嘉豪-AIGC内容制作</title>
-    <link rel="icon" type="image/png" href="/assets/site-share-profile.png" />
-    <link rel="apple-touch-icon" href="/assets/site-share-profile.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://motionsites.ai" />
-    <link rel="preconnect" href="https://images.higgs.ai" />
+    <link rel="icon" type="image/webp" href="/assets/site-share-profile.webp" />
+    <link rel="apple-touch-icon" href="/assets/site-share-profile.webp" />
     <link
       rel="preload"
       as="image"
-      href="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png"
+      href="/assets/hero-portrait.webp"
+      fetchpriority="high"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
+    <script>
+      // Set this before assets/React load, not after native scroll restoration.
+      // Explicit hash links and in-app detail returns remain handled by the router.
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    </script>
   </head>
   <body translate="no" class="notranslate">
     <div id="root"></div>

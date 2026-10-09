@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import { PortfolioLink } from "../../routing";
 import { interests } from "../../utils/interestsData";
+import { ViewportImage } from "../ui/ViewportImage";
 
 export function InterestsSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -17,7 +18,6 @@ export function InterestsSection() {
         transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
       >
         <div>
-          <p>工作之外</p>
           <h2>我的兴趣爱好</h2>
         </div>
         <p className="interests-showcase-intro">
@@ -47,7 +47,7 @@ export function InterestsSection() {
               data-image-status={interest.imageStatus}
             >
               <figure className="interests-showcase-poster">
-                <img
+                <ViewportImage
                   className="interests-showcase-image"
                   src={interest.image}
                   alt={interest.imageAlt}

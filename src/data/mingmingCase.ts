@@ -1,3 +1,5 @@
+import { mediaUrl } from "../utils/media";
+
 export type MingmingMedia = {
   id: string;
   title: string;
@@ -37,6 +39,7 @@ export type MingmingVideo = MingmingMedia & {
 };
 
 const assetRoot = "/assets/cases/mingming";
+const assetUrl = (path: string) => mediaUrl(`${assetRoot}/${path}`);
 
 export const heroContent = {
   chapter: "01",
@@ -97,7 +100,7 @@ export const videoCases: MingmingVideo[] = [
     alt: "浙江区域招商宣传片",
     caption: "完整成片",
     videoSrc: `${assetRoot}/videos/zhejiang-regional-investment.mp4`,
-    poster: `${assetRoot}/video-covers/zhejiang-cover.png`,
+    poster: assetUrl("video-covers/zhejiang-cover.png"),
     width: 1600,
     height: 900,
     isPlaceholder: false,
@@ -113,7 +116,7 @@ export const videoCases: MingmingVideo[] = [
     alt: "石家庄区域招商宣传片",
     caption: "完整成片",
     videoSrc: `${assetRoot}/videos/shijiazhuang-city-promotion.mp4`,
-    poster: `${assetRoot}/video-covers/shijiazhuang-cover.png`,
+    poster: assetUrl("video-covers/shijiazhuang-cover.png"),
     width: 1600,
     height: 900,
     isPlaceholder: false,
@@ -200,7 +203,7 @@ export const accountGrowthResults: MingmingGrowthEvidence[] = accountFollowerEvi
     const evidenceNumber = index + 1;
     const number = String(evidenceNumber).padStart(2, "0");
     const sourceFile = accountSourceFiles[index];
-    const src = `${assetRoot}/ip-orbit/account-${number}.webp`;
+    const src = assetUrl(`ip-orbit/account-${number}.webp`);
 
     return {
       id: `account-growth-${number}`,
@@ -252,8 +255,8 @@ export const contentPerformanceResults: MingmingGrowthEvidence[] = contentSource
       caption: `内容表现成果 ${displayNumber} / 09`,
       alt: `内容表现成果第${index + 1}张，单条视频或公开内容数据截图`,
       src: contentWebpFiles[contentPublicIndexes[index]]
-        ? `${assetRoot}/ip-executive/${contentWebpFiles[contentPublicIndexes[index]]}`
-        : `${assetRoot}/ip-executive-results/executive-${publicNumber}.jpg`,
+        ? assetUrl(`ip-executive/${contentWebpFiles[contentPublicIndexes[index]]}`)
+        : assetUrl(`ip-executive-results/executive-${publicNumber}.jpg`),
       canonicalSource: sourceFile,
       sourceFile,
       width: 1206,
@@ -316,7 +319,7 @@ export const performanceMedia: MingmingMedia[] = [
     title: "企业号",
     alt: "企业号运营工具截图",
     caption: "账号运营与线索承接记录",
-    src: `${assetRoot}/performance/enterprise-account.png`,
+    src: assetUrl("performance/enterprise-account.png"),
     width: 210,
     height: 239,
     isPlaceholder: false,
@@ -326,7 +329,7 @@ export const performanceMedia: MingmingMedia[] = [
     title: "本地推",
     alt: "本地推投放工具截图",
     caption: "本地内容投放与效果观察",
-    src: `${assetRoot}/performance/local-promotion.png`,
+    src: assetUrl("performance/local-promotion.png"),
     width: 234,
     height: 260,
     isPlaceholder: false,
@@ -336,7 +339,7 @@ export const performanceMedia: MingmingMedia[] = [
     title: "巨量 AD",
     alt: "巨量 AD 投放工具截图",
     caption: "广告数据与素材表现分析",
-    src: `${assetRoot}/performance/ocean-engine-ad.png`,
+    src: assetUrl("performance/ocean-engine-ad.png"),
     width: 280,
     height: 284,
     isPlaceholder: false,
@@ -362,7 +365,7 @@ export const trainingGallery: MingmingEvidence[] = trainingEvidence.map(
     title,
     alt: `${title}现场记录`,
     caption: "线下训练营现场记录",
-    src: `${assetRoot}/ip-training/${targetFile}`,
+    src: assetUrl(`ip-training/${targetFile}`),
     width,
     height,
     sourceFile,

@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useState, type ReactNode } from "react";
 
 import { Carousel, FadeContent } from "../components/ui/ReactBitsEvidence";
+import { ViewportImage } from "../components/ui/ViewportImage";
 import {
   accountMatrix,
   aiEvidence,
@@ -59,7 +60,7 @@ function EvidenceImage({ item, eager = false, cover = false, className = "", cap
   return (
     <figure className={`hq-evidence is-${format}${cover ? " is-cover" : ""} ${className}`.trim()}>
       <span className="hq-evidence-frame" style={cover ? undefined : { aspectRatio: `${item.width} / ${item.height}` }}>
-        <img src={item.src} alt={item.alt} width={item.width} height={item.height} loading={eager ? "eager" : "lazy"} decoding="async" draggable="false" />
+        <ViewportImage src={item.src} alt={item.alt} width={item.width} height={item.height} loading={eager ? "eager" : "lazy"} draggable="false" />
       </span>
       {caption ? <figcaption>{caption}</figcaption> : null}
     </figure>

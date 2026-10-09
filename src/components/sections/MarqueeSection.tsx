@@ -1,7 +1,9 @@
 import {
   motion,
-  useAnimationFrame,
+  frame,
+  cancelFrame,
   useMotionValue,
+  useMotionValueEvent,
   useInView,
   useReducedMotion,
   useScroll,
@@ -18,8 +20,8 @@ import {
 } from "react";
 
 import { useMarqueeOffset } from "../../hooks/useMarqueeOffset";
+import { ViewportImage } from "../ui/ViewportImage";
 import {
-  marqueeAccounts,
   repeatedMarqueeRowOne,
   repeatedMarqueeRowTwo,
   type MarqueeAccount,
@@ -30,11 +32,13 @@ function MarqueeRow({
   accounts,
   rowRef,
   x,
+  preloadImages,
 }: {
   direction: "left" | "right";
   accounts: MarqueeAccount[];
   rowRef: RefObject<HTMLDivElement>;
   x: MotionValue<number>;
+  preloadImages: boolean;
 }) {
   return (
     <motion.div
@@ -51,6 +55,7 @@ function MarqueeRow({
         <MemoizedMarqueeImage
           key={`${account.image}-${index}`}
           account={account}
+          preloadImages={preloadImages}
         />
       ))}
     </motion.div>
@@ -65,7 +70,10 @@ function wrapSequence(value: number, width: number) {
   return ((value % width) + width) % width - width;
 }
 
-function MarqueeImage({ account }: { account: MarqueeAccount }) {
+function MarqueeImage({ account, preloadImages }: {
+  account: MarqueeAccount;
+  preloadImages: boolean;
+}) {
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const handlePointerMove = (
@@ -109,12 +117,14 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
         onPointerMove={handlePointerMove}
         onPointerLeave={resetTilt}
       >
-        <img
+        <ViewportImage
           src={account.image}
-          alt={`Douyin account card, ${account.followers} followers, ${account.likes} likes`}
+          srcSet={account.imageSrcSet}
+          sizes="(max-width: 767px) 300px, 432px"
+          alt={`抖音账号记录，${account.followers}粉丝，${account.likes}获赞`}
           width={432}
           height={282}
-          loading="lazy"
+          loading={preloadImages ? "eager" : "lazy"}
           decoding="async"
           draggable={false}
           className="marquee-card-image h-full w-full object-cover object-[center_18%]"
@@ -126,8 +136,6 @@ function MarqueeImage({ account }: { account: MarqueeAccount }) {
 
 const MemoizedMarqueeImage = memo(MarqueeImage);
 
-const prewarmedImages = new Set<string>();
-
 export function MarqueeSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const rowOneRef = useRef<HTMLDivElement | null>(null);
@@ -137,6 +145,8 @@ export function MarqueeSection() {
   const shouldReduceMotion = useReducedMotion();
   const idleOffset = useMotionValue(0);
   const isVisible = useInView(sectionRef, { margin: "80px" });
+  // Observe the section, not clipped offscreen cards, to warm the whole row.
+  const preloadImages = useInView(sectionRef, { margin: "1000px", once: true });
   // The entire showcase rises into the split cover's wake, without individual card motion.
   const { scrollYProgress: entryProgress } = useScroll({
     target: sectionRef,
@@ -147,47 +157,21 @@ export function MarqueeSection() {
   });
   const entryOpacity = useTransform(smoothEntry, [0, 0.18, 0.78, 1], [0, 0.08, 1, 1]);
   const entryY = useTransform(smoothEntry, [0, 0.85, 1], [120, 0, 0]);
+  const [hasVisibleContent, setHasVisibleContent] = useState(false);
+  useMotionValueEvent(entryOpacity, "change", (opacity) => {
+    setHasVisibleContent((visible) => visible === (opacity > 0) ? visible : opacity > 0);
+  });
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) {
-      return;
-    }
-
-    const preloadObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        marqueeAccounts.forEach(({ image }) => {
-          if (prewarmedImages.has(image)) {
-            return;
-          }
-
-          prewarmedImages.add(image);
-          const img = new Image();
-          img.decoding = "async";
-          img.src = image;
-          void img.decode?.().catch(() => undefined);
-        });
-        preloadObserver.disconnect();
-      },
-      { rootMargin: "1400px 0px" },
-    );
-
-    preloadObserver.observe(section);
-    return () => preloadObserver.disconnect();
-  }, []);
-
-  useAnimationFrame((_, delta) => {
-    if (shouldReduceMotion || !isVisible || rowWidths.one === 0 || rowWidths.two === 0) {
-      return;
-    }
-
-    const nextOffset = idleOffset.get() + (Math.min(delta, 64) / 1000) * 6;
-    idleOffset.set(nextOffset);
-  });
+    // The observer margin includes the gallery below the hero. Do not advance
+    // its invisible rows until the existing entry fade actually starts.
+    if (shouldReduceMotion || !isVisible || !hasVisibleContent || !rowWidths.one || !rowWidths.two) return;
+    const advance = ({ delta }: { delta: number }) => {
+      idleOffset.set(idleOffset.get() + (Math.min(delta, 64) / 1000) * 6);
+    };
+    frame.update(advance, true);
+    return () => cancelFrame(advance);
+  }, [idleOffset, isVisible, hasVisibleContent, rowWidths.one, rowWidths.two, shouldReduceMotion]);
 
   useEffect(() => {
     const getSequenceWidth = (row: HTMLDivElement | null) => {
@@ -195,12 +179,12 @@ export function MarqueeSection() {
         return 0;
       }
 
-      const sequenceLength = row.children.length / 3;
+      const sequenceLength = row.children.length / 2;
       const nextSequence = row.children.item(sequenceLength) as
         | HTMLElement
         | null;
 
-      return nextSequence?.offsetLeft ?? row.scrollWidth / 3;
+      return nextSequence?.offsetLeft ?? row.scrollWidth / 2;
     };
 
     const measureRows = () => {
@@ -255,12 +239,14 @@ export function MarqueeSection() {
             accounts={repeatedMarqueeRowOne}
             rowRef={rowOneRef}
             x={rowOneX}
+            preloadImages={preloadImages}
           />
           <MarqueeRow
             direction="left"
             accounts={repeatedMarqueeRowTwo}
             rowRef={rowTwoRef}
             x={rowTwoX}
+            preloadImages={preloadImages}
           />
         </motion.div>
       </div>

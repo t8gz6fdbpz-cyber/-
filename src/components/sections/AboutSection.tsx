@@ -2,18 +2,19 @@ import { AnimatedText } from "../ui/AnimatedText";
 import { FadeIn } from "../ui/FadeIn";
 
 const aboutParagraphs = [
-  "我是做内容运营、IP孵化、直播运营和 AI 应用的人。",
-  "我擅长把内容、人设、直播、平台运营和 AI 工具串成可执行的增长系统，让创意、数据和转化之间形成稳定循环。",
-  "我关注内容如何服务业务增长，也关注 AI 如何提升创作和运营效率。对我来说，内容不是孤立的作品，而是一套可以被观察、复盘和迭代的系统。",
-  "我习惯从人设、选题、脚本、拍摄、直播、平台反馈和数据复盘之间找连接点，把看起来零散的动作整理成团队可以继续执行的方法。",
+  "我是有IP孵化与商业运营背景的AIGC视频制作人。",
+  "我热爱影像创作与视听表达，从受众兴趣和商业目标出发，判断内容方向，让画面、故事与传播之间形成清晰联系。",
+  "我熟悉平台流量与获客转化，也关注AI如何提升视频创作和制作效率。对我来说，好的内容都需要兼顾画面表现力、受众感受和实际的商业目标。",
+  "我喜欢探索AI工具与工作流，在脚本、分镜、画面生成和后期制作之间找连接点，把创作中积累的经验整理成可以反复使用的方法。",
 ];
 
 const aboutHighlights = [
+  "AIGC制作",
+  "AI 工作流",
   "内容运营",
   "IP 孵化",
   "直播运营",
   "平台增长",
-  "AI 工作流",
   "复盘迭代",
 ];
 
@@ -26,9 +27,6 @@ export function AboutSection() {
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center">
         <FadeIn delay={0} y={40}>
           <div>
-            <p className="mb-5 text-center text-xs font-bold text-[var(--color-text-soft)]">
-              自我介绍
-            </p>
             <h2 className="hero-heading text-center text-[clamp(3.4rem,10vw,6rem)] font-black leading-[0.94] tracking-normal">
               关于我
             </h2>

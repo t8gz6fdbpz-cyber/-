@@ -19,13 +19,17 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
   --mm-text: #e8dfcc;
   --mm-muted: #a79a82;
   --mm-rule: rgba(200, 174, 120, .26);
-  --mm-gutter: clamp(24px, 5vw, 88px);
+  /* Match the homepage's floating-control safe lanes; one frame for every chapter. */
+  --mm-gutter: max(clamp(24px, 7vw, 150px), var(--home-floating-left-safe), var(--home-floating-right-safe));
+  --mm-frame-width: min(calc(100% - 2 * var(--mm-gutter)), 1440px);
+  --mm-frame-inset: calc((100% - var(--mm-frame-width)) / 2);
   width: 100%;
   overflow: clip;
   color: var(--mm-text);
   background: var(--mm-black);
   font: 450 16px/1.7 "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   font-variant-numeric: tabular-nums;
+  text-align: left;
 }
 .mingming-case * { box-sizing: border-box; }
 .mingming-case :is(h1,h2,h3,h4,p,figure,dl,ol) { margin: 0; }
@@ -38,7 +42,10 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
 .mingming-case :is(a,button,video):focus-visible { outline: 2px solid var(--mm-gold); outline-offset: 4px; }
 .mingming-case ::selection { color: var(--mm-black); background: var(--mm-gold); }
 .mingming-case a { text-underline-offset: .22em; }
-.mingming-case .mm-shell { width: min(calc(100% - 2 * var(--mm-gutter)), 1440px); margin-inline: auto; }
+.mingming-case .mm-shell { width: var(--mm-frame-width); margin-inline: auto; min-width: 0; }
+.mingming-case .mm-shell > *, .mingming-case :is(.mm-process-heading,.mm-evidence-heading) > * { min-width: 0; }
+.mingming-case :is(p,dd,figcaption) { overflow-wrap: anywhere; }
+.mingming-case :is(.mm-cover-meta > span,.mm-process-heading > p,.mm-evidence-heading > p) { text-align: right; }
 .mingming-case main, .mingming-case main > section { background-color: var(--mm-black) !important; }
 .mingming-case main > .mm-ip { background-color: var(--mm-raised) !important; }
 .mingming-case .mm-index, .mingming-case .mm-section-intro > span, .mingming-case .mm-subhead > span, .mingming-case .mm-evidence-heading > div > span, .mingming-case .mm-orbit-heading > span { color: var(--mm-champagne); font-size: 13px; font-weight: 600; letter-spacing: .07em; }
@@ -154,7 +161,7 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
 .mingming-case .mm-impact-grid dd span { color: var(--mm-muted); font-size: 12px; }
 
 .mingming-case .mm-orbit { position: relative; height: 600svh; background: var(--mm-raised); }
-.mingming-case .mm-orbit-stage { position: sticky; top: 0; height: 100svh; overflow: clip; background: var(--mm-raised); }
+.mingming-case .mm-orbit-stage { position: sticky; top: 0; height: 100svh; overflow: clip; background: var(--mm-raised); clip-path: inset(0 var(--mm-frame-inset)); }
 .mingming-case .mm-orbit-heading { position: absolute; z-index: 1200; top: clamp(88px, 10svh, 120px); left: 0; right: 0; pointer-events: none; }
 .mingming-case .mm-orbit-heading h3 { color: var(--mm-gold); margin-bottom: 8px; font-size: 28px; }
 .mingming-case .mm-orbit-heading p { max-width: 62ch; color: var(--mm-muted); font-size: 14px; }
@@ -166,7 +173,7 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
 .mingming-case .mm-orbit-curvature > span { position: absolute; top: 0; display: block; transform-style: preserve-3d; }
 .mingming-case .mm-orbit-face { position: absolute; inset: 0; display: block; background-repeat: no-repeat; backface-visibility: hidden; transform: translateZ(.05px); }
 .mingming-case .mm-orbit-face-back { transform: rotateY(180deg) translateZ(.05px); }
-.mingming-case .mm-orbit-statement { position: absolute; z-index: 900; width: min(70vw, 900px); margin: 0; color: var(--mm-text); font: 800 clamp(25.6px, 3.5vw, 51.2px)/1.3 "AlimamaShuHeiTi", "Microsoft YaHei", sans-serif; text-align: center; pointer-events: none; will-change: opacity, transform; }
+.mingming-case .mm-orbit-statement { position: absolute; z-index: 900; width: min(70vw, 900px, var(--mm-frame-width)); margin: 0; color: var(--mm-text); font: 800 clamp(25.6px, 3.5vw, 51.2px)/1.3 "AlimamaShuHeiTi", "Microsoft YaHei", sans-serif; text-align: center; pointer-events: none; will-change: opacity, transform; }
 .mingming-case .mm-orbit-line { display: block; }
 .mingming-case .mm-orbit-line > span { display: inline-block; }
 .mingming-case .mm-orbit-exit { position: absolute; z-index: 1100; top: 40%; left: var(--mm-gutter); color: var(--mm-gold); font: 800 clamp(32px, 4vw, 56px)/1.3 "AlimamaShuHeiTi", "Microsoft YaHei", sans-serif; pointer-events: none; }
@@ -215,8 +222,16 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
 .mingming-case .mm-summary-abilities span { color: var(--mm-champagne); font-size: 13px; }
 .mingming-case .mm-summary-abilities h3 { margin: 15px 0 9px; font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif; font-size: 22px; font-weight: 700; }
 .mingming-case .mm-summary-abilities p { max-width: 32ch; color: var(--mm-muted); font-size: 14px; }
-.mingming-case .mm-closing nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 22px; border-top: 1px solid var(--mm-rule); margin-top: 100px; padding-top: 22px; }
+.mingming-case .mm-closing nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 22px; border-top: 1px solid var(--mm-rule); margin-top: 100px; padding-top: 22px; }
 .mingming-case .mm-closing nav a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px; }
+.mingming-case .mm-closing nav a:first-child { justify-self: start; }
+.mingming-case .mm-closing nav a:nth-child(2) { justify-self: center; }
+.mingming-case .mm-closing nav a:last-child { justify-self: end; }
+
+/* Perspective photos enter/exit within the same content frame, not the page edges. */
+.mingming-case .mm-training-depth .depth-carousel { clip-path: inset(-6px 0); }
+.mingming-case .mm-training-lightbox { padding-inline: var(--mm-frame-inset); }
+.mingming-case .mm-training-lightbox__caption > span:last-child { text-align: right; }
 
 @media (max-width: 1100px) {
   .mingming-case .mm-process-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -242,8 +257,14 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
   .mingming-case .mm-orbit-statement { display: none; }
   .mingming-case .mm-orbit-mobile-copy { display: block; max-width: 28ch; margin-top: 16px; color: var(--mm-text); font-size: 16px; line-height: 1.6; }
 }
+@media (min-width: 701px) and (max-width: 900px) {
+  .mingming-case .mm-hero-main { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
 @media (max-width: 700px) {
   .mingming-case { --mm-gutter: 22px; }
+  .mingming-case :is(.mm-process-heading > p,.mm-evidence-heading > p) { text-align: left; }
+  .mingming-case .mm-closing nav { grid-template-columns: 1fr; }
+  .mingming-case .mm-closing nav a:nth-child(n) { justify-self: start; }
   .mingming-case .mm-scroll-progress { display: none; }
   .mingming-case .mm-rail-segment > span { display: none; }
   .mingming-case .mm-hero { height: auto; min-height: 100svh; }
