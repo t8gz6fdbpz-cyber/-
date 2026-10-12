@@ -28,6 +28,13 @@ const historyState = { scrollRestoration: "auto" };
 vm.runInNewContext(restorationBootstrap, { history: historyState });
 assert.equal(historyState.scrollRestoration, "manual");
 assert.equal((html.match(/class="marquee-card-shell /g) ?? []).length, 32);
+const appSource = await readFile(path.join(root, "src/App.tsx"), "utf8");
+assert.match(appSource, /path="\/cases\/wujiahao" element=\{<MingmingCasePage \/>\}/, "Known case must load directly, not through a second route chunk");
+assert.match(appSource, /path="\/cases\/hengqian" element=\{<HengqianCasePage \/>\}/);
+const responsiveSource = await readFile(path.join(root, "src/data/responsivePhotos.ts"), "utf8");
+for (const [, source] of responsiveSource.matchAll(/"(\/images\/interests\/[^"\n]+\.webp)"/g)) {
+  await readFile(path.join(root, "public", source.replace(/\.webp$/, ".responsive-800.webp")));
+}
 assert.ok(!html.includes("interests-showcase-watermarks"));
 for (const route of ["/cases/wujiahao", "/cases/hengqian", "/interests/sports", "/interests/travel", "/interests/singing", "/interests/reading"]) {
   assert.ok(html.includes(`href="${route}"`), `Missing entry: ${route}`);

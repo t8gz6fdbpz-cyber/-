@@ -1,24 +1,12 @@
 import { ArrowLeft } from "lucide-react";
-import { lazy } from "react";
 
 import { DetailBackLink } from "../routing";
 import { getCaseStudy } from "../utils/caseStudies";
 import { useNearbyImageLoading } from "../hooks/useNearbyImageLoading";
 
-// Keep each case's code, animation library and CSS behind its own route.
-const MingmingCasePage = lazy(() => import("./MingmingCasePage").then(module => ({ default: module.MingmingCasePage })));
-const HengqianCasePage = lazy(() => import("./HengqianCasePage").then(module => ({ default: module.HengqianCasePage })));
 
 export function CaseStudyPage({ slug }: { slug: string }) {
   useNearbyImageLoading(slug, ".case-study-page");
-  if (slug === "wujiahao") {
-    return <MingmingCasePage />;
-  }
-
-  if (slug === "hengqian") {
-    return <HengqianCasePage />;
-  }
-
   const study = getCaseStudy(slug);
 
   if (!study) {

@@ -13,6 +13,8 @@ import { FloatingLogoNav } from "./components/ui/FloatingLogoNav";
 import { RouteEffects } from "./routing";
 
 const CaseStudyPage = lazy(() => import("./pages/CaseStudyPage").then(m => ({ default: m.CaseStudyPage })));
+const MingmingCasePage = lazy(() => import("./pages/MingmingCasePage").then(m => ({ default: m.MingmingCasePage })));
+const HengqianCasePage = lazy(() => import("./pages/HengqianCasePage").then(m => ({ default: m.HengqianCasePage })));
 const InterestPage = lazy(() => import("./pages/InterestPage").then(m => ({ default: m.InterestPage })));
 const ListPage = lazy(() => import("./pages/ListPage").then(m => ({ default: m.ListPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
@@ -55,6 +57,9 @@ export function PortfolioApp({ initialTimestamp }: { initialTimestamp?: number }
         <Route path="/about" element={<ListPage />} />
         <Route path="/list" element={<ListPage />} />
         <Route path="/cases/mingming" element={<Navigate replace to="/cases/wujiahao" />} />
+        {/* Load known cases directly, without waiting for an intermediate route chunk. */}
+        <Route path="/cases/wujiahao" element={<MingmingCasePage />} />
+        <Route path="/cases/hengqian" element={<HengqianCasePage />} />
         <Route path="/cases/:slug" element={<CaseStudyRoute />} />
         <Route path="/interests/:slug" element={<InterestRoute />} />
         <Route path="*" element={<NotFoundPage />} />
