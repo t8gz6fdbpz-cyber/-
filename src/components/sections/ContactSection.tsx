@@ -9,7 +9,6 @@ export function ContactSection() {
       <div className="mx-auto max-w-7xl">
         <div className="contact-footer-inner">
           <div>
-            <p>联系</p>
             <h2>可以从这里找到我</h2>
           </div>
           <div className="contact-footer-links">

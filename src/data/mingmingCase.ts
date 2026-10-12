@@ -19,6 +19,7 @@ export type MingmingEvidence = MingmingMedia & {
 
 export type MingmingGrowthEvidence = MingmingMedia & {
   src: string;
+  originalSrc?: string;
   width: number;
   height: number;
   sourceFile: string;
@@ -135,7 +136,7 @@ export const incubationResults = {
     { value: "1 个月", label: "最快 0→1 万粉", detail: "增长路径最快验证周期" },
     { value: "10 场", label: "线下训练营", detail: "我组织并沉淀培训流程" },
   ],
-  evidenceSummary: "精选粉丝数最高的 12 个账号主页记录增长规模；9 张内容截图记录传播与互动表现。",
+  evidenceSummary: "8 个精选主页记录公开账号规模；9 张内容截图记录单条内容的传播与互动表现。",
 } as const;
 
 const accountFollowerEvidence = [
@@ -209,7 +210,7 @@ export const accountGrowthResults: MingmingGrowthEvidence[] = accountFollowerEvi
       id: `account-growth-${number}`,
       evidenceType: "account-profile" as const,
       title: `账号主页 · ${followersLabel}粉丝`,
-      caption: `账号增长成果 ${number} / 12`,
+      caption: "公开账号主页记录",
       alt: `${accountDisplayNames[evidenceNumber] ?? "账号"}的公开主页截图，粉丝${followersLabel}`,
       src,
       canonicalSource: sourceFile,
@@ -223,9 +224,9 @@ export const accountGrowthResults: MingmingGrowthEvidence[] = accountFollowerEvi
     };
   })
   // Every count was checked against the public follower figure in its source screenshot.
-  // The two 1.4万 accounts tie for the final place; the source order selects talent-14.
+  // Preserve the approved eight profiles and stable source-order tie breaking.
   .sort((left, right) => right.sortWeight - left.sortWeight)
-  .slice(0, 12);
+  .slice(0, 8);
 
 const contentSourceFiles = [
   "05b82ce2-dece-4cd9-994d-82c0382521b6.jpg",
@@ -251,6 +252,8 @@ export const contentPerformanceResults: MingmingGrowthEvidence[] = contentSource
     return {
       id: `content-performance-${displayNumber}`,
       evidenceType: "content-performance",
+      // Keep the original JPEG: mediaUrl deliberately rewrites previews to WebP.
+      originalSrc: `${assetRoot}/ip-executive-results/executive-${publicNumber}.jpg`,
       title: `单条内容表现 · ${displayNumber}`,
       caption: `内容表现成果 ${displayNumber} / 09`,
       alt: `内容表现成果第${index + 1}张，单条视频或公开内容数据截图`,
@@ -317,8 +320,8 @@ export const performanceMedia: MingmingMedia[] = [
   {
     id: "enterprise-account",
     title: "企业号",
-    alt: "企业号运营工具截图",
-    caption: "账号运营与线索承接记录",
+    alt: "企业号工具标识",
+    caption: "账号运营与线索承接",
     src: assetUrl("performance/enterprise-account.png"),
     width: 210,
     height: 239,
@@ -327,7 +330,7 @@ export const performanceMedia: MingmingMedia[] = [
   {
     id: "local-promotion",
     title: "本地推",
-    alt: "本地推投放工具截图",
+    alt: "本地推工具标识",
     caption: "本地内容投放与效果观察",
     src: assetUrl("performance/local-promotion.png"),
     width: 234,
@@ -337,7 +340,7 @@ export const performanceMedia: MingmingMedia[] = [
   {
     id: "ocean-engine-ad",
     title: "巨量 AD",
-    alt: "巨量 AD 投放工具截图",
+    alt: "巨量 AD 工具标识",
     caption: "广告数据与素材表现分析",
     src: assetUrl("performance/ocean-engine-ad.png"),
     width: 280,
@@ -387,6 +390,13 @@ export const summaryContent = {
   ],
 } as const;
 
+export const automationEvidence = {
+  src: "/assets/cases/mingming/performance/enterprise-account-rpa.webp",
+  alt: "影刀 RPA 企业号扫码流程配置，包含 Edge 页面和企业微信的搜索、点击操作",
+  caption: "影刀 RPA 的“企业号扫码”流程配置：把企业号网页与企业微信中的搜索、点击等重复动作组织为操作链。",
+  limit: "这是流程配置记录。截图未提供运行日志或效率统计。",
+} as const;
+
 function validateCaseEvidence() {
   if (!import.meta.env.DEV) return;
 
@@ -396,7 +406,7 @@ function validateCaseEvidence() {
     (source, index, sources) => sources.indexOf(source) !== index,
   );
   const checks = [
-    accountGrowthResults.length === 12 || `精选账号主页应为12张，当前为${accountGrowthResults.length}张`,
+    accountGrowthResults.length === 8 || `精选账号主页应为8张，当前为${accountGrowthResults.length}张`,
     contentPerformanceResults.length === 9 || `内容表现成果应为9张，当前为${contentPerformanceResults.length}张`,
     trainingGallery.length === 10 || `培训资料应为10张，当前为${trainingGallery.length}张`,
     performanceMedia.length === 3 || `投流资料应为3张，当前为${performanceMedia.length}张`,

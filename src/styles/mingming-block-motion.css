@@ -1,0 +1,49 @@
+/* Authored motion stays on ordinary regions. Approved exhibition selectors are absent. */
+.mingming-case .mm-block-rule { position:absolute; top:0; left:0; width:100%; height:1px; background:var(--mm-gold); transform-origin:left; pointer-events:none; }
+.mingming-case .mm-role-scope,
+.mingming-case .mm-focal-film-notes,
+.mingming-case .mm-focal-operation-chain > li { position:relative; }
+.mingming-case .mm-focal-film-notes > .mm-block-rule { top:-16px; }
+
+.mingming-case .mm-media-arrival { aspect-ratio:16/9; perspective:1000px; }
+.mingming-case .mm-media-frame {
+  --mm-frame-scale:.94;
+  --mm-frame-tilt:5deg;
+  --mm-frame-progress:1;
+  transform:rotateX(calc((1 - var(--mm-frame-progress)) * var(--mm-frame-tilt))) scale(calc(var(--mm-frame-scale) + (1 - var(--mm-frame-scale)) * var(--mm-frame-progress)));
+  transform-origin:center;
+}
+.mingming-case .mm-focal-result-primary,
+.mingming-case .mm-config-evidence { transform-origin:left center; }
+.mingming-case .mm-focal-operation-evidence { transform:translateX(calc((1 - var(--mm-evidence-progress, 1)) * 12px)); }
+
+/* A common baseline makes the four courses comparable; phrases are never split internally. */
+.mingming-case .mm-focal-curriculum li > p { max-width:none; text-wrap:pretty; overflow-wrap:normal; }
+.mingming-case .mm-focal-curriculum li > p > span { display:inline-block; white-space:nowrap; color:inherit; font-size:inherit; }
+.mingming-case .mm-focal-curriculum > i { transform:scaleX(var(--mm-path-progress, 1)); }
+.mingming-case .mm-focal-training-summary { border-top:1px solid var(--mm-rule); padding-top:20px; }
+
+.mingming-case .mm-editorial-closing > .mm-shell { position:relative; }
+.mingming-case .mm-closing-rule { top:-32px; }
+.mingming-case .mm-editorial-next::before { content:""; position:absolute; left:0; top:-1px; width:100%; height:1px; background:var(--mm-gold); transform:scaleX(0); transform-origin:left; transition:transform .28s cubic-bezier(.16,1,.3,1); }
+.mingming-case .mm-editorial-next > strong { transition:color .18s ease-out; }
+.mingming-case .mm-editorial-next:is(:hover,:focus-visible)::before { transform:scaleX(1); }
+.mingming-case .mm-editorial-next:is(:hover,:focus-visible) > strong { color:var(--mm-gold); }
+.mingming-case .mm-editorial-next:focus-visible { outline:1px solid var(--mm-gold); outline-offset:8px; }
+
+@media (min-width:701px) and (max-width:900px) {
+  .mingming-case .mm-focal-curriculum ol { grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; }
+}
+@media (max-width:700px) {
+  .mingming-case .mm-media-frame { --mm-frame-scale:.97; --mm-frame-tilt:0deg; }
+  .mingming-case .mm-focal-operation-evidence { transform:none; }
+  .mingming-case .mm-focal-curriculum > i { top:24px; bottom:0; left:6px; width:1px; height:calc(100% - 24px); transform:scaleY(var(--mm-path-progress, 1)); transform-origin:top; }
+  .mingming-case .mm-focal-curriculum li > span { position:relative; z-index:1; background:#0b0a08; }
+  .mingming-case .mm-focal-training-summary { margin-top:28px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .mingming-case .mm-media-frame,
+  .mingming-case .mm-focal-operation-evidence,
+  .mingming-case .mm-focal-curriculum > i { transform:none; }
+  .mingming-case .mm-editorial-next::before { transition:none; }
+}

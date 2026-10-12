@@ -1,0 +1,46 @@
+/* The approved scenes already use #0b0a08. Bring their surroundings onto it. */
+html.mm-route-active, body.mm-route-active, html.mm-route-active #root,
+html.mm-route-active #root > main { background: #0b0a08 !important; }
+.mingming-case, .mingming-case .mm-hero, .mingming-case .mm-editorial-closing { background: #0b0a08; }
+.mingming-case main, .mingming-case main > :is(.mm-aigc,.mm-focal-results,.mm-ip) { background-color: #0b0a08 !important; }
+
+html.mm-route-active .floating-logo-nav.floating-logo-nav--reference,
+html.mm-route-active .floating-logo-nav.floating-logo-nav--reference .floating-logo-nav-logo { background: #f2c15b; }
+html.mm-route-active .floating-logo-nav .floating-monogram { filter: brightness(0); }
+html.mm-route-active .floating-logo-nav .floating-logo-nav-links a { color: #0b0a08; }
+
+.mingming-case .mm-focal-hero-role dl > div:first-child dd { color: var(--mm-gold); font-size: 22px; font-weight: 700; }
+.mingming-case .mm-role-scope { margin-block: 40px 48px; padding-top: 26px; border-top: 1px solid var(--mm-rule); }
+.mingming-case .mm-role-scope h3 { font-size: clamp(23px,2.6vw,34px); color: var(--mm-champagne); line-height: 1.35; }
+.mingming-case .mm-role-scope dl { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 32px; margin-top: 24px; }
+.mingming-case .mm-role-scope dt { font-size: 23px; font-weight: 700; color: var(--mm-gold); }
+.mingming-case .mm-role-scope dd { margin: 10px 0 0; font-size: 14px; line-height: 1.8; color: var(--mm-text); }
+.mingming-case .mm-focal-results .mm-role-scope { margin-bottom: 0; }
+
+/* Only the handoff changes: the Orbit's 600/450svh range and poses remain intact. */
+.mingming-case .mm-ip-details.mm-content-handoff { position: relative; z-index: 1300; margin-top: -60svh; padding-top: 0; }
+.mingming-case .mm-content-handoff #mm-content-exhibit { border-top-color: transparent; }
+.mingming-case .mm-content-handoff .mm-content-exhibit__heading {
+  --arrival: clamp(0, calc((var(--mm-handoff-progress, 1) - .925) * 25), 1);
+  opacity: var(--arrival);
+  transform: translateY(calc((1 - var(--arrival)) * 24px));
+}
+.mingming-case .mm-content-handoff .mm-content-exhibit__stage {
+  --arrival: clamp(0, calc((var(--mm-handoff-progress, 1) - .945) * 20), 1);
+  opacity: var(--arrival);
+  transform: translateY(calc((1 - var(--arrival)) * 48px));
+}
+
+@media (max-width: 768px) {
+  .mingming-case .mm-role-scope { margin-block: 28px 36px; padding-top: 22px; }
+  .mingming-case .mm-role-scope h3 { font-size: 24px; }
+  .mingming-case .mm-role-scope dl { grid-template-columns: 1fr; gap: 18px; margin-top: 22px; }
+  .mingming-case .mm-role-scope dl > div { display: grid; grid-template-columns: 100px 1fr; gap: 16px; align-items: baseline; }
+  .mingming-case .mm-role-scope dt { font-size: 18px; }
+  .mingming-case .mm-role-scope dd { margin: 0; font-size: 13px; }
+  .mingming-case .mm-ip-details.mm-content-handoff { margin-top: -55svh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mingming-case .mm-ip-details.mm-content-handoff { margin-top: 0; padding-top: 90px; }
+  .mingming-case .mm-content-handoff :is(.mm-content-exhibit__heading,.mm-content-exhibit__stage) { opacity: 1; transform: none; }
+}

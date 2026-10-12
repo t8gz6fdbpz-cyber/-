@@ -1,15 +1,16 @@
 import { ArrowLeft } from "lucide-react";
-import "../styles/mingming-hierarchy.css";
-import "../styles/hengqian-case.css";
+import { lazy } from "react";
 
 import { DetailBackLink } from "../routing";
 import { getCaseStudy } from "../utils/caseStudies";
-import { MingmingCasePage } from "./MingmingCasePage";
-import { HengqianCasePage } from "./HengqianCasePage";
 import { useNearbyImageLoading } from "../hooks/useNearbyImageLoading";
 
+// Keep each case's code, animation library and CSS behind its own route.
+const MingmingCasePage = lazy(() => import("./MingmingCasePage").then(module => ({ default: module.MingmingCasePage })));
+const HengqianCasePage = lazy(() => import("./HengqianCasePage").then(module => ({ default: module.HengqianCasePage })));
+
 export function CaseStudyPage({ slug }: { slug: string }) {
-  useNearbyImageLoading(slug, ".mingming-case, .hengqian-case, .case-study-page");
+  useNearbyImageLoading(slug, ".case-study-page");
   if (slug === "wujiahao") {
     return <MingmingCasePage />;
   }

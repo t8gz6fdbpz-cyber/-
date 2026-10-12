@@ -1,0 +1,96 @@
+/* Native-scroll adaptation of Aceternity ContainerScroll / StickyScroll.
+   All selectors are ordinary case regions; the three exhibitions are untouched. */
+.mingming-case.mm-transitions .mm-media-frame {
+  --mm-frame-scale:.82;
+  --mm-frame-tilt:12deg;
+  --mm-frame-shift:64px;
+  transform:translate3d(calc((1 - var(--mm-frame-progress)) * var(--mm-frame-shift)),calc((1 - var(--mm-frame-progress)) * 56px),0) rotateX(calc((1 - var(--mm-frame-progress)) * var(--mm-frame-tilt))) scale(calc(var(--mm-frame-scale) + (1 - var(--mm-frame-scale)) * var(--mm-frame-progress)));
+  border-radius:calc(4px + (1 - var(--mm-frame-progress)) * 12px);
+  outline:1px solid #b58c4366;
+  transform-origin:center;
+}
+.mingming-case.mm-transitions .mm-aigc { padding-bottom:64px; }
+.mingming-case.mm-transitions .mm-focal-results { padding-top:72px; }
+.mingming-case.mm-transitions .mm-process-focus { position:relative; height:220px; }
+.mingming-case.mm-transitions .mm-process-focus > div { position:absolute; top:56px; left:0; width:100%; }
+.mingming-case.mm-transitions .mm-process-focus span { color:var(--mm-muted); font-size:12px; }
+.mingming-case.mm-transitions .mm-process-focus strong { display:block; color:var(--mm-gold); font:800 clamp(44px,5vw,64px)/1.2 "AlimamaShuHeiTi",sans-serif; }
+.mingming-case.mm-transitions .mm-process-focus p { color:var(--mm-champagne); font-size:13px; margin-top:16px; }
+.mingming-case.mm-transitions .mm-process-focus + h3 { font-size:24px; color:var(--mm-champagne); margin-top:12px; }
+.mingming-case.mm-transitions .mm-focal-phase { padding-bottom:72px; }
+.mingming-case.mm-transitions .mm-focal-phase:last-child { padding-bottom:0; }
+.mingming-case.mm-transitions .mm-focal-phase h4 { font-size:28px; }
+.mingming-case.mm-transitions .mm-arrival-heading { transform:translateX(calc((1 - var(--mm-arrival,1)) * -96px)); }
+.mingming-case.mm-transitions .mm-focal-result-primary { transform:translateX(calc((1 - var(--mm-result-arrival,1)) * 112px)) scale(calc(.72 + .28 * var(--mm-result-arrival,1))); }
+.mingming-case.mm-transitions .mm-focal-result-bridge { transform:translateY(calc((1 - var(--mm-arrival,1)) * 64px)); }
+.mingming-case.mm-transitions .mm-focal-result-context { transform:translateY(calc((1 - var(--mm-arrival,1)) * 56px)); }
+.mingming-case.mm-transitions .mm-hero-identity-entry { --mm-hero-shift:-64px; animation:mm-identity-establish .85s cubic-bezier(.16,1,.3,1) both; }
+.mingming-case.mm-transitions .mm-hero-identity-entry > p { margin-top:24px; font-size:18px; }
+.mingming-case.mm-transitions .mm-focal-hero-brand img { --mm-hero-shift:64px; animation:mm-mascot-establish .95s .1s cubic-bezier(.16,1,.3,1) both; }
+.mingming-case.mm-transitions .mm-focal-hero-role { animation:mm-role-establish .65s .3s cubic-bezier(.16,1,.3,1) both; }
+.mingming-case.mm-transitions .mm-process-identity { transform:translate3d(calc((1 - var(--mm-arrival,1)) * -80px),calc((1 - var(--mm-arrival,1)) * 24px - var(--mm-exit,0) * 64px),0); }
+.mingming-case.mm-transitions .mm-operations-identity { transform:translateY(calc((1 - var(--mm-arrival,1)) * 88px)); }
+.mingming-case.mm-transitions .mm-focal-operation-focus { transform:translateY(calc((1 - var(--mm-arrival,1)) * 56px)); }
+.mingming-case.mm-transitions .mm-focal-operation-evidence { transform:translateX(calc((1 - var(--mm-evidence-progress,1)) * 80px)); }
+.mingming-case.mm-transitions .mm-config-evidence { transform:translateX(calc((1 - var(--mm-arrival,1)) * 80px + var(--mm-exit,0) * 64px)) scale(calc(.86 + .14 * var(--mm-arrival,1))); }
+.mingming-case.mm-transitions .mm-config-caption { transform:translateY(calc(var(--mm-exit,0) * -64px)); }
+.mingming-case.mm-transitions .mm-training-identity { transform:translate3d(calc((1 - var(--mm-arrival,1)) * -80px),calc((1 - var(--mm-arrival,1)) * 56px),0); }
+.mingming-case.mm-transitions .mm-focal-curriculum { transform:translateY(calc((1 - var(--mm-arrival,1)) * 56px)); }
+.mingming-case.mm-transitions .mm-closing-conclusion { transform:translateY(calc((1 - var(--mm-arrival,1)) * 96px)); }
+.mingming-case.mm-transitions .mm-next-arrival { transform:translateX(calc((1 - var(--mm-arrival,1)) * 96px)); }
+@keyframes mm-identity-establish { from { transform:translate3d(var(--mm-hero-shift),32px,0); } to { transform:translate3d(0,0,0); } }
+@keyframes mm-mascot-establish { from { transform:translate3d(var(--mm-hero-shift),32px,0) rotate(4deg) scale(.84); } to { transform:translate3d(0,0,0) rotate(0) scale(1); } }
+@keyframes mm-role-establish { from { transform:translateY(32px); } to { transform:translateY(0); } }
+@media (max-width:1100px) and (min-width:701px) {
+  .mingming-case.mm-transitions .mm-media-frame { --mm-frame-shift:32px; }
+  .mingming-case.mm-transitions .mm-arrival-heading { transform:translateY(calc((1 - var(--mm-arrival,1)) * 64px)); }
+  .mingming-case.mm-transitions .mm-focal-result-primary { transform:scale(calc(.72 + .28 * var(--mm-result-arrival,1))); }
+  .mingming-case.mm-transitions .mm-process-identity { transform:translateY(calc((1 - var(--mm-arrival,1)) * 40px - var(--mm-exit,0) * 64px)); }
+  .mingming-case.mm-transitions .mm-training-identity { transform:translateY(calc((1 - var(--mm-arrival,1)) * 64px)); }
+  .mingming-case.mm-transitions .mm-config-evidence { transform:translateY(calc((1 - var(--mm-arrival,1)) * 64px)) scale(calc(.86 + .14 * var(--mm-arrival,1))); }
+  .mingming-case.mm-transitions .mm-focal-operation-evidence { transform:translateY(calc((1 - var(--mm-evidence-progress,1)) * 48px)); }
+  .mingming-case.mm-transitions .mm-next-arrival { transform:translateY(calc((1 - var(--mm-arrival,1)) * 48px)); }
+}
+@media (max-width:700px) {
+  .mingming-case.mm-transitions .mm-media-frame { --mm-frame-scale:.86; --mm-frame-tilt:7deg; --mm-frame-shift:0px; }
+  .mingming-case.mm-transitions .mm-process-focus { display:none; }
+  .mingming-case.mm-transitions .mm-process-focus + h3 { font-size:36px; color:var(--mm-gold); }
+  .mingming-case.mm-transitions .mm-focal-phase { padding-bottom:36px; }
+  .mingming-case.mm-transitions .mm-phase-action { width:fit-content; transform:translateX(calc((1 - var(--mm-action-progress,1)) * 44px)); }
+  .mingming-case.mm-transitions .mm-arrival-heading { transform:translateY(calc((1 - var(--mm-arrival,1)) * 48px)); }
+  .mingming-case.mm-transitions .mm-focal-result-primary { transform:scale(calc(.82 + .18 * var(--mm-result-arrival,1)))!important; }
+  .mingming-case.mm-transitions .mm-focal-result-context { transform:translateY(calc((1 - var(--mm-arrival,1)) * 40px))!important; }
+  .mingming-case.mm-transitions .mm-hero-identity-entry { --mm-hero-shift:-14px; }
+  .mingming-case.mm-transitions .mm-hero-identity-entry > p { font-size:13px; line-height:1.6; margin-top:20px; max-width:10em; }
+  .mingming-case.mm-transitions .mm-focal-hero-brand img { --mm-hero-shift:14px; }
+  .mingming-case.mm-transitions .mm-process-identity { transform:translateY(calc((1 - var(--mm-arrival,1)) * 40px)); }
+  .mingming-case.mm-transitions .mm-operations-identity { transform:translateY(calc((1 - var(--mm-arrival,1)) * 56px)); }
+  .mingming-case.mm-transitions .mm-focal-operation-focus { transform:translateY(calc((1 - var(--mm-arrival,1)) * 36px)); }
+  .mingming-case.mm-transitions .mm-focal-operation-evidence { transform:translateY(calc((1 - var(--mm-evidence-progress,1)) * 44px)); }
+  .mingming-case.mm-transitions .mm-config-evidence { transform:translateY(calc((1 - var(--mm-arrival,1)) * 44px)) scale(calc(.9 + .1 * var(--mm-arrival,1))); }
+  .mingming-case.mm-transitions .mm-config-caption { transform:none; }
+  .mingming-case.mm-transitions .mm-training-identity { transform:translateY(calc((1 - var(--mm-arrival,1)) * 56px)); }
+  .mingming-case.mm-transitions .mm-next-arrival { transform:translateY(calc((1 - var(--mm-arrival,1)) * 48px)); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .mingming-case.mm-transitions .mm-process-focus { display:none; }
+  .mingming-case.mm-transitions .mm-media-frame,
+  .mingming-case.mm-transitions .mm-arrival-heading,
+  .mingming-case.mm-transitions .mm-focal-result-primary,
+  .mingming-case.mm-transitions .mm-focal-result-bridge,
+  .mingming-case.mm-transitions .mm-focal-result-context,
+  .mingming-case.mm-transitions .mm-phase-action,
+  .mingming-case.mm-transitions .mm-process-identity,
+  .mingming-case.mm-transitions .mm-operations-identity,
+  .mingming-case.mm-transitions .mm-focal-operation-focus,
+  .mingming-case.mm-transitions .mm-focal-operation-evidence,
+  .mingming-case.mm-transitions .mm-config-evidence,
+  .mingming-case.mm-transitions .mm-config-caption,
+  .mingming-case.mm-transitions .mm-training-identity,
+  .mingming-case.mm-transitions .mm-focal-curriculum,
+  .mingming-case.mm-transitions .mm-closing-conclusion,
+  .mingming-case.mm-transitions .mm-next-arrival { transform:none!important; }
+  .mingming-case.mm-transitions .mm-hero-identity-entry,
+  .mingming-case.mm-transitions .mm-focal-hero-brand img,
+  .mingming-case.mm-transitions .mm-focal-hero-role { animation:none; }
+}

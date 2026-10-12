@@ -59,7 +59,6 @@ export function InterestsSection() {
 
               <div className="interests-showcase-meta">
                 <div className="interests-showcase-labels">
-                  <span className="interests-showcase-number">{interest.number}</span>
                   <span className="interests-showcase-category">{interest.category}</span>
                 </div>
                 <div className="interests-showcase-title">

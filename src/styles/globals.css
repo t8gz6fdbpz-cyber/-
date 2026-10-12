@@ -403,7 +403,7 @@ img {
 
 .hero-cover-role {
   margin: 0;
-  font-size: clamp(13px, 0.94vw, 14px);
+  font-size: clamp(16.9px, 1.222vw, 18.2px);
   font-weight: 700;
   line-height: 1.4;
   white-space: nowrap;
@@ -411,10 +411,10 @@ img {
 
 .hero-cover-tagline {
   margin: 0;
-  font-size: clamp(12px, 0.94vw, 14px);
+  font-size: clamp(15.6px, 1.222vw, 18.2px);
   font-weight: 500;
   line-height: 1.5;
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .hero-cover-title-wrap {
@@ -508,31 +508,82 @@ img {
   z-index: 9998;
   right: var(--home-floating-right-inset);
   bottom: var(--home-floating-bottom-inset);
-  display: grid;
+  display: block;
   width: var(--home-floating-control-size);
   height: var(--home-floating-control-size);
-  place-items: center;
+  border: 0;
+  padding: 0;
+  overflow: hidden;
   border-radius: 999px;
   color: var(--color-bg);
   background: var(--color-text);
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
   opacity: 1;
-  transition: color 220ms ease, box-shadow 220ms ease;
+  transition: width 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-floating-email[data-state="copied"],
+.home-floating-email[data-state="error"] {
+  width: min(calc(var(--home-floating-control-size) + 164px), calc(100vw - var(--home-floating-right-inset) - var(--home-floating-inline-inset)));
+  transition-duration: 350ms;
+}
+
+.home-floating-email__icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: var(--home-floating-control-size);
+  height: 100%;
+  transition: transform 150ms ease-out;
 }
 
 .home-floating-email svg {
+  display: block;
   width: var(--home-floating-icon-size);
   height: var(--home-floating-icon-size);
 }
 
-.home-floating-email:hover,
-.home-floating-email:focus-visible {
-  color: var(--color-offwhite);
-  box-shadow:
-    0 28px 64px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+.home-floating-email__message {
+  position: absolute;
+  inset: 0 calc(var(--home-floating-control-size) + 8px) 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  opacity: 0;
+  transition: opacity 100ms linear;
+}
+
+.home-floating-email:not([data-state="idle"]) .home-floating-email__message {
+  opacity: 1;
+  transition-delay: 100ms;
+}
+
+@media (hover: hover) {
+  .home-floating-email:hover .home-floating-email__icon { transform: scale(1.2); }
+}
+
+.home-floating-email__symbol.is-copying { animation: contact-copy-pulse 400ms cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes contact-copy-pulse {
+  0% { transform: scale(1); }
+  25% { transform: scale(.88); }
+  65% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-floating-email,
+  .home-floating-email__icon,
+  .home-floating-email__message { transition: none; }
+  .home-floating-email__symbol.is-copying { animation: none; }
+  .home-floating-email:hover .home-floating-email__icon { transform: none; }
 }
 
 .home-floating-email:focus-visible {
@@ -566,11 +617,11 @@ img {
   }
 
   .hero-cover-role {
-    font-size: clamp(11px, 1.45vw, 13px);
+    font-size: clamp(14.3px, 1.885vw, 16.9px);
   }
 
   .hero-cover-tagline {
-    font-size: clamp(10px, 1.3vw, 12px);
+    font-size: clamp(13px, 1.69vw, 15.6px);
   }
 
   .hero-cover-meta {
@@ -633,11 +684,11 @@ img {
   }
 
   .hero-cover-role {
-    font-size: 12px;
+    font-size: 15.6px;
   }
 
   .hero-cover-tagline {
-    font-size: 12px;
+    font-size: 15.6px;
     white-space: normal;
     text-wrap: balance;
   }
@@ -692,11 +743,11 @@ img {
   }
 
   .hero-cover-role {
-    font-size: clamp(10px, 1.55vw, 12px);
+    font-size: clamp(13px, 2.015vw, 15.6px);
   }
 
   .hero-cover-tagline {
-    font-size: 10px;
+    font-size: 13px;
   }
 
   .hero-cover-meta {
@@ -3780,8 +3831,7 @@ main > section {
   position: relative;
   overflow: hidden;
   --interest-poster-radius: clamp(16px, 1.1vw, 24px);
-  --interest-inner-radius: calc(var(--interest-poster-radius) * 0.618);
-  padding: clamp(36px, 2.5vw, 44px) 0 clamp(96px, 6vw, 120px);
+  padding: clamp(8px, 0.5vw, 12px) 0 clamp(96px, 6vw, 120px);
   background: var(--color-bg);
   isolation: isolate;
 }
@@ -3813,6 +3863,9 @@ main > section {
 
 .interests-showcase-intro {
   max-width: 40ch;
+  margin: 0;
+  justify-self: end;
+  text-align: right;
   padding-bottom: 4px;
   color: var(--color-text-muted);
   font-size: clamp(0.98rem, 1.1vw, 1.12rem);
@@ -3861,8 +3914,8 @@ main > section {
   aspect-ratio: 1 / 1.5;
   overflow: hidden;
   border-radius: var(--interest-poster-radius);
-  padding: 2px;
-  background: var(--color-card);
+  padding: 0;
+  background: transparent;
   box-shadow: 0 14px 30px rgba(7, 6, 4, 0.11);
 }
 
@@ -3870,7 +3923,7 @@ main > section {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: var(--interest-inner-radius);
+  border-radius: inherit;
   object-fit: cover;
   filter: saturate(0.91) contrast(1.02) brightness(0.96);
   transform: scale(1);
@@ -3894,18 +3947,13 @@ main > section {
 }
 
 .interests-showcase-labels {
+  justify-content: flex-end;
   gap: 14px;
   color: var(--color-text-muted);
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.02em;
-}
-
-.interests-showcase-number {
-  color: var(--color-text);
-  font-size: 12px;
-  font-weight: 900;
 }
 
 .interests-showcase-category {
@@ -3974,13 +4022,9 @@ main > section {
   align-items: start;
 }
 
-.contact-footer p {
-  color: var(--color-text-muted);
-}
-
 .contact-footer h2 {
   max-width: 9ch;
-  margin-top: 10px;
+  margin-top: 0;
   color: var(--color-text);
   font-size: clamp(2.4rem, 6vw, 5rem);
   font-weight: 900;
@@ -4819,7 +4863,7 @@ main > section {
 
 @media (max-width: 767px) {
   .interests-showcase-section {
-    padding: 72px 0 82px;
+    padding: 40px 0 82px;
   }
 
   .interests-showcase-heading {

@@ -1,50 +1,50 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { Info } from "lucide-react";
 
 import { travelRecords } from "../../data/interestDetails";
 import { InterestPageFrame } from "./InterestPageFrame";
+import { InterestPhoto } from "./InterestPhoto";
 
 export function TravelInterestPage() {
   const reduceMotion = useReducedMotion();
+  const renderEntry = (item: (typeof travelRecords)[number], index: number) => (
+    <li key={item.place} className="travel-entry">
+      <figure>
+        <InterestPhoto photo={item.photo} nativeRatio eager={index < 2}
+          sizes={index === 0 ? "(max-width: 760px) calc(100vw - 40px), 60vw" : undefined} />
+        <figcaption>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h2>{item.place}</h2>
+          <p>{item.story}</p>
+        </figcaption>
+      </figure>
+    </li>
+  );
 
   return (
     <InterestPageFrame active="travel">
       <div className="travel-notes">
         <motion.header
-          className="travel-hero"
-          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          className="travel-hero life-section-hero"
+          initial={reduceMotion ? false : { opacity: 0.8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="life-eyebrow">02 / 在路上</p>
-          <h1>旅行札记</h1>
+          <h1>旅行日记</h1>
           <p>记住的往往不是行程，而是一阵风、一条街，或一座城市不经意显出的节奏。</p>
-          <span>十三处停留，十三种观看</span>
         </motion.header>
 
-        <ol className="travel-stream">
-          {travelRecords.map((item, index) => (
-            <li
-              key={item.place}
-              className={`travel-entry travel-entry--${(index % 5) + 1}`}
-            >
-              <figure>
-                <div className={`life-photo life-photo--${item.photo.ratio}`}>
-                  <img
-                    src={item.photo.src}
-                    alt={item.photo.alt}
-                    loading={index < 2 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                </div>
-                <figcaption>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <h2>{item.place}</h2>
-                  <p>{item.story}</p>
-                </figcaption>
-              </figure>
-            </li>
-          ))}
+        <ol className="travel-opening" aria-label="旅行日记开篇" role="list">
+          {travelRecords.slice(0, 2).map(renderEntry)}
         </ol>
+        <ol className="travel-stream" start={3} aria-label="沿途影像" role="list">
+          {travelRecords.slice(2).map((item, index) => renderEntry(item, index + 2))}
+        </ol>
+        <div className="travel-image-info">
+          <a href="/travel-image-info.html" aria-label="查看影像署名" title="影像署名">
+            <Info aria-hidden="true" size={18} />
+          </a>
+        </div>
       </div>
     </InterestPageFrame>
   );

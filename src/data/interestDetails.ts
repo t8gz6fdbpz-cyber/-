@@ -1,10 +1,13 @@
 import { mediaUrl } from "../utils/media";
+import travelPhotoSources from "./travelPhotoSources.json";
 
 export type LocalPhoto = {
   src: string;
   alt: string;
   ratio: "portrait" | "square" | "landscape" | "wide";
   replacementNote: string;
+  width?: number;
+  height?: number;
 };
 
 export type SportsRecord = {
@@ -17,6 +20,7 @@ export type TravelRecord = {
   place: string;
   story: string;
   photo: LocalPhoto;
+  credit: (typeof travelPhotoSources)[number];
 };
 
 export type LearningStep = {
@@ -36,112 +40,131 @@ export const sportsRecords = [
     name: "健身",
     note: "稳住呼吸，把每一次重复做完整。",
     photo: {
-      src: mediaUrl("/images/interests/sports/fitness.jpg"),
-      alt: "训练者在明亮健身房里进行力量训练",
+      src: "/images/interests/personal/fitness.webp",
+      alt: "在健身房的长凳上进行哑铃力量训练",
       ratio: "portrait",
-      replacementNote: "建议替换为 4:5 竖幅健身照片",
-    },
-  },
-  {
-    name: "骑行",
-    note: "路面向前展开，速度让思绪慢慢变轻。",
-    photo: {
-      src: mediaUrl("/images/interests/sports/cycling.jpg"),
-      alt: "骑行者沿开阔山路向前骑行",
-      ratio: "landscape",
-      replacementNote: "建议替换为 3:2 横幅骑行照片",
-    },
-  },
-  {
-    name: "登山",
-    note: "一步一步向上，身体会找到自己的节拍。",
-    photo: {
-      src: mediaUrl("/images/interests/sports/hiking.jpg"),
-      alt: "登山者背着背包走在山间小径上",
-      ratio: "portrait",
-      replacementNote: "建议替换为 4:5 竖幅登山照片",
+      replacementNote: "",
+      width: 1080,
+      height: 1178,
     },
   },
   {
     name: "攀岩",
     note: "专注落在手脚之间，下一处支点自然出现。",
     photo: {
-      src: mediaUrl("/images/interests/sports/climbing.jpg"),
-      alt: "攀岩者在自然岩壁上寻找支点",
-      ratio: "landscape",
-      replacementNote: "建议替换为 3:2 横幅攀岩照片",
+      src: "/images/interests/personal/climbing.webp",
+      alt: "在室内抱石墙上寻找支点的攀岩记录",
+      ratio: "portrait",
+      replacementNote: "",
+      width: 1206,
+      height: 1272,
     },
   },
   {
-    name: "羽毛球",
-    note: "轻快的来回里，反应与默契同时醒来。",
+    name: "登山",
+    note: "一步一步向上，身体会找到自己的节拍。",
     photo: {
-      src: mediaUrl("/images/interests/sports/badminton.jpg"),
-      alt: "羽毛球运动员在球场上挥拍击球",
-      ratio: "square",
-      replacementNote: "建议替换为 1:1 或 4:3 羽毛球照片",
+      src: "/images/interests/personal/hiking.webp",
+      alt: "登山者背着背包走在山间小径上",
+      ratio: "portrait",
+      replacementNote: "",
+      width: 1080,
+      height: 1440,
+    },
+  },
+  {
+    name: "骑行",
+    note: "路面向前展开，速度让思绪慢慢变轻。",
+    photo: {
+      src: "/images/interests/personal/cycling.webp",
+      alt: "骑行停靠时，河边落日与公路自行车的近景",
+      ratio: "portrait",
+      replacementNote: "",
+      width: 1206,
+      height: 1584,
     },
   },
   {
     name: "游泳",
     note: "水声包住呼吸，动作回到最直接的节奏。",
     photo: {
-      src: mediaUrl("/images/interests/sports/swimming.jpg"),
-      alt: "游泳者在泳池水面划水前进",
+      src: "/images/interests/personal/swimming.webp",
+      alt: "泳池中的自由泳训练，水面映着明亮光线",
+      ratio: "landscape",
+      replacementNote: "",
+      width: 1206,
+      height: 849,
+    },
+  },
+  {
+    name: "羽毛球",
+    note: "轻快的来回里，反应与默契同时醒来。",
+    photo: {
+      src: "/images/interests/personal/badminton.webp",
+      alt: "羽毛球落在球场上，斜射光线勾出球羽和影子",
       ratio: "wide",
-      replacementNote: "建议替换为 16:9 横幅游泳照片",
+      replacementNote: "",
+      width: 1206,
+      height: 644,
     },
   },
 ] satisfies readonly SportsRecord[];
 
-const travelRecordRows = [
-  ["广西", "山影落进水面，天色一慢下来，喀斯特的轮廓也变得很安静。", "guangxi.jpg", "广西喀斯特群山与河流相映的清晨景色", "landscape"],
-  ["河南", "石壁和岁月都不说话，走近时才发现细节比想象更多。", "henan.jpg", "河南龙门石窟的石刻造像", "portrait"],
-  ["海南", "风里带着盐味，浪一遍遍抹平脚印，时间也跟着松下来。", "hainan.jpg", "海南气息的热带海岸与浅色沙滩", "wide"],
-  ["福建", "屋顶围成完整的圆，烟火气在天井里慢慢聚拢。", "fujian.jpg", "福建土楼围合而成的圆形院落", "square"],
-  ["浙江", "水面把城市声音压低，沿湖走时，连风都显得有分寸。", "zhejiang.jpg", "浙江杭州西湖水面与岸边树影", "landscape"],
-  ["上海", "江风很快，高楼很亮，但拐进街口，生活仍按自己的速度展开。", "shanghai.jpg", "上海浦东天际线与黄浦江", "wide"],
-  ["北京", "朱墙之外人流不断，阳光把旧建筑的尺度照得格外清楚。", "beijing.jpg", "北京故宫朱墙与宽阔院落", "landscape"],
-  ["山西", "夜色落在老街上，灯牌、砖墙和热气一起把路面照暖。", "shanxi.jpg", "山西平遥古城夜晚亮起灯火的街道", "portrait"],
-  ["陕西", "城墙把街道拉得很长，雨后灰砖的颜色比白天更沉静。", "shaanxi.jpg", "陕西西安城墙附近雨后的街景", "landscape"],
-  ["山东", "海风从礁石之间穿过，浪花和松枝把北方海岸写得很轻。", "shandong.jpg", "山东青岛海边的礁石与浪花", "wide"],
-  ["天津", "巷子窄而明亮，红灯笼和砖墙之间藏着缓慢的日常。", "tianjin.jpg", "天津老街砖墙与红灯笼", "portrait"],
-  ["贵州", "山与水把视线层层推远，雾气让远处的村落只留下轮廓。", "guizhou.jpg", "贵州群山与水面交叠的开阔风景", "landscape"],
-  ["重庆", "高低错落的灯沿江展开，走在里面，总会忘记自己正处在哪一层。", "chongqing.jpg", "重庆夜晚沿江展开的城市灯火", "wide"],
-] satisfies readonly (readonly [string, string, string, string, LocalPhoto["ratio"]])[];
+const travelDiaryNotes: Record<string, string> = {
+  广西: "桂林的山影与夜色，把城市的边界慢慢收进水面。",
+  河南: "在龙门石窟，石壁上的细节值得把脚步放慢。",
+  海南: "海口新海港的灯火，接住夜色里往来的渡轮。",
+  福建: "厦门街巷亮起灯，夜晚也有了温暖的层次。",
+  浙江: "西湖的水面和远处的塔，留下一段安静的距离。",
+  上海: "天光慢慢退去，陆家嘴的楼宇接住傍晚的颜色。",
+  北京: "雨中的故宫，朱墙与屋檐显得格外沉静。",
+  山西: "五台延庆寺的木构与屋顶，留下岁月的层次。",
+  陕西: "夜色里的西安钟楼，是城市中心的一处停顿。",
+  山东: "长岛的海岸展开，视线跟着水面走向更远处。",
+  天津: "海河两岸的灯影，把夜晚写进水里。",
+  贵州: "黄果树的水流落下，山间有了清楚的回响。",
+  重庆: "夜色沿着楼宇铺开，山城的高低藏在灯火之间。",
+};
 
-export const travelRecords = travelRecordRows.map(([place, story, filename, alt, ratio]) => ({
-  place,
-  story,
+// These are dated, openly licensed scenery images, not personal trip evidence.
+export const travelRecords = travelPhotoSources.map((source) => ({
+  place: source.place,
+  story: travelDiaryNotes[source.place],
+  credit: source,
   photo: {
-    src: mediaUrl(`/images/interests/travel/${filename}`),
-    alt,
-    ratio,
-    replacementNote: `建议保持${ratio === "portrait" ? "竖幅" : ratio === "square" ? "方幅" : "横幅"}构图`,
+    src: source.src,
+    alt: source.subject,
+    ratio: source.height > source.width ? "portrait" as const : "landscape" as const,
+    replacementNote: "",
+    width: source.width,
+    height: source.height,
   },
 })) satisfies readonly TravelRecord[];
 
-// 四个位置的文件名保持固定即可直接替换；推荐比例分别为 4:5、3:4、1:1、16:7。
 export const singingPhotos = [
   {
-    label: "主图",
-    note: "适合替换为年会舞台、排练或演唱中的个人照片。",
-    photo: { src: mediaUrl("/images/interests/singing/singing-main.svg"), alt: "唱歌主图照片占位，推荐四比五竖幅", ratio: "portrait", replacementNote: "推荐比例 4:5" },
+    label: "舞台侧影",
+    note: "声音发生时的光线、距离和身体状态。",
+    photo: {
+      src: "/images/interests/personal/singing-side.webp",
+      alt: "穿着黑金色舞台服装，侧身站在麦克风旁的演唱照片",
+      ratio: "portrait",
+      replacementNote: "",
+      width: 1078,
+      height: 1436,
+    },
   },
   {
-    label: "侧拍 A",
-    note: "适合替换为侧身、候场或调试麦克风的照片。",
-    photo: { src: mediaUrl("/images/interests/singing/singing-side-a.svg"), alt: "唱歌辅助照片占位，推荐三比四竖幅", ratio: "portrait", replacementNote: "推荐比例 3:4" },
-  },
-  {
-    label: "侧拍 B",
-    note: "适合替换为舞台细节或近距离表情照片。",
-    photo: { src: mediaUrl("/images/interests/singing/singing-side-b.svg"), alt: "唱歌辅助照片占位，推荐一比一方幅", ratio: "square", replacementNote: "推荐比例 1:1" },
-  },
-  {
-    label: "横幅",
-    note: "适合替换为完整舞台、合唱或环境全景。",
-    photo: { src: mediaUrl("/images/interests/singing/singing-banner.svg"), alt: "唱歌横幅照片占位，推荐十六比七横幅", ratio: "wide", replacementNote: "推荐比例 16:7" },
+    label: "唱歌的瞬间",
+    note: "先听见呼吸，再让情绪自然抵达。",
+    photo: {
+      src: "/images/interests/personal/singing-front.webp",
+      alt: "在暖色舞台灯光下，面向观众站在麦克风前的演唱照片",
+      ratio: "portrait",
+      replacementNote: "",
+      width: 1078,
+      height: 1436,
+    },
   },
 ] satisfies readonly PlaceholderRecord[];
 

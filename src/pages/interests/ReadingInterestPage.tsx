@@ -21,7 +21,6 @@ export function ReadingInterestPage() {
           transition={{ duration: 0.55 }}
         >
           <div>
-            <p className="life-eyebrow">04 / 阅读与思考</p>
             <h1>把理解，<br />重新讲清楚</h1>
           </div>
           <p>

@@ -5,11 +5,12 @@ colors:
   sports-paper: "#f3f2eb"
   sports-ink: "#17382f"
   sports-accent: "#e15825"
-  sports-focus: "#e6632e"
+  sports-focus: "#c44417"
   travel-paper: "#ede3d4"
   travel-ink: "#382d25"
   travel-accent: "#9c4229"
   travel-focus: "#a74428"
+  travel-photo-placeholder: "#d8c9b5"
   singing-paper: "#241d1f"
   singing-ink: "#eee7df"
   singing-accent: "#c98b73"
@@ -18,39 +19,49 @@ colors:
   reading-ink: "#172124"
   reading-accent: "#147168"
   reading-focus: "#157a72"
+  reading-equation-ink: "#145f58"
+  photo-placeholder: "rgba(0, 0, 0, 0.08)"
 typography:
-  sports-display:
-    fontFamily: "Georgia, 'Noto Serif SC', serif"
-    fontSize: "clamp(104px, 17vw, 250px)"
-    fontWeight: 400
-    lineHeight: 0.72
-    letterSpacing: "-0.1em"
   chapter-display:
     fontFamily: "'Songti SC', SimSun, serif"
-    fontSize: "clamp(58px, 7.4vw, 110px)"
+    fontSize: "clamp(3rem, 6.5vw, 5.5rem)"
     fontWeight: 400
-    lineHeight: 1.08
-    letterSpacing: "-0.065em"
+    lineHeight: 1.15
+    letterSpacing: "-0.03em"
   section-title:
     fontFamily: "'Songti SC', SimSun, serif"
-    fontSize: "clamp(40px, 5vw, 72px)"
+    fontSize: "clamp(2rem, 4vw, 3rem)"
     fontWeight: 400
-    lineHeight: 1.12
-    letterSpacing: "-0.04em"
+    lineHeight: 1.3
+  photo-title:
+    fontFamily: "'Songti SC', SimSun, serif"
+    fontSize: "clamp(1.5rem, 2.2vw, 1.75rem)"
+    fontWeight: 400
+    lineHeight: 1.3
+  intro:
+    fontSize: "clamp(1.125rem, 1.6vw, 1.25rem)"
+    lineHeight: 1.75
   body:
     fontFamily: "Kanit, sans-serif"
-    fontSize: "14px"
+    fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.8
+    lineHeight: 1.75
+  caption:
+    fontSize: "0.875rem"
+    lineHeight: 1.6
   label:
     fontFamily: "Arial, sans-serif"
-    fontSize: "11px"
+    fontSize: "0.75rem"
     fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "0.16em"
+    lineHeight: 1.5
 spacing:
-  page-gutter: "clamp(22px, 5vw, 78px)"
+  page-gutter: "clamp(20px, 5vw, 72px)"
   mobile-page-gutter: "20px"
+  tight: "8px"
+  text: "16px"
+  group: "32px"
+  grid: "32px"
+  section: "clamp(40px, 4vw, 64px)"
   tap-target: "44px"
 components:
   back-link:
@@ -63,6 +74,8 @@ components:
 ---
 
 # Design System: Personal Notes — Four Chapters
+
+Travel refinement: homepage and chapter navigation use “旅行”; the detail title remains “旅行日记”. A broad opening landscape pairs with a smaller native-ratio portrait; the remaining images flow through three balanced columns in numbered, top-to-bottom reading order. Six of the thirteen photos are native portraits, including five replacements photographed in 2025–2026; Shanghai and Chongqing provide especially tall frames. Photo dates, sourcing notices and licensing disclosures are kept out of the gallery body. Verified shooting dates, author and license credits remain accessible through the information icon linking to `/travel-image-info.html`.
 
 ## Overview
 
@@ -120,10 +133,9 @@ Each chapter uses one controlled accent against its own paper-and-ink pair; colo
 
 ### Hierarchy
 
-- **Sports Display:** Monumental, tightly tracked, and unusually low in line height; reserved for the sports title.
-- **Chapter Display:** Tall, calm Songti headlines for travel, singing, and reading; line breaks are deliberate compositional decisions.
+- **Chapter Display:** One shared Songti size, weight, tracking, and leading for sports, travel, singing, and reading. Long titles may wrap; page identity never changes the role scale.
 - **Section Title:** Songti headings establish long-form chapter structure without resembling UI cards.
-- **Body:** Comfortable sans-serif prose with generous leading; introductions widen in size, while captions stay compact.
+- **Body:** All four chapters use 16px body text with 1.75 leading; introductions use the same 18–20px scale, captions use 14px / 1.6, and metadata uses 12px / 1.5.
 - **Label:** Small, bold, uppercase or numeric folios with wide tracking for eyebrows, proof labels, and navigation metadata.
 
 ### Named Rules
@@ -136,9 +148,9 @@ Each chapter uses one controlled accent against its own paper-and-ink pair; colo
 
 The shared frame uses a fluid page gutter and a 44px minimum interaction target. Desktop chapters work on wide editorial canvases capped between 1340px and 1480px, with 12-column arrangements used where image rhythm needs controlled asymmetry.
 
-Sports becomes a single-screen, absolutely positioned collage at 1280px and above; below that it returns to a staggered sequence. Travel keeps a loose 12-column stream with varied image ratios and deliberate vertical gaps. Singing pairs an offset hero, rehearsal trio, and wide closing banner. Reading separates methodology, written output, and system evidence into clearly labeled zones rather than mixing process with results.
+Sports uses a naturally flowing 12-column editorial composition: four native-ratio portraits share the opening row, followed by two broad landscapes. Travel is a compact 13-entry diary with a landscape/portrait opening and balanced native-ratio columns that avoid large empty grid rows beneath long images. Both use fluid 20–32px horizontal gaps and fixed 24px folio columns so captions align consistently. Singing pairs two real stage portraits at different scales and heights. Reading separates methodology, written output, and system evidence into clearly labeled zones rather than mixing process with results.
 
-At 760px and below, the header stacks, the four chapter links become an equal four-column strip, and complex grids become readable sequences. Alternating 88–92% widths preserve rhythm and whitespace; they are not scaled-down desktop collages.
+At 1100px and below, sports and the travel stream become two columns. The travel opening retains its landscape/portrait pairing until 760px. At 760px and below, the header stacks, the four chapter links become an equal four-column strip, and complex grids become readable sequences. Sports and travel use the full reading width, with the opening travel portrait capped at 320px and aligned right. Singing retains its alternating widths.
 
 ### Named Rules
 
@@ -167,6 +179,13 @@ The form language is rectilinear and editorial. Photos are clipped to a small, e
 
 ## Components
 
+### Content Performance Ribbon
+
+- `/cases/wujiahao` reuses the approved `artifacts/material-strip-study/demo/strip.js` WebGL effect, not the demo's other-case photography or editorial copy. Keep the nine existing content-performance screenshots, source order, black/gold styling, 22–30px heading, count/arrows and fine rules; no second thumbnail row. The following operations chapter retains its 56px gap.
+- The ribbon is now the local visual subject: 440–640px desktop / 340–430px mobile. Native screenshot ratios set panel widths, with a normalized .016 gap and partial images at both ends. Forty-eight horizontal mesh segments map each image onto one continuous inward cylinder. The centre is flatter/further back; both edges become taller/closer. Every panel's deformation is computed from its live position. Desktop bend .55, mobile .36, perspective distance 1.2; geometry and background are component parameters.
+- Default to stillness with no autoplay. The approved .042s dragging / .065s released following and .42s exponential inertia act on one phase. New pointerdown takes over the displayed position immediately; moves beyond 6px suppress opening. Touch leaves vertical scrolling native. Arrows and Home/End use this same position state, while projected mesh picking maps loop copies back to original IDs.
+- Lazy-load near the viewport; stop rendering at rest, offscreen, hidden or inside the lightbox. Reduced motion makes the strip flat, switches immediately and disables inertia. Cleanup deletes textures, shaders and buffers and removes observers/listeners. WebGL failure exposes a native horizontal flat-image fallback. Full-image dialogs use original JPGs, retain complete proportions and allow previous/next, keyboard, Escape, focus restoration and a native-resolution image link.
+
 ### Back Link
 
 - **Character:** A quiet, always-visible return control that belongs to the shared archive frame.
@@ -187,19 +206,19 @@ The form language is rectilinear and editorial. Photos are clipped to a small, e
 
 ### Sports Sequence
 
-- **Character:** A bright breathing collage with six independently sized entries and compact numbered captions.
-- **Desktop:** At wide desktop it is a composed one-screen collage without photo shadows.
-- **Mobile:** Entries become a staggered vertical sequence with alternating alignment and solid offset shadows.
+- **Character:** A bright photo journal with compact numbered captions and predictable reading order.
+- **Desktop:** Four equal-width near-square/portrait frames open the sequence, followed by two equal-width landscapes. All six retain native proportions and supplied order, without absolute positioning or forced crops.
+- **Mobile:** Entries become a full-width vertical sequence with consistent caption gutters and spacing.
 
 ### Travel Stream
 
-- **Character:** Warm, loose place notes with varied ratios, restrained image saturation, and generous intervals.
+- **Character:** Warm place notes with mixed landscape and portrait ratios, including 2.2:1 tall photographs. Photo colors remain original; no saturation reduction, sepia, or muted opacity. Images have verified 2025–2026 capture dates and public-photo attribution accessible through the information link.
 - **Caption:** A hairline rule leads into the index, place name, and short observation; the text never becomes a destination card.
 
 ### Singing Rehearsal Book
 
 - **Character:** A dark, warm, quiet record of breath, rehearsal, and stage positions.
-- **Photography:** Neutral outlined placeholders preserve the requested ratios until real personal photos are available; labels state what should replace them.
+- **Photography:** Two supplied personal stage portraits replace all former placeholders. Preserve the complete frame and original color; captions do not claim an unprovided venue, date, or award.
 - **Signal:** The narrow copper meter is the only expressive graphic motif.
 
 ### Reading Workbench
@@ -210,11 +229,28 @@ The form language is rectilinear and editorial. Photos are clipped to a small, e
 
 ## Do's and Don'ts
 
+### Floating Navigation — Reference-Matched Refinement
+
+- Navigation destinations are 首页 (home), 履历 (the existing case-studies section), and 兴趣 (the interests section).
+- Preserve the supplied black/yellow artwork and its original pixel texture. Exact contour masks separate W, J, H, the upper curves, and the face; the black navigation surface stays stationary and shadow-free.
+- Keep the animated mark visually connected: all yellow parts share one center and upward stretch (72 artwork units, 12.5–13.5% uniform scale), with W/H separating outward by only 40–44 units and J kept 18 units lower than the shared trajectory to protect the face. No independent rotation or letter deformation. Letter handoffs are lightly staggered by 45ms, taking 640ms on open and 700ms when idle; opening starts after 180ms. Start interrupted sequences from the current transform; exit restores within 200ms. The closed mark animates after 2.2–2.8 seconds, then pauses 4.5–6.5 seconds between gestures without pointer or scroll input. Pause in hidden tabs and disable decorative movement under reduced-motion preferences.
+- Match Bill Chien's single clipped black surface: desktop 80px height at 20px inset, 10px corner radius, logo anchored on the right of expanded links. No shadow on the surface, links, or logo.
+- Desktop hover starts at 992px: open in 250ms with outBack, close in 200ms with outQuad; logo shrinks from 80px to 54px in 100ms. Link arrows enter over 500ms, with a 100ms opacity change.
+- Below 992px use click; below 480px use the reference's 60px trigger at 8px inset and 200px vertical menu. Open in 300ms outBack; close in 200ms ease after a 100ms delay; retain 40px bottom breathing room.
+- Keep keyboard access, Escape dismissal, outside-click dismissal, and reduced-motion support without changing pointer interaction.
+
+### Floating Contact Copy
+
+- Homepage only: a shadow-free black circular button with a filled yellow envelope, matching the contact interaction at https://www.billchien.net/ rather than scrolling to the footer.
+- Click or keyboard activation copies `13999854204`. Successful copying expands the surface leftward into a capsule, keeps the envelope anchored on the right, shows “联系方式已复制”, and closes after 2.4 seconds. Expand in 350ms, close in 240ms; a bounded 400ms envelope pulse acknowledges the action. Repeated clicks replay the pulse and renew the feedback timer.
+- Copy errors never display a success receipt. Keep native button semantics, a live status, keyboard focus and safe-area insets. Reduced motion removes resizing transitions, pulses and hover scaling but retains the copy feedback. Cleanup cancels feedback timers on route changes/unmount. The footer's small “联系” label is removed; its heading and channel list remain.
+
 ### Do:
 
 - **Do** preserve the shared return, four-chapter index, footer, and chapter-aware focus color on every interest route.
 - **Do** let real photographs, replacement-ready proof frames, and whitespace dominate the visual hierarchy.
-- **Do** keep sports as a one-screen collage at 1280px and above and a staggered sequence on mobile.
+- **Do** keep typography roles identical across chapters while allowing picture scale and placement to vary.
+- **Do** preserve original photo saturation and native proportions, with natural document flow at all widths.
 - **Do** keep reading process evidence separate from finished article output.
 - **Do** preserve visible focus states and collapse animation and transitions under reduced-motion preferences.
 - **Do** recompose complex layouts at 760px and below so text and evidence retain their intended order.
