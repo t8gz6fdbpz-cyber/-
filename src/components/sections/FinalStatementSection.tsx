@@ -1,7 +1,8 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { motion, } from "framer-motion";
 
 export function FinalStatementSection() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
 
   return (
     <section

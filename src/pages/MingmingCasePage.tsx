@@ -1,5 +1,6 @@
+import { useSiteReducedMotion } from "../motion/MotionPreference";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValue, useMotionValueEvent,  useScroll, useTransform } from "framer-motion";
 import type { MotionStyle, MotionValue } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AccountOrbit } from "../components/ui/AccountOrbit";
@@ -19,7 +20,7 @@ import "../styles/mingming-block-motion.css";
 import "../styles/mingming-transitions.css";
 
 function ResponsibilityScope({ project }: { project: "film" | "ip" }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const target = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target, offset: ["start .9", "start .5"] });
   const scopeLine = useTransform(scrollYProgress, value => readingProgress(value));
@@ -45,7 +46,7 @@ function ResponsibilityScope({ project }: { project: "film" | "ip" }) {
 }
 
 function VideoResult({ video, index, nextProgress }: { video: MingmingVideo; index: number; nextProgress: MotionValue<number> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const target = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target, offset: ["start .85", "start .25"] });
   const frameScale = useTransform(scrollYProgress, [0, .75, 1], [.2, 1, 1]);
@@ -70,7 +71,7 @@ const productionPhases = [
 ];
 
 function ProductionPhase({ phase, index }: { phase: typeof productionPhases[number]; index: number }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const target = useRef<HTMLLIElement>(null);
   const { scrollYProgress } = useScroll({ target, offset: ["start .85", "end .45"] });
   const lineScale = useTransform(scrollYProgress, value => readingProgress(value, 0, .85));
@@ -89,7 +90,7 @@ function ProcessFocus({ phase, index, progress }: { phase: typeof productionPhas
 }
 
 function ProductionProcess({ nextProgress, entrance, target }: { nextProgress: MotionValue<number>; entrance: MotionValue<number>; target: React.RefObject<HTMLElement> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const { scrollYProgress } = useScroll({ target, offset: ["start .2", "end .45"] });
   const arrival = useTransform(entrance, p => readingProgress(p, 0, .92));
   const exit = useTransform(nextProgress, p => readingProgress(p, 0, .9));
@@ -102,7 +103,7 @@ function ProductionProcess({ nextProgress, entrance, target }: { nextProgress: M
 }
 
 function AutomationMethod({ nextProgress }: { nextProgress: MotionValue<number> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const target = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target, offset: ["start .85", "start .2"] });
   const lineScale = useTransform(scrollYProgress, [0, .8, 1], [.1, 1, 1]);
@@ -116,7 +117,7 @@ function AutomationMethod({ nextProgress }: { nextProgress: MotionValue<number> 
 }
 
 function OperationStage({ stage, index }: { stage: string; index: number }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const target = useRef<HTMLLIElement>(null);
   const { scrollYProgress } = useScroll({ target, offset: ["start .9", "start .45"] });
   const stageLine = useTransform(scrollYProgress, value => readingProgress(value, 0, .6));
@@ -132,7 +133,7 @@ function OperationStage({ stage, index }: { stage: string; index: number }) {
 }
 
 function OperationsMethod({ nextProgress }: { nextProgress: MotionValue<number> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const target = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target, offset: ["start .9", "start .25"] });
   const arrival = useTransform(scrollYProgress, p => readingProgress(p, 0, .95));
@@ -144,7 +145,7 @@ function OperationsMethod({ nextProgress }: { nextProgress: MotionValue<number> 
 }
 
 function TrainingMethod({ progress }: { progress: MotionValue<number> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const curriculum = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: curriculum, offset: ["start .85", "end .55"] });
   const pathProgress = useTransform(scrollYProgress, value => readingProgress(value, 0, .85));
@@ -158,7 +159,7 @@ function TrainingMethod({ progress }: { progress: MotionValue<number> }) {
 }
 
 function ChapterTransition({ target, progress }: { target: React.RefObject<HTMLElement>; progress: MotionValue<number> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const arrival = useTransform(progress, p => readingProgress(p, 0, .95));
   const result = useTransform(progress, p => readingProgress(p, .5, 1));
   const bridge = useTransform(progress, p => readingProgress(p, .65, 1));
@@ -183,7 +184,7 @@ function ChapterTransition({ target, progress }: { target: React.RefObject<HTMLE
 }
 
 function FocalHero({ nextProgress }: { nextProgress: MotionValue<number> }) {
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const portraitY = useTransform(nextProgress, p => -112 * readingProgress(p, 0, .95));
   const identityY = useTransform(nextProgress, p => -72 * readingProgress(p, 0, .95));
   return <header id="mm-overview" className="mm-hero mm-focal-hero">
@@ -260,7 +261,7 @@ export function MingmingCasePage() {
   const resultsRef = useRef<HTMLElement>(null);
   const productionRef = useRef<HTMLElement>(null);
   const trainingRef = useRef<HTMLDivElement>(null);
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useSiteReducedMotion();
   const { scrollYProgress: resultsProgress } = useScroll({ target: resultsRef, offset: ["start .93", "start .25"] });
   const { scrollYProgress: productionEntrance } = useScroll({ target: productionRef, offset: ["start .9", "start .3"] });
   const { scrollYProgress: trainingEntrance } = useScroll({ target: trainingRef, offset: ["start .9", "start .25"] });
@@ -317,7 +318,7 @@ export function MingmingCasePage() {
     </main>
 
     <footer ref={summaryRef} id="mm-summary" className="mm-editorial-closing" aria-labelledby="mm-summary-title">
-      <div className="mm-shell"><motion.i className="mm-block-rule mm-closing-rule" aria-hidden="true" style={reducedMotion ? undefined : { scaleX: closingLine }} /><motion.div className="mm-closing-conclusion" style={{ "--mm-arrival": reducedMotion ? 1 : closingArrival } as MotionStyle}><h2 id="mm-summary-title">能交付影片，<br /><em>也能搭建运营方法。</em></h2>
+      <div className="mm-shell"><motion.i className="mm-block-rule mm-closing-rule" aria-hidden="true" style={reducedMotion ? undefined : { scaleX: closingLine }} /><motion.div className="mm-closing-conclusion" style={{ "--mm-arrival": reducedMotion ? 1 : closingArrival } as MotionStyle}><h2 id="mm-summary-title">能交付影片，<br /><em className="case-closing-line">也能搭建运营方法。</em></h2>
         <div className="mm-editorial-takeaways"><p><strong>完整交付</strong>把策略、故事和 AIGC 制作串起来，让区域招商需求成为可以播放的作品。</p><p><strong>持续运行</strong>把账号运营、内容复盘和线下培训串起来，让单点经验成为员工可以执行的方法。</p></div>
         </motion.div><motion.div className="mm-next-arrival" style={{ "--mm-arrival": reducedMotion ? 1 : nextArrival } as MotionStyle}><PortfolioLink className="mm-editorial-next" to="/cases/hengqian"><span>继续阅读 · 下一个案例</span><strong>镜前时代</strong><ArrowRight aria-hidden="true" /></PortfolioLink></motion.div>
         <nav className="mm-editorial-footer-links" aria-label="案例后续操作"><DetailBackLink fallback="/#case-studies"><ArrowLeft size={17} aria-hidden="true" />返回重点经历</DetailBackLink><PortfolioLink to="/#contact">联系我<ArrowRight size={17} aria-hidden="true" /></PortfolioLink></nav>

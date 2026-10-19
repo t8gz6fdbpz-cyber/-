@@ -1,6 +1,7 @@
+import { useSiteReducedMotion } from "../../../motion/MotionPreference";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { animate, motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { animate, motion, useMotionValue,  useScroll, useTransform } from "framer-motion";
 import type { MotionStyle } from "framer-motion";
 import { readingProgress } from "./blockMotion";
 
@@ -11,7 +12,7 @@ import { readingProgress } from "./blockMotion";
  */
 export function MingmingMediaFrame({ children }: { children: ReactNode }) {
   const target = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = useSiteReducedMotion();
   const { scrollYProgress } = useScroll({ target, offset: ["start .82", "start .16"] });
   const progress = useTransform(scrollYProgress, value => readingProgress(value, 0, .94));
   const [lockedAt, setLockedAt] = useState<number | null>(null);

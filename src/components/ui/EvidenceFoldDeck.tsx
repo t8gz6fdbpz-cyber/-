@@ -1,5 +1,6 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, } from "framer-motion";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
 export type EvidenceFoldItem = {
@@ -27,10 +28,7 @@ type EvidenceFoldDeckProps = {
 };
 
 export function EvidenceFoldDeck({ decks, defaultDeckId }: EvidenceFoldDeckProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const forceReducedMotionForQa = import.meta.env.DEV
-    && new URLSearchParams(window.location.search).get("motion") === "reduce";
-  const shouldReduceMotion = Boolean(prefersReducedMotion || forceReducedMotionForQa);
+  const shouldReduceMotion = useSiteReducedMotion();
   const [activeDeckId, setActiveDeckId] = useState<string | null>(defaultDeckId);
   const [activeIndexes, setActiveIndexes] = useState<Record<string, number>>(() => (
     Object.fromEntries(decks.map((deck) => [deck.id, 0]))

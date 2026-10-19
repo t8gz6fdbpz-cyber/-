@@ -1,5 +1,6 @@
+import { useSiteReducedMotion } from "../motion/MotionPreference";
 import { ArrowLeft } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -30,7 +31,7 @@ export function InterestPage({ slug }: { slug: string }) {
   const interest = getInterest(slug);
   const location = useLocation();
   const navigate = useNavigate();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
   const [transitionDirection, setTransitionDirection] =
     useState<SequentialDirection | null>(null);
   const navigationTimer = useRef<number | null>(null);

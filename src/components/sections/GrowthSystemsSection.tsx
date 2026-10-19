@@ -1,3 +1,4 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import {
   ArrowRight,
   BarChart3,
@@ -8,7 +9,7 @@ import {
 } from "lucide-react";
 import {
   motion,
-  useReducedMotion,
+
   useScroll,
   useSpring,
   useTransform,
@@ -88,7 +89,7 @@ function OverviewCard({
   index: number;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "end 0.25"],
@@ -270,7 +271,7 @@ function MetricsBento() {
 
 function LiveReviewStory() {
   const ref = useRef<HTMLElement | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],

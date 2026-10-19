@@ -2,6 +2,7 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import { PortfolioApp } from "./App";
 import { formatDate, formatTime } from "./components/sections/HeroSection";
+import { MOTION_STORAGE_KEY, normalizeMotionChoice, resolveMotionPreference } from "./motion/motionModel";
 
 export function renderHome(timestamp: number) {
   return renderToString(
@@ -16,7 +17,16 @@ export function renderHome(timestamp: number) {
 export function clockBootstrap() {
   return `<script>(() => {
     const root = document.getElementById('root');
-    if (location.pathname !== '/' || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const normalizeChoice = ${normalizeMotionChoice.toString()};
+    const resolvePreference = ${resolveMotionPreference.toString()};
+    let storedChoice;
+    try { storedChoice = localStorage.getItem('${MOTION_STORAGE_KEY}'); } catch {}
+    const choice = normalizeChoice(storedChoice);
+    const state = resolvePreference(choice, matchMedia('(prefers-reduced-motion: reduce)').matches, new URLSearchParams(location.search).get('motion') === 'reduce');
+    document.documentElement.dataset.motion = state.reduced ? 'reduce' : 'full';
+    document.documentElement.dataset.motionPreference = choice;
+    document.documentElement.dataset.motionSource = state.source;
+    if (location.pathname !== '/' || state.reduced) {
       root.replaceChildren(); root.removeAttribute('data-prerendered'); return;
     }
     const formatDate = ${formatDate.toString()};

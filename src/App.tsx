@@ -11,6 +11,10 @@ import { SkillsMatrixSection } from "./components/sections/ServicesSection";
 import { FloatingEmailButton } from "./components/ui/FloatingEmailButton";
 import { FloatingLogoNav } from "./components/ui/FloatingLogoNav";
 import { RouteEffects } from "./routing";
+import { MotionPreferenceProvider } from "./motion/MotionPreference";
+import { MotionPreferences } from "./components/ui/MotionPreferences";
+import { RouteLoadBoundary } from "./components/ui/RouteLoadBoundary";
+import { useLocation } from "react-router-dom";
 
 const CaseStudyPage = lazy(() => import("./pages/CaseStudyPage").then(m => ({ default: m.CaseStudyPage })));
 const MingmingCasePage = lazy(() => import("./pages/MingmingCasePage").then(m => ({ default: m.MingmingCasePage })));
@@ -45,10 +49,17 @@ function InterestRoute() {
 }
 
 export function PortfolioApp({ initialTimestamp }: { initialTimestamp?: number }) {
+  return <MotionPreferenceProvider><PortfolioContent initialTimestamp={initialTimestamp} /></MotionPreferenceProvider>;
+}
+
+function PortfolioContent({ initialTimestamp }: { initialTimestamp?: number }) {
+  const location = useLocation();
   return (
     <main className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[var(--color-bg)]">
       <FloatingLogoNav />
       <FloatingEmailButton />
+      <MotionPreferences />
+      <RouteLoadBoundary key={location.pathname}>
       <Suspense fallback={<div className="route-loading" role="status">正在打开页面…</div>}>
       {typeof window !== "undefined" ? <RouteEffects /> : null}
       <Routes>
@@ -65,6 +76,7 @@ export function PortfolioApp({ initialTimestamp }: { initialTimestamp?: number }
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </Suspense>
+      </RouteLoadBoundary>
     </main>
   );
 }

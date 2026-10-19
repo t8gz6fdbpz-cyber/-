@@ -1,5 +1,6 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import { Component, lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { useInView, useMotionValue, useMotionValueEvent, useReducedMotion, type MotionValue } from "framer-motion";
+import { useInView, useMotionValue, useMotionValueEvent,  type MotionValue } from "framer-motion";
 import { ArrowLeft, ArrowRight, Expand, X } from "lucide-react";
 import type { MingmingGrowthEvidence } from "../../data/mingmingCase";
 import { defaultStripSettings, type StripSettings } from "./contentExhibitMotion";
@@ -25,9 +26,7 @@ export function ContentExhibit({ items, stripSettings, autoScroll = false, entry
   items: readonly MingmingGrowthEvidence[]; stripSettings?: Partial<StripSettings>;
   autoScroll?: boolean; entryProgress?: MotionValue<number>;
 }) {
-  const systemReducedMotion = useReducedMotion();
-  // Matches the demo's test branch. The system preference always takes precedence.
-  const reducedMotion = systemReducedMotion || (import.meta.env.DEV && new URLSearchParams(location.search).get("motion") === "reduce");
+  const reducedMotion = useSiteReducedMotion();
   const settings = useMemo(() => ({ ...defaultStripSettings, ...stripSettings }), [stripSettings]);
   const immediateEntry = useMotionValue(1);
   const entry = entryProgress ?? immediateEntry;

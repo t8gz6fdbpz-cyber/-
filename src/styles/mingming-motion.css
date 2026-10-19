@@ -41,6 +41,8 @@ html.mm-route-active .floating-logo-nav .floating-logo-nav-links a { color: #0b0
   .mingming-case .mm-ip-details.mm-content-handoff { margin-top: -55svh; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mingming-case .mm-ip-details.mm-content-handoff { margin-top: 0; padding-top: 90px; }
-  .mingming-case .mm-content-handoff :is(.mm-content-exhibit__heading,.mm-content-exhibit__stage) { opacity: 1; transform: none; }
+  :where(html:not([data-motion])) .mingming-case .mm-ip-details.mm-content-handoff { margin-top: 0; padding-top: 90px; }
+  :where(html:not([data-motion])) .mingming-case .mm-content-handoff :is(.mm-content-exhibit__heading,.mm-content-exhibit__stage) { opacity: 1; transform: none; }
 }
+:where(html[data-motion="reduce"]) .mingming-case .mm-ip-details.mm-content-handoff { margin-top: 0; padding-top: 90px; }
+:where(html[data-motion="reduce"]) .mingming-case .mm-content-handoff :is(.mm-content-exhibit__heading,.mm-content-exhibit__stage) { opacity: 1; transform: none; }

@@ -296,6 +296,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .experience-card { transition: none; }
-  .experience-card:hover { transform: none; }
+  :where(html:not([data-motion])) .experience-card { transition: none; }
+  :where(html:not([data-motion])) .experience-card:hover { transform: none; }
 }
+
+:where(html[data-motion="reduce"]) .experience-card { transition: none; }
+
+:where(html[data-motion="reduce"]) .experience-card:hover { transform: none; }
+.experience-swipe-hint { display: none; }

@@ -42,7 +42,7 @@ for (const route of ["/cases/wujiahao", "/cases/hengqian", "/interests/sports", 
 
 const bootstrap = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(script => script.includes("prerenderTime"));
 assert.ok(bootstrap, "Missing pre-hydration clock and route guard");
-function runBootstrap(pathname, reduced, hash = "") {
+function runBootstrap(pathname, reduced, hash = "", stored = null, search = "", storageBlocked = false) {
   const fields = [{}, {}, {}];
   const links = ["/", "/#interests"].map(href => ({
     href, current: href === "/" ? "page" : undefined,
@@ -59,11 +59,13 @@ function runBootstrap(pathname, reduced, hash = "") {
       assert.equal(selector, ".hero-cover-meta p"); return fields;
     },
   };
+  const root = { dataset: {} };
   vm.runInNewContext(bootstrap, {
-    document: { getElementById: () => element }, location: { pathname, hash },
-    matchMedia: () => ({ matches: reduced }), Date,
+    document: { getElementById: () => element, documentElement: root }, location: { pathname, hash, search },
+    localStorage: { getItem() { if (storageBlocked) throw new Error("Storage disabled"); return stored; } },
+    matchMedia: () => ({ matches: reduced }), Date, URLSearchParams,
   });
-  return { element, fields, links };
+  return { element, fields, links, root };
 }
 const home = runBootstrap("/", false);
 assert.ok(!home.element.cleared);
@@ -77,10 +79,26 @@ for (const [pathname, reduced] of [["/cases/wujiahao", false], ["/interests/read
   const result = runBootstrap(pathname, reduced);
   assert.ok(result.element.cleared && result.element.removed, "Client-render fallback must not hydrate unrelated markup");
 }
+// Explicit full must hydrate the full homepage even when the OS requests less
+// motion. A reading-mode URL wins until the visitor changes the control.
+for (const systemReduced of [false, true]) {
+  for (const stored of [null, "full", "reduced", "invalid"]) {
+    for (const queryReduced of [false, true]) {
+      const result = runBootstrap("/", systemReduced, "", stored, queryReduced ? "?motion=reduce" : "");
+      const preference = stored === "full" || stored === "reduced" ? stored : "system";
+      const expected = queryReduced || preference === "reduced" || (preference === "system" && systemReduced);
+      assert.equal(result.root.dataset.motion, expected ? "reduce" : "full");
+      assert.equal(result.root.dataset.motionPreference, preference);
+      assert.equal(result.root.dataset.motionSource, queryReduced ? "link" : preference === "system" ? "system" : "visitor");
+      assert.equal(result.element.cleared, expected, "Pre-hydration markup must match the effective motion branch");
+    }
+  }
+}
+assert.equal(runBootstrap("/", true, "", null, "", true).root.dataset.motion, "reduce");
 for (const filename of await readdir(path.join(outDir, "assets"))) {
   assert.ok(!filename.includes("performanceAudit"), "Audit recorder leaked into production assets");
   if (!filename.endsWith(".js")) continue;
   const source = await readFile(path.join(outDir, "assets", filename), "utf8");
   assert.ok(!source.includes("__portfolioFrameAudit"), "Frame probe leaked into production JS");
 }
-console.log(`PASS: static homepage, ${characterCount} current-copy characters, 32 gallery cards, early scroll restoration, all entries, live clock, direct routes, reduced-motion fallback, clean production bundle.`);
+console.log(`PASS: static homepage, ${characterCount} current-copy characters, 32 gallery cards, early scroll restoration, all entries, live clock, direct routes, 16 preference/bootstrap combinations + blocked storage, clean production bundle.`);

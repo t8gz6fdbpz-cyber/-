@@ -168,6 +168,10 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
 .mingming-case .mm-orbit-mobile-copy { display: none; }
 .mingming-case .mm-orbit-space { position: absolute; inset: 0; perspective: 1200px; display: flex; align-items: center; justify-content: center; transform-style: flat; }
 .mingming-case .mm-orbit-image { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; }
+.mingming-case .mm-orbit-open { display: block; position: relative; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; transform-style: preserve-3d; cursor: zoom-in; }
+.mingming-case .mm-orbit-browse { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; margin-block: 8px; padding: 4px 0; color: var(--mm-gold); font-size: 14px; border-bottom: 1px solid var(--mm-line); pointer-events: auto; }
+.mingming-case .mm-orbit-static-open { display: block; width: 100%; min-height: 44px; cursor: zoom-in; }
+.mingming-case .mm-orbit-reduced-grid .mm-orbit-static-open img { aspect-ratio: auto; object-fit: contain; }
 .mingming-case .mm-orbit-image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0; }
 .mingming-case .mm-orbit-curvature { position: absolute; inset: 0; transform-style: preserve-3d; }
 .mingming-case .mm-orbit-curvature > span { position: absolute; top: 0; display: block; transform-style: preserve-3d; }
@@ -253,9 +257,15 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
   .mingming-case .mm-transition-content { padding-block: 40px; }
   .mingming-case .mm-summary-abilities { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
-@media (max-width: 768px) {
-  .mingming-case .mm-orbit-statement { display: none; }
-  .mingming-case .mm-orbit-mobile-copy { display: block; max-width: 28ch; margin-top: 16px; color: var(--mm-text); font-size: 16px; line-height: 1.6; }
+.mingming-case .mm-orbit[data-compact="true"] .mm-orbit-stage { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 16px; padding-block: 88px 20px; }
+.mingming-case .mm-orbit[data-compact="true"] .mm-orbit-heading { position: static; }
+.mingming-case .mm-orbit[data-compact="true"] .mm-orbit-space { position: relative; min-height: 0; width: var(--mm-frame-width); justify-self: center; }
+.mingming-case .mm-orbit[data-compact="true"] .mm-orbit-statement { display: none; }
+.mingming-case .mm-orbit[data-compact="true"] .mm-orbit-mobile-copy { display: block; max-width: 28ch; margin-top: 12px; color: var(--mm-text); font-size: 16px; line-height: 1.6; }
+@media (min-width: 600px) and (max-height: 600px) {
+  .mingming-case .mm-orbit[data-compact="true"] .mm-orbit-stage { grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr); grid-template-rows: minmax(0, 1fr); padding-inline: var(--mm-frame-inset); }
+  .mingming-case .mm-orbit[data-compact="true"] .mm-orbit-heading { margin: 0; width: auto; }
+  .mingming-case .mm-orbit[data-compact="true"] .mm-orbit-space { width: 100%; }
 }
 @media (min-width: 701px) and (max-width: 900px) {
   .mingming-case .mm-hero-main { grid-template-columns: minmax(0, 1fr); gap: 32px; }
@@ -339,8 +349,16 @@ html.mm-route-active .floating-logo-nav-logo { width: 48px; height: 48px; border
   .mingming-case .mm-orbit-reduced-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mingming-case .mm-preloader { display: none; }
-  .mingming-case *, .mingming-case *::before, .mingming-case *::after { animation: none !important; transition-duration: .01ms !important; }
-  .mingming-case .mm-hero { height: auto; min-height: 100svh; }
-  .mingming-case .mm-hero > .mm-shell { position: static; height: auto; min-height: 100svh; }
+  :where(html:not([data-motion])) .mingming-case .mm-preloader { display: none; }
+  :where(html:not([data-motion])) .mingming-case *,
+:where(html:not([data-motion])) .mingming-case *::before,
+:where(html:not([data-motion])) .mingming-case *::after { animation: none !important; transition-duration: .01ms !important; }
+  :where(html:not([data-motion])) .mingming-case .mm-hero { height: auto; min-height: 100svh; }
+  :where(html:not([data-motion])) .mingming-case .mm-hero > .mm-shell { position: static; height: auto; min-height: 100svh; }
 }
+:where(html[data-motion="reduce"]) .mingming-case .mm-preloader { display: none; }
+:where(html[data-motion="reduce"]) .mingming-case *,
+:where(html[data-motion="reduce"]) .mingming-case *::before,
+:where(html[data-motion="reduce"]) .mingming-case *::after { animation: none !important; transition-duration: .01ms !important; }
+:where(html[data-motion="reduce"]) .mingming-case .mm-hero { height: auto; min-height: 100svh; }
+:where(html[data-motion="reduce"]) .mingming-case .mm-hero > .mm-shell { position: static; height: auto; min-height: 100svh; }

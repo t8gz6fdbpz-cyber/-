@@ -1,6 +1,7 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import {
   motion,
-  useReducedMotion,
+
   type HTMLMotionProps,
   type Transition,
 } from "framer-motion";
@@ -26,7 +27,7 @@ export function FadeIn({
   y = 30,
   ...rest
 }: FadeInProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const MotionComponent = useMemo(
     () => motion.create(as as ElementType),
     [as],

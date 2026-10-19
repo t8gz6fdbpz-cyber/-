@@ -1,3 +1,4 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import {
   motion,
   frame,
@@ -5,7 +6,7 @@ import {
   useMotionValue,
   useMotionValueEvent,
   useInView,
-  useReducedMotion,
+
   useScroll,
   useSpring,
   useTransform,
@@ -75,11 +76,12 @@ function MarqueeImage({ account, preloadImages }: {
   preloadImages: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const reduced = useSiteReducedMotion();
 
   const handlePointerMove = (
     event: React.PointerEvent<HTMLDivElement>,
   ) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reduced) {
       return;
     }
 
@@ -103,6 +105,7 @@ function MarqueeImage({ account, preloadImages }: {
     card?.style.setProperty("--tilt-x", "0deg");
     card?.style.setProperty("--tilt-y", "0deg");
   };
+  useEffect(() => { if (reduced) resetTilt(); }, [reduced]);
 
   return (
     <div
@@ -142,7 +145,7 @@ export function MarqueeSection() {
   const rowTwoRef = useRef<HTMLDivElement | null>(null);
   const [rowWidths, setRowWidths] = useState({ one: 0, two: 0 });
   const progress = useMarqueeOffset(sectionRef);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const idleOffset = useMotionValue(0);
   const isVisible = useInView(sectionRef, { margin: "80px" });
   // Observe the section, not clipped offscreen cards, to warm the whole row.

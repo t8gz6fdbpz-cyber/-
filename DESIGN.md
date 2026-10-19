@@ -179,6 +179,14 @@ The form language is rectilinear and editorial. Photos are clipped to a small, e
 
 ## Components
 
+### Mobile Reading Contract
+
+- `src/styles/mobile.css` owns mobile-only adaptation without replacing desktop compositions. Shared roles: 16px body / 1.75–1.8 leading, 14px caption, 12px metadata; 36–48px display, 30–40px section title and 24px photo title. Phone gutters are 20px, 16px at 380px and below, with safe-area support.
+- Phones use a compact text-led cover instead of an invisible portrait row; low-height landscape gets a separate title scale. The homepage gallery remains moving but its phone entrance is immediately visible and its sticky distance is shorter. About, tools, interests and contact use a 64px section rhythm.
+- Experience cards expose part of the next item, show a mobile swipe hint, and retain native horizontal/keyboard scrolling. Tool filters remain available on a horizontal rail outside the 3D scene; detail controls retain 44px touch areas. Navigation uses the 60px click-operated vertical surface through 767px.
+- Personal chapters share the same typography roles but retain native photo proportions, color saturation and varied left/right placement. Mobile chapter chrome no longer reserves space for a hidden floating logo.
+- Case pages retain their scoped black/gold or paper identities and approved exhibits. Mobile reflows descriptive text, safe-area lightboxes and compact reading gaps; no changes to WebGL curvature, phase, inertia or picking are introduced.
+
 ### Content Performance Ribbon
 
 - `/cases/wujiahao` reuses the approved `artifacts/material-strip-study/demo/strip.js` WebGL effect, not the demo's other-case photography or editorial copy. Keep the nine existing content-performance screenshots, source order, black/gold styling, 22–30px heading, count/arrows and fine rules; no second thumbnail row. The following operations chapter retains its 56px gap.

@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { motion, } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
@@ -55,7 +56,7 @@ export function Carousel<T extends { id: string }>({
   className = "",
 }: CarouselProps<T>) {
   const viewport = useCarouselViewport();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
   const pageSize = viewport === "desktop"
     ? desktopPageSize
     : viewport === "phone"
@@ -63,7 +64,7 @@ export function Carousel<T extends { id: string }>({
       : mobilePageSize;
   const columns = viewport === "desktop" ? desktopColumns : Math.min(2, pageSize);
   const [page, setPage] = useState(0);
-  const pointerStart = useRef<number | null>(null);
+  const pointerStart = useRef<{ x: number; y: number; horizontal: boolean; vertical: boolean; switched: boolean } | null>(null);
   const suppressClick = useRef(false);
   const pages = useMemo(() => {
     const result: T[][] = [];
@@ -112,24 +113,28 @@ export function Carousel<T extends { id: string }>({
           animate={{ x: `-${page * 100}%` }}
           transition={reduceMotion ? { duration: 0 } : { duration: 0.38, ease: easeOutQuint }}
           onPointerDown={(event) => {
-            pointerStart.current = event.clientX;
-            event.currentTarget.setPointerCapture(event.pointerId);
+            suppressClick.current = false;
+            pointerStart.current = { x: event.clientX, y: event.clientY, horizontal: false, vertical: false, switched: false };
           }}
           onPointerMove={(event) => {
-            if (pointerStart.current === null) return;
-            const distance = event.clientX - pointerStart.current;
-            if (Math.abs(distance) < 48) return;
-            pointerStart.current = null;
+            const start = pointerStart.current;
+            if (!start || start.vertical) return;
+            const distance = event.clientX - start.x, dy = event.clientY - start.y;
+            if (!start.horizontal) {
+              if (Math.hypot(distance, dy) < 6) return;
+              if (Math.abs(dy) > Math.abs(distance)) { start.vertical = true; return; }
+              start.horizontal = true;
+              event.currentTarget.setPointerCapture(event.pointerId);
+            }
             suppressClick.current = true;
-            move(distance < 0 ? 1 : -1);
+            if (Math.abs(distance) >= 48 && !start.switched) { start.switched = true; move(distance < 0 ? 1 : -1); }
           }}
           onPointerUp={(event) => {
-            if (pointerStart.current === null) return;
-            const distance = event.clientX - pointerStart.current;
+            const start = pointerStart.current;
             pointerStart.current = null;
-            if (Math.abs(distance) < 48) return;
-            suppressClick.current = true;
-            move(distance < 0 ? 1 : -1);
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+            if (!start || start.vertical) return;
+            if (start.horizontal) suppressClick.current = true;
           }}
           onPointerCancel={() => {
             pointerStart.current = null;
@@ -171,7 +176,7 @@ export function Carousel<T extends { id: string }>({
 }
 
 export function FadeContent({ active, children, id }: { active: boolean; children: ReactNode; id: string }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
 
   return (
     <motion.div

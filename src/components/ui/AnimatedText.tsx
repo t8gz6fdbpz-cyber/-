@@ -1,10 +1,11 @@
-import { scroll, useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { scroll, } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 /** Same character markup, offsets and opacity curve; one nearby subscription. */
 export function AnimatedText({ text }: { text: string }) {
   const ref = useRef<HTMLParagraphElement | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const characters = Array.from(text);
 
   useEffect(() => {

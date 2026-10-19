@@ -134,11 +134,20 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .depth-carousel__card {
+  :where(html:not([data-motion])) .depth-carousel__card {
     will-change: auto;
   }
-  .depth-carousel__arrow,
-  .depth-carousel__dot {
+  :where(html:not([data-motion])) .depth-carousel__arrow,
+:where(html:not([data-motion])) .depth-carousel__dot {
     transition: none;
   }
 }
+
+:where(html[data-motion="reduce"]) .depth-carousel__card {
+    will-change: auto;
+  }
+
+:where(html[data-motion="reduce"]) .depth-carousel__arrow,
+:where(html[data-motion="reduce"]) .depth-carousel__dot {
+    transition: none;
+  }

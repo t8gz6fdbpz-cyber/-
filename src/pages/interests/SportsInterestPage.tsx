@@ -1,11 +1,12 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { motion, } from "framer-motion";
 
 import { sportsRecords } from "../../data/interestDetails";
 import { InterestPageFrame } from "./InterestPageFrame";
 import { InterestPhoto } from "./InterestPhoto";
 
 export function SportsInterestPage() {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
 
   return (
     <InterestPageFrame active="sports">

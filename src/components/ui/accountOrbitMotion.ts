@@ -1,4 +1,6 @@
-export interface OrbitViewport { width: number; height: number }
+export interface OrbitViewport { width: number; height: number; compact?: boolean }
+export const isCompactOrbit = (viewport: OrbitViewport) => viewport.compact ??
+  (viewport.width <= 768 || (viewport.width <= 1024 && viewport.height <= 600));
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -6,10 +8,12 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
 export const ORBIT_STAGGER = .09;
 export const ORBIT_SLICE_COUNT = 10;
 export const ORBIT_REFERENCE_CAPACITY = 8;
-export const orbitCapacity = (viewport: OrbitViewport) => viewport.width <= 768 ? 4 : ORBIT_REFERENCE_CAPACITY;
+// Selection is identical on every device; density changes the interval, not data.
+export const orbitCapacity = (_viewport: OrbitViewport) => ORBIT_REFERENCE_CAPACITY;
+export const orbitStagger = (viewport: OrbitViewport) => isCompactOrbit(viewport) ? .28 : ORBIT_STAGGER;
 
 export function orbitStatementBounds(viewport: OrbitViewport) {
-  const mobile = viewport.width <= 768;
+  const mobile = isCompactOrbit(viewport);
   const width = mobile ? viewport.width * .85 : Math.min(900, viewport.width * .7);
   const font = mobile ? 24 : Math.min(51.2, Math.max(25.6, viewport.width * .035));
   const height = font * 1.3 * (mobile ? 4 : 3);
@@ -18,10 +22,14 @@ export function orbitStatementBounds(viewport: OrbitViewport) {
 }
 
 export function orbitGeometry(viewport: OrbitViewport) {
-  const mobile = viewport.width <= 768;
+  const mobile = isCompactOrbit(viewport);
   const width = mobile ? 120 : Math.min(210, Math.max(120, viewport.width * .14));
+  // Reserve the complete curved image at its closest perspective depth.
+  const maxScale = 1200 / (1200 - 180 - width / 2);
   return { width, height: width * 2 / 3, depth: mobile ? 180 : 500,
-    tilt: mobile ? 80 : 180, centerY: viewport.height / 2, horizontalRadius: viewport.width * .34 };
+    tilt: mobile ? Math.max(0, Math.min(80, (viewport.height / 2 - 12) / maxScale - width / 3)) : 180,
+    centerY: viewport.height / 2,
+    horizontalRadius: mobile ? Math.max(0, Math.min(viewport.width * .34, (viewport.width / 2 - 12) / maxScale - width / 2)) : viewport.width * .34 };
 }
 
 export function orbitCurve(viewport: OrbitViewport) {
@@ -41,12 +49,12 @@ export function orbitPose(value: number, viewport: OrbitViewport) {
   let y = z / depth * tilt;
   if (t <= .12) {
     const entry = t / .12;
-    x = -viewport.width * .85 * (1 - entry);
+    x = -(isCompactOrbit(viewport) ? horizontalRadius : viewport.width * .85) * (1 - entry);
     z = depth * entry;
     y = tilt;
   } else if (t > .88) {
     const exit = (t - .88) / .12;
-    x = viewport.width * .85 * exit;
+    x = (isCompactOrbit(viewport) ? horizontalRadius : viewport.width * .85) * exit;
     z = depth * (1 - exit);
     y = tilt;
   }

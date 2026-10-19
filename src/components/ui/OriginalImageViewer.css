@@ -1,0 +1,20 @@
+dialog.original-viewer {
+  position: fixed; inset: 0; width: 100%; max-width: none; height: 100dvh;
+  max-height: none; margin: 0; border: 0; background: #0b0a08; color: #ffd47c;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  overflow: hidden; overscroll-behavior: contain; font: 14px/1.5 "Microsoft YaHei", sans-serif;
+}
+.original-viewer::backdrop { background: #0b0a08; }
+.original-viewer__inner { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; height: 100%; max-width: 1440px; margin-inline: auto; }
+.original-viewer__toolbar, .original-viewer__toolbar > div { display: flex; gap: 8px; align-items: center; }
+.original-viewer__toolbar { justify-content: space-between; }
+.original-viewer button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #705b38; border-radius: 50%; background: transparent; color: inherit; }
+.original-viewer button:disabled { opacity: .4; }
+.original-viewer :is(button,a):focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.original-viewer__image { display: grid; place-items: center; min-height: 0; min-width: 0; touch-action: pan-y pinch-zoom; }
+.original-viewer__image img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.original-viewer__caption { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; }
+.original-viewer__caption > span:first-child { flex: 1 1 180px; overflow-wrap: anywhere; }
+.original-viewer__caption > span:nth-child(2) { font-variant-numeric: tabular-nums; }
+.original-viewer__caption a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 767px) { .original-viewer__caption a { flex-basis: 100%; } }

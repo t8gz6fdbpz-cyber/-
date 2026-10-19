@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ViewportImage } from "../ui/ViewportImage";
 import { aiProduction, photography } from "../../data/hengqianCase";
 import { useHengqianMotion } from "./HengqianMotion";
+import { useOriginalImages } from "../ui/OriginalImageViewer";
 import type { ReactNode } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,6 +16,21 @@ gsap.registerPlugin(ScrollTrigger);
 const sceneImages = [photography[3], photography[0], photography[4], aiProduction[2]];
 const sceneCaptions = ["商业 IP · 真人拍摄", "商业 IP · 布光与机位", "商业 IP · 摄影执行", "数字人 · 绿幕采集"];
 const showcaseImages = aiProduction.slice(0, 2);
+
+/** Short windows keep natural flow: establish each photograph while approaching,
+ * then hold it for reading. No pin, horizontal rail, or extra scroll height. */
+function shortProductionMotion(node: HTMLDivElement) {
+  gsap.fromTo(node.querySelectorAll(".hq-scene-line > span"), { yPercent: 55 }, { yPercent: 0, duration: .65, stagger: .08, ease: "power3.out", scrollTrigger: { trigger: node, start: "top 88%", once: true } });
+  node.querySelectorAll<HTMLElement>(".hq-scene-photo").forEach(card => {
+    gsap.fromTo(card, { y: 40 }, { y: 0, ease: "none", scrollTrigger: { trigger: card, start: "top 95%", end: "top 45%", scrub: true } });
+    gsap.fromTo(card.querySelector("img"), { yPercent: 0, scale: 1.04 }, { yPercent: -12, scale: 1, ease: "none", scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true } });
+  });
+}
+
+function shortShowcaseMotion(node: HTMLDivElement) {
+  gsap.fromTo(node.querySelector(".hq-showcase-frame"), { scale: .88, y: 32 }, { scale: 1, y: 0, ease: "none", scrollTrigger: { trigger: node, start: "top 95%", end: "top 30%", scrub: true } });
+  gsap.fromTo(node.querySelectorAll(".hq-showcase-title,.hq-showcase-intro"), { y: 28 }, { y: 0, duration: .65, stagger: .1, ease: "power3.out", scrollTrigger: { trigger: node.querySelector(".hq-showcase-title"), start: "top 92%", once: true } });
+}
 
 // Observe the unclipped scene, so rail/switch photographs are requested before
 // their animated mask enters the screen. The individual images retain their
@@ -54,9 +70,10 @@ export function HengqianHeroScene({ children }: { children: ReactNode }) {
  * See docs/hengqian-motion-study.md for observed reference stages and adaptations.
  */
 export function HengqianProductionScene() {
+  const open = useOriginalImages();
   const root = useRef<HTMLDivElement>(null);
   const mediaReady = useSceneMediaReady(root);
-  const { reduce, compact } = useHengqianMotion();
+  const { reduce, compact, short } = useHengqianMotion();
   const [active, setActive] = useState(0);
   const activeRef = useRef(0);
 
@@ -65,6 +82,7 @@ export function HengqianProductionScene() {
     const node = root.current;
     const media = gsap.matchMedia();
     const context = gsap.context(() => {
+      if (short) { shortProductionMotion(node); return; }
       media.add("(min-height: 700px)", () => {
         const headings = node.querySelectorAll(".hq-scene-line > span");
         gsap.from(headings, { yPercent: 105, duration: 0.95, stagger: 0.12, ease: "power3.out",
@@ -104,9 +122,9 @@ export function HengqianProductionScene() {
     }, node);
     const refresh = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => { cancelAnimationFrame(refresh); media.revert(); context.revert(); };
-  }, [compact, reduce]);
+  }, [compact, reduce, short]);
 
-  return <div ref={root} className="hq-paper-scene" data-scroll-scene="production">
+  return <div ref={root} className="hq-paper-scene" data-scroll-scene="production" data-scene-layout={short ? "flow" : "sticky"}>
     <div className="hq-shell hq-scene-canvas">
       <div className="hq-scene-sticky">
         <div className="hq-scene-reading">
@@ -121,10 +139,10 @@ export function HengqianProductionScene() {
         </div>
         <div className="hq-scene-window"><div className="hq-scene-rail">
           {sceneImages.map((item, index) => <figure key={item.id} data-media-id={item.id} className={`hq-scene-photo hq-scene-photo-${index + 1}`}>
-            <div className="hq-scene-photo-frame">
+            <button type="button" className="hq-scene-photo-frame hq-photo-original" aria-label={`查看现场原图：${item.alt}`} onClick={() => open(sceneImages.map(photo => ({ id: photo.id, src: photo.originalSrc, alt: photo.alt, label: photo.evidence, width: photo.width, height: photo.height })), index)}>
               <div className="hq-scene-photo-media"><ViewportImage src={item.previewSrc} alt={item.alt} width={item.width} height={item.height} loading={mediaReady ? "eager" : "lazy"} draggable="false" /></div>
               <span className="hq-scene-photo-veil" aria-hidden="true" />
-            </div>
+            </button>
             <figcaption>{String(index + 1).padStart(2, "0")} / {sceneCaptions[index]}</figcaption>
           </figure>)}
         </div></div>
@@ -135,9 +153,10 @@ export function HengqianProductionScene() {
 }
 
 export function HengqianAIShowcase() {
+  const open = useOriginalImages();
   const root = useRef<HTMLDivElement>(null);
   const mediaReady = useSceneMediaReady(root);
-  const { reduce, compact } = useHengqianMotion();
+  const { reduce, compact, short } = useHengqianMotion();
   const [index, setIndex] = useState(0);
   const item = showcaseImages[index];
   useLayoutEffect(() => {
@@ -145,16 +164,13 @@ export function HengqianAIShowcase() {
     const node = root.current;
     const media = gsap.matchMedia();
     const context = gsap.context(() => {
+      if (short) { shortShowcaseMotion(node); return; }
       media.add("(min-height: 700px)", () => {
         const stage = node.querySelector<HTMLElement>(".hq-showcase-stage")!;
         const sideWidth = () => stage.clientWidth * 0.175 - 32;
         const timeline = gsap.timeline({ scrollTrigger: { trigger: node, start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true } });
         timeline.addLabel("framed", 0).to({}, { duration: 0.25 });
-        if (compact) {
-          // Clear the future photograph bounds before its expansion begins.
-          timeline.fromTo(".hq-showcase-title", { y: 0 }, { y: -20, duration: 0.14, ease: "power1.inOut" }, 0.1)
-            .fromTo(".hq-showcase-intro", { y: 0 }, { y: 52, duration: 0.14, ease: "power1.inOut" }, 0.1);
-        } else {
+        if (!compact) {
           // Side columns leave the framed view first. Their new overlay
           // positions are revealed only after the shade has begun to develop.
           timeline.to([".hq-showcase-title", ".hq-showcase-intro"], { autoAlpha: 0, duration: 0.1, ease: "none" }, 0.1)
@@ -165,22 +181,22 @@ export function HengqianAIShowcase() {
             .to([".hq-showcase-title", ".hq-showcase-intro"], { autoAlpha: 1, duration: 0.15, ease: "none" }, 0.42);
         }
         timeline
-          .fromTo(".hq-showcase-frame", { width: compact ? "90%" : "65%", height: compact ? "31%" : "65%" }, { width: "100%", height: compact ? "43%" : "100%", duration: 0.4, ease: "power1.inOut" }, 0.25)
+          .fromTo(".hq-showcase-frame", { width: compact ? "90%" : "65%", height: compact ? "75%" : "65%" }, { width: "100%", height: "100%", duration: 0.4, ease: "power1.inOut" }, 0.25)
           .fromTo(".hq-showcase-shade", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "none" }, 0.25)
           .addLabel("expanded", 0.65).to({}, { duration: 0.35 }).addLabel("release", 1);
       });
     }, node);
     const refresh = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => { cancelAnimationFrame(refresh); media.revert(); context.revert(); };
-  }, [compact, reduce]);
+  }, [compact, reduce, short]);
 
-  return <div className="hq-ai-showcase" ref={root} data-scroll-scene="showcase">
+  return <div className="hq-ai-showcase" ref={root} data-scroll-scene="showcase" data-scene-layout={short ? "flow" : "sticky"}>
     <div className="hq-showcase-sticky"><div className="hq-shell hq-showcase-stage">
       <div className="hq-showcase-frame">{showcaseImages.map((photo, slot) =>
         <motion.figure data-media-id={photo.id} className={`hq-showcase-switch-layer ${slot === index ? "is-active" : ""}`} key={photo.id}
           aria-hidden={!reduce && slot !== index} initial={false} animate={{ clipPath: reduce || slot === index ? "inset(0 0 0% 0)" : "inset(0 0 100% 0)" }}
           style={{ zIndex: slot === index ? 1 : 0 }} transition={{ duration: reduce ? 0 : 0.75, ease: [0.76, 0, 0.24, 1] }}>
-          <ViewportImage src={photo.previewSrc} alt={photo.alt} width={photo.width} height={photo.height} loading={mediaReady ? "eager" : "lazy"} draggable="false" />
+          <button type="button" className="hq-photo-original hq-showcase-original" tabIndex={!reduce && slot !== index ? -1 : 0} aria-label={`查看绿幕原图：${photo.alt}`} onClick={() => open(showcaseImages.map(image => ({ id: image.id, src: image.originalSrc, alt: image.alt, label: image.evidence, width: image.width, height: image.height })), slot)}><ViewportImage src={photo.previewSrc} alt={photo.alt} width={photo.width} height={photo.height} loading={mediaReady ? "eager" : "lazy"} draggable="false" /></button>
           {reduce && <figcaption>数字人项目 · {photo.evidence}</figcaption>}
         </motion.figure>)}<div className="hq-showcase-shade" aria-hidden="true" /></div>
       <h2 className="hq-showcase-title" id="hq-ai-title"><span className="hq-project-number">02 数字人 / AI 矩阵打法</span>把生产方法<br />扩展为矩阵</h2>

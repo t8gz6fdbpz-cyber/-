@@ -1,8 +1,9 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import {
   motion,
   useMotionTemplate,
   useMotionValue,
-  useReducedMotion,
+
   useScroll,
   useSpring,
   useTransform,
@@ -42,7 +43,7 @@ function ProjectCard({
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isActive, setIsActive] = useState(false);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "end 0.2"],

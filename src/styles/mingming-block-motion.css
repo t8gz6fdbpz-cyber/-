@@ -42,8 +42,12 @@
   .mingming-case .mm-focal-training-summary { margin-top:28px; }
 }
 @media (prefers-reduced-motion:reduce) {
-  .mingming-case .mm-media-frame,
-  .mingming-case .mm-focal-operation-evidence,
-  .mingming-case .mm-focal-curriculum > i { transform:none; }
-  .mingming-case .mm-editorial-next::before { transition:none; }
+  :where(html:not([data-motion])) .mingming-case .mm-media-frame,
+:where(html:not([data-motion])) .mingming-case .mm-focal-operation-evidence,
+:where(html:not([data-motion])) .mingming-case .mm-focal-curriculum > i { transform:none; }
+  :where(html:not([data-motion])) .mingming-case .mm-editorial-next::before { transition:none; }
 }
+:where(html[data-motion="reduce"]) .mingming-case .mm-media-frame,
+:where(html[data-motion="reduce"]) .mingming-case .mm-focal-operation-evidence,
+:where(html[data-motion="reduce"]) .mingming-case .mm-focal-curriculum > i { transform:none; }
+:where(html[data-motion="reduce"]) .mingming-case .mm-editorial-next::before { transition:none; }

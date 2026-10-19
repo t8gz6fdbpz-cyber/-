@@ -2,7 +2,8 @@ import { ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import { LayoutGroup, motion } from "framer-motion";
 import { useState, type ReactNode } from "react";
 import { ViewportImage } from "../components/ui/ViewportImage";
-import { aiEvidence, douyinEvidence, evidenceGroups, photography, projectResults, wechatEvidence, xiaohongshuEvidence, type HengqianMedia } from "../data/hengqianCase";
+import { allEvidence, aiEvidence, douyinEvidence, evidenceGroups, photography, projectResults, wechatEvidence, xiaohongshuEvidence, type HengqianMedia } from "../data/hengqianCase";
+import { OriginalImageViewerProvider, useOriginalImages } from "../components/ui/OriginalImageViewer";
 import { DetailBackLink, PortfolioLink } from "../routing";
 import { contactHref } from "../utils/portfolioData";
 import { HengqianChapterHeader, HengqianEditorialBlock, HengqianMotionProvider, HengqianPhotoSurface, useHengqianEntrance, useHengqianMotion } from "../components/cases/HengqianMotion";
@@ -12,16 +13,18 @@ import { Carousel } from "../components/ui/ReactBitsEvidence";
 import { useNearbyImageLoading } from "../hooks/useNearbyImageLoading";
 import "../styles/hengqian-case.css";
 
-function EvidenceFigure({ item, photo = false, hero = false, caption, className = "" }: {
-  item: HengqianMedia; photo?: boolean; hero?: boolean; caption?: ReactNode; className?: string;
+function EvidenceFigure({ item, photo = false, hero = false, caption, className = "", collection = allEvidence }: {
+  item: HengqianMedia; photo?: boolean; hero?: boolean; caption?: ReactNode; className?: string; collection?: readonly HengqianMedia[];
 }) {
+  const open = useOriginalImages();
+  const view = () => open(collection.map(media => ({ id: media.id, src: media.originalSrc, alt: media.alt, label: `${media.platform} · ${media.evidence}`, width: media.width, height: media.height })), collection.findIndex(media => media.id === item.id));
   const image = <ViewportImage src={hero ? "/assets/cases/hengqian/photography/photo-02.hero.webp" : item.previewSrc}
     srcSet={hero ? `${item.previewSrc} 1100w, /assets/cases/hengqian/photography/photo-02.hero.webp 1800w` : undefined}
     sizes={hero ? "(max-width: 820px) 100vw, 60vw" : undefined} alt={item.alt} width={item.width} height={item.height}
     loading={hero ? "eager" : "lazy"} {...(hero ? { fetchpriority: "high" } : {})} draggable="false" />;
   return <figure data-media-id={item.id} className={`hq-figure ${photo ? "hq-photo" : "hq-data"} ${className}`}>
-    <div className="hq-image-frame">{photo ? <HengqianPhotoSurface hero={hero}>{image}</HengqianPhotoSurface> : image}</div>
-    <figcaption>{caption ?? <><strong>{item.platform} · {item.evidence}</strong><span>{item.note}</span></>}</figcaption>
+    <button type="button" className="hq-image-frame" aria-label={`查看原图：${item.alt}`} onClick={view}>{photo ? <HengqianPhotoSurface hero={hero}>{image}</HengqianPhotoSurface> : image}</button>
+    <figcaption>{caption ?? <><strong>{item.platform} · {item.evidence}</strong><span>{item.note}</span></>}<button type="button" className="hq-original-link" onClick={view}>查看原图</button></figcaption>
   </figure>;
 }
 function LeadResult({ value, scope, compact = false }: { value: string; scope: string; compact?: boolean }) {
@@ -40,7 +43,7 @@ const workingStages = [
 ];
 export function HengqianCasePage() {
   useNearbyImageLoading("hengqian", ".hengqian-case");
-  return <HengqianMotionProvider><HengqianCaseContent /></HengqianMotionProvider>;
+  return <HengqianMotionProvider><OriginalImageViewerProvider><HengqianCaseContent /></OriginalImageViewerProvider></HengqianMotionProvider>;
 }
 function HengqianCaseContent() {
   const { reduce: reduceMotion } = useHengqianMotion();
@@ -97,8 +100,8 @@ function HengqianCaseContent() {
         if (event.key === "End") next = evidenceGroups.length - 1;
         if (next !== undefined) { event.preventDefault(); selectTab(next, true); }
       }}>{candidate.label}{groupIndex === index && <motion.span aria-hidden="true" className="hq-tab-indicator" layoutId={reduceMotion ? undefined : "selected"} transition={{ duration: reduceMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] }} />}</button>)}</div></LayoutGroup>
-      <motion.div key={group.id} id="hq-evidence-panel" role="tabpanel" aria-labelledby={`hq-evidence-tab-${groupIndex}`} tabIndex={0} initial={reduceMotion ? false : { opacity: 0.92 }} animate={{ opacity: 1 }} transition={{ duration: reduceMotion ? 0 : 0.2 }}><p className="hq-library-description">{group.description}</p><Carousel key={group.id} items={group.items} label={`${group.label}证据`} statusLabel={group.label} desktopPageSize={3} desktopColumns={3} mobilePageSize={2} phonePageSize={1} className="hq-evidence-carousel" renderItem={item => <EvidenceFigure item={item} photo={item.originalSrc.endsWith(".jpg")} />} /></motion.div>
+      <motion.div key={group.id} id="hq-evidence-panel" role="tabpanel" aria-labelledby={`hq-evidence-tab-${groupIndex}`} tabIndex={0} initial={reduceMotion ? false : { opacity: 0.92 }} animate={{ opacity: 1 }} transition={{ duration: reduceMotion ? 0 : 0.2 }}><p className="hq-library-description">{group.description}</p><Carousel key={group.id} items={group.items} label={`${group.label}证据`} statusLabel={group.label} desktopPageSize={3} desktopColumns={3} mobilePageSize={2} phonePageSize={1} className="hq-evidence-carousel" renderItem={item => <EvidenceFigure item={item} collection={group.items} photo={item.originalSrc.endsWith(".jpg")} />} /></motion.div>
     </div></section>
-    <footer className="hq-footer"><div className="hq-shell"><div className="hq-footer-copy"><h2>让内容制作，<br />成为持续运营的能力。</h2><p>这段经历让我把人物表达、现场制作、AI 内容生产与运营复盘连接起来，也更清楚个人执行与团队协作的边界。</p></div><nav aria-label="案例后续操作"><DetailBackLink fallback="/#case-studies"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink><PortfolioLink to="/cases/wujiahao">查看另一个案例<ArrowRight aria-hidden="true" /></PortfolioLink><a href={contactHref}>联系我<ArrowRight aria-hidden="true" /></a></nav></div></footer>
+    <footer className="hq-footer"><div className="hq-shell"><div className="hq-footer-copy"><h2>让内容制作，<br /><span className="case-closing-line">成为持续运营的能力。</span></h2><p>这段经历让我把人物表达、现场制作、AI 内容生产与运营复盘连接起来，也更清楚个人执行与团队协作的边界。</p></div><nav aria-label="案例后续操作"><DetailBackLink fallback="/#case-studies"><ArrowLeft aria-hidden="true" />返回重点经历</DetailBackLink><PortfolioLink to="/cases/wujiahao">查看另一个案例<ArrowRight aria-hidden="true" /></PortfolioLink><a href={contactHref}>联系我<ArrowRight aria-hidden="true" /></a></nav></div></footer>
   </article>;
 }

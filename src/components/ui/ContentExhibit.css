@@ -181,7 +181,10 @@
   .mingming-case dialog.mm-content-exhibit__lightbox { padding: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mingming-case .mm-content-exhibit *,
-  .mingming-case .mm-content-exhibit *::before,
-  .mingming-case .mm-content-exhibit *::after { transition: none; animation: none; }
+  :where(html:not([data-motion])) .mingming-case .mm-content-exhibit *,
+:where(html:not([data-motion])) .mingming-case .mm-content-exhibit *::before,
+:where(html:not([data-motion])) .mingming-case .mm-content-exhibit *::after { transition: none; animation: none; }
 }
+:where(html[data-motion="reduce"]) .mingming-case .mm-content-exhibit *,
+:where(html[data-motion="reduce"]) .mingming-case .mm-content-exhibit *::before,
+:where(html[data-motion="reduce"]) .mingming-case .mm-content-exhibit *::after { transition: none; animation: none; }

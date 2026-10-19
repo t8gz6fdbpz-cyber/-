@@ -579,12 +579,20 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-floating-email,
-  .home-floating-email__icon,
-  .home-floating-email__message { transition: none; }
-  .home-floating-email__symbol.is-copying { animation: none; }
-  .home-floating-email:hover .home-floating-email__icon { transform: none; }
+  :where(html:not([data-motion])) .home-floating-email,
+:where(html:not([data-motion])) .home-floating-email__icon,
+:where(html:not([data-motion])) .home-floating-email__message { transition: none; }
+  :where(html:not([data-motion])) .home-floating-email__symbol.is-copying { animation: none; }
+  :where(html:not([data-motion])) .home-floating-email:hover .home-floating-email__icon { transform: none; }
 }
+
+:where(html[data-motion="reduce"]) .home-floating-email,
+:where(html[data-motion="reduce"]) .home-floating-email__icon,
+:where(html[data-motion="reduce"]) .home-floating-email__message { transition: none; }
+
+:where(html[data-motion="reduce"]) .home-floating-email__symbol.is-copying { animation: none; }
+
+:where(html[data-motion="reduce"]) .home-floating-email:hover .home-floating-email__icon { transform: none; }
 
 .home-floating-email:focus-visible {
   outline: 3px solid var(--color-text);
@@ -1830,7 +1838,7 @@ img {
   object-fit: contain;
 }
 
-.tool-info-content > p:first-of-type {
+.tool-info-heading > p {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -1845,7 +1853,7 @@ img {
   line-height: 1;
 }
 
-.tool-info-content > span {
+.tool-info-extras > span {
   display: inline-flex;
   width: fit-content;
   margin-top: 18px;
@@ -1935,51 +1943,96 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:where(:not([data-motion])) {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  :where(html:not([data-motion])) *,
+:where(html:not([data-motion])) *::before,
+:where(html:not([data-motion])) *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
 
-  .marquee-card {
+  :where(html:not([data-motion])) .marquee-card {
     transform: none !important;
   }
 
-  .project-card-surface,
-  .project-scene-background,
-  .project-card-header,
-  .project-media-grid,
-  .project-image-column,
-  .project-image-frame,
-  .project-particles {
+  :where(html:not([data-motion])) .project-card-surface,
+:where(html:not([data-motion])) .project-scene-background,
+:where(html:not([data-motion])) .project-card-header,
+:where(html:not([data-motion])) .project-media-grid,
+:where(html:not([data-motion])) .project-image-column,
+:where(html:not([data-motion])) .project-image-frame,
+:where(html:not([data-motion])) .project-particles {
     transform: none !important;
   }
 
-  .project-particle {
+  :where(html:not([data-motion])) .project-particle {
     animation: none !important;
   }
 
-  .system-marquee-track {
+  :where(html:not([data-motion])) .system-marquee-track {
     animation: none !important;
   }
 
-  .tool-planet-stage,
-  .tool-planet-icon {
+  :where(html:not([data-motion])) .tool-planet-stage,
+:where(html:not([data-motion])) .tool-planet-icon {
     transform: none !important;
   }
 
-  .tool-nebula,
-  .tool-particle-field > span {
+  :where(html:not([data-motion])) .tool-nebula,
+:where(html:not([data-motion])) .tool-particle-field > span {
     animation: none !important;
   }
 }
+
+html:where([data-motion="reduce"]) {
+    scroll-behavior: auto;
+  }
+
+:where(html[data-motion="reduce"]) *,
+:where(html[data-motion="reduce"]) *::before,
+:where(html[data-motion="reduce"]) *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+:where(html[data-motion="reduce"]) .marquee-card {
+    transform: none !important;
+  }
+
+:where(html[data-motion="reduce"]) .project-card-surface,
+:where(html[data-motion="reduce"]) .project-scene-background,
+:where(html[data-motion="reduce"]) .project-card-header,
+:where(html[data-motion="reduce"]) .project-media-grid,
+:where(html[data-motion="reduce"]) .project-image-column,
+:where(html[data-motion="reduce"]) .project-image-frame,
+:where(html[data-motion="reduce"]) .project-particles {
+    transform: none !important;
+  }
+
+:where(html[data-motion="reduce"]) .project-particle {
+    animation: none !important;
+  }
+
+:where(html[data-motion="reduce"]) .system-marquee-track {
+    animation: none !important;
+  }
+
+:where(html[data-motion="reduce"]) .tool-planet-stage,
+:where(html[data-motion="reduce"]) .tool-planet-icon {
+    transform: none !important;
+  }
+
+:where(html[data-motion="reduce"]) .tool-nebula,
+:where(html[data-motion="reduce"]) .tool-particle-field > span {
+    animation: none !important;
+  }
 
 @media (max-width: 1100px) {
   .tool-desktop-layout {
@@ -4191,8 +4244,9 @@ main > section {
 }
 
 .tool-galaxy-a11y-button {
-  width: 58px;
-  height: 58px;
+  width: 76px;
+  height: 76px;
+  touch-action: pan-y pinch-zoom;
   border: 0;
   border-radius: 38.2%;
   background: transparent;
@@ -4234,8 +4288,10 @@ main > section {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .viewport-image { transition: none; }
+  :where(html:not([data-motion])) .viewport-image { transition: none; }
 }
+
+:where(html[data-motion="reduce"]) .viewport-image { transition: none; }
 
 .toolbox-section .tool-category-index {
   position: absolute;
@@ -4377,8 +4433,8 @@ main > section {
     0 0 34px var(--tool-glow, rgba(255, 209, 117, 0.2));
 }
 
-.toolbox-section .tool-info-content > p:first-of-type,
-.toolbox-section .tool-info-content > span,
+.toolbox-section .tool-info-heading > p,
+.toolbox-section .tool-info-extras > span,
 .toolbox-section .tool-tag-list em {
   border-color: color-mix(in srgb, var(--tool-accent, #ffd175) 30%, rgba(255, 255, 255, 0.12));
 }
@@ -4387,7 +4443,7 @@ main > section {
   color: #fff7df;
 }
 
-.toolbox-section .tool-info-content > span,
+.toolbox-section .tool-info-extras > span,
 .toolbox-section .tool-tag-list em {
   background: color-mix(in srgb, var(--tool-accent, #ffd175) 16%, transparent);
 }
@@ -4593,12 +4649,7 @@ main > section {
     min-height: 0;
     max-height: min(274px, 36vh);
     padding: 20px;
-    overflow-y: auto;
-    scrollbar-width: none;
-  }
-
-  .toolbox-section .tool-info-panel::-webkit-scrollbar {
-    width: 0;
+    overflow: visible;
   }
 
   .toolbox-section .tool-info-logo {
@@ -4901,16 +4952,26 @@ main > section {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .interests-showcase-image,
-  .interests-showcase-title svg {
+  :where(html:not([data-motion])) .interests-showcase-image,
+:where(html:not([data-motion])) .interests-showcase-title svg {
     transition: none;
   }
 
-  .interests-showcase-trigger:hover .interests-showcase-image,
-  .interests-showcase-trigger:hover .interests-showcase-title svg {
+  :where(html:not([data-motion])) .interests-showcase-trigger:hover .interests-showcase-image,
+:where(html:not([data-motion])) .interests-showcase-trigger:hover .interests-showcase-title svg {
     transform: none;
   }
 }
+
+:where(html[data-motion="reduce"]) .interests-showcase-image,
+:where(html[data-motion="reduce"]) .interests-showcase-title svg {
+    transition: none;
+  }
+
+:where(html[data-motion="reduce"]) .interests-showcase-trigger:hover .interests-showcase-image,
+:where(html[data-motion="reduce"]) .interests-showcase-trigger:hover .interests-showcase-title svg {
+    transform: none;
+  }
 
 /* Retained shared carousel behavior for Hengqian; Mingming is scoped in mingming-hierarchy.css. */
 

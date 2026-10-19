@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>影像资料</title>
   <style>
     :root{color-scheme:light}
@@ -16,6 +16,12 @@
     a{color:inherit;text-underline-offset:4px}
     a:focus-visible{outline:3px solid #a74428;outline-offset:4px}
     .back{display:inline-flex;align-items:center;min-height:44px}
+    @media(max-width:767px){
+      body{padding:max(24px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
+      h1{font-size:36px;line-height:1.25}
+      li{overflow-wrap:anywhere}
+      li a{display:inline-flex;align-items:center;min-height:44px}
+    }
   </style>
 </head>
 <body>

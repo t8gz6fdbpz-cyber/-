@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { motion, } from "framer-motion";
 import { Info } from "lucide-react";
 
 import { travelRecords } from "../../data/interestDetails";
@@ -6,7 +7,7 @@ import { InterestPageFrame } from "./InterestPageFrame";
 import { InterestPhoto } from "./InterestPhoto";
 
 export function TravelInterestPage() {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
   const renderEntry = (item: (typeof travelRecords)[number], index: number) => (
     <li key={item.place} className="travel-entry">
       <figure>

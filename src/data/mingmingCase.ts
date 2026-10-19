@@ -213,6 +213,7 @@ export const accountGrowthResults: MingmingGrowthEvidence[] = accountFollowerEvi
       caption: "公开账号主页记录",
       alt: `${accountDisplayNames[evidenceNumber] ?? "账号"}的公开主页截图，粉丝${followersLabel}`,
       src,
+      originalSrc: `${assetRoot}/ip-talent-results/talent-${number}.jpg`,
       canonicalSource: sourceFile,
       sourceFile,
       width: 1206,

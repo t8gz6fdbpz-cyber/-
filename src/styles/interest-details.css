@@ -757,12 +757,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .life-page *,
-  .life-page *::before,
-  .life-page *::after {
+  :where(html:not([data-motion])) .life-page *,
+:where(html:not([data-motion])) .life-page *::before,
+:where(html:not([data-motion])) .life-page *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
 }
+
+:where(html[data-motion="reduce"]) .life-page *,
+:where(html[data-motion="reduce"]) .life-page *::before,
+:where(html[data-motion="reduce"]) .life-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+.life-page .reading-proof-image img { height: auto; object-fit: contain; }

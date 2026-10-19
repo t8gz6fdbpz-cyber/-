@@ -1,4 +1,5 @@
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { motion,  useScroll, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { heroPortrait } from "../../utils/portfolioData";
@@ -25,7 +26,7 @@ export const formatTime = (date: Date) => {
 
 export function HeroSection({ initialTimestamp }: { initialTimestamp?: number }) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const [now, setNow] = useState(() => new Date(initialTimestamp ?? Date.now()));
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -57,8 +58,7 @@ export function HeroSection({ initialTimestamp }: { initialTimestamp?: number })
     <section
       ref={sectionRef}
       aria-label="01 Hero"
-      className="relative isolate min-h-screen overflow-hidden"
-      style={{ minHeight: "100vh" }}
+      className="hero-cover-section relative isolate min-h-screen overflow-hidden"
     >
       <div className="hero-cover-grid">
         <motion.div className="hero-cover-left" style={{ y: shouldReduceMotion ? 0 : leftY }}>
@@ -95,7 +95,7 @@ export function HeroSection({ initialTimestamp }: { initialTimestamp?: number })
             width={1400}
             height={1042}
             loading="eager"
-            fetchPriority="high"
+            {...{ fetchpriority: "high" }}
             decoding="async"
             className="hero-cover-image"
             style={{

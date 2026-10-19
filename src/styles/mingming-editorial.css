@@ -159,5 +159,6 @@
   .mingming-case .mm-editorial-next { margin-top:42px; }
 }
 @media (prefers-reduced-motion:reduce) {
-  .mingming-case :is(.mm-editorial-projects,.mm-editorial-next) svg { transition:none; transform:none !important; }
+  :where(html:not([data-motion])) .mingming-case :is(.mm-editorial-projects,.mm-editorial-next) svg { transition:none; transform:none !important; }
 }
+:where(html[data-motion="reduce"]) .mingming-case :is(.mm-editorial-projects,.mm-editorial-next) svg { transition:none; transform:none !important; }

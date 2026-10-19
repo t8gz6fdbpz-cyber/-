@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useSiteReducedMotion } from "../motion/MotionPreference";
 
 type MagneticOptions = {
   padding?: number;
@@ -14,6 +15,7 @@ export function useMagneticEffect({
   inactiveTransition = "transform 0.6s ease-in-out",
 }: MagneticOptions = {}) {
   const ref = useRef<HTMLDivElement | null>(null);
+  const reduced = useSiteReducedMotion();
 
   useEffect(() => {
     const node = ref.current;
@@ -23,7 +25,7 @@ export function useMagneticEffect({
 
     if (
       !window.matchMedia("(pointer: fine)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      reduced
     ) {
       node.style.transform = "translate3d(0px, 0px, 0px)";
       return;
@@ -86,7 +88,7 @@ export function useMagneticEffect({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", reset);
     };
-  }, [activeTransition, inactiveTransition, padding, strength]);
+  }, [activeTransition, inactiveTransition, padding, strength, reduced]);
 
   return ref;
 }

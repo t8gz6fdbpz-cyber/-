@@ -1,4 +1,5 @@
-import { useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+
 import {
   Component,
   lazy,
@@ -457,6 +458,7 @@ function ToolInfoPanel({
       style={style}
       aria-hidden={!active}
       aria-live={active ? "polite" : undefined}
+      onKeyDown={(event) => { if (event.key === "Escape") onClose(); }}
     >
       <button
         type="button"
@@ -477,15 +479,16 @@ function ToolInfoPanel({
         )}
       </div>
       <div className="tool-info-content">
-        <p>{tool.category}</p>
-        <h3>{tool.name}</h3>
-        <span>{tool.tags[0]}</span>
-        <div className="tool-tag-list" aria-label="工具标签">
-          {tool.tags.map((tag) => (
-            <em key={tag}>{tag}</em>
-          ))}
+        <div className="tool-info-heading"><p>{tool.category}</p><h3>{tool.name}</h3></div>
+        <div className="tool-info-extras" tabIndex={active ? 0 : -1} aria-label="工具标签，可滚动浏览">
+          <span>{tool.tags[0]}</span>
+          <div className="tool-tag-list" aria-label="工具标签">
+            {tool.tags.map((tag) => (
+              <em key={tag}>{tag}</em>
+            ))}
+          </div>
+          <div className="tool-info-divider" />
         </div>
-        <div className="tool-info-divider" />
         <p className="tool-info-description">{tool.description}</p>
         <small>点击空白处或关闭按钮，恢复自由轨道。</small>
       </div>
@@ -494,7 +497,7 @@ function ToolInfoPanel({
 }
 
 export function SkillsMatrixSection() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
   const [tools, setTools] = useState(initialTools);
   const [activeCategory, setActiveCategory] = useState<ToolCategory | null>(null);
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);

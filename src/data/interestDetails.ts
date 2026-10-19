@@ -183,6 +183,8 @@ export const readingArticles = [1, 2, 3].map((index) => ({
     src: mediaUrl(`/images/interests/reading/article-0${index}.svg`),
     alt: `文章输出截图占位 ${index}`,
     ratio: "landscape" as const,
+    width: 1200,
+    height: 900,
     replacementNote: "推荐比例 4:3",
   },
 })) satisfies readonly PlaceholderRecord[];
@@ -194,6 +196,8 @@ export const readingSystemShots = [1, 2, 3, 4].map((index) => ({
     src: mediaUrl(`/images/interests/reading/system-0${index}.svg`),
     alt: `交互式学习系统截图占位 ${index}`,
     ratio: "wide" as const,
+    width: 1600,
+    height: 1000,
     replacementNote: "推荐比例 16:10",
   },
 })) satisfies readonly PlaceholderRecord[];

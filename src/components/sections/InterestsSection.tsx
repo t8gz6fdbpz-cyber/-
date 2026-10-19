@@ -1,12 +1,13 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import { ArrowUpRight } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, } from "framer-motion";
 
 import { PortfolioLink } from "../../routing";
 import { interests } from "../../utils/interestsData";
 import { ViewportImage } from "../ui/ViewportImage";
 
 export function InterestsSection() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSiteReducedMotion();
 
   return (
     <section id="interests" className="interests-showcase-section scroll-mt-8">

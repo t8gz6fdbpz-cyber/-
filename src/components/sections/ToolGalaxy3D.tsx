@@ -10,6 +10,8 @@ import {
 } from "react";
 import type { MutableRefObject } from "react";
 import * as THREE from "three";
+import { galaxyCameraZoom, galaxyProjection } from "./toolGalaxyGeometry";
+import { createToolTapGesture } from "./toolTapGesture";
 
 export type ToolCategory = "AI 创作" | "内容制作" | "平台运营";
 export type GalaxyInteractionPhase =
@@ -161,9 +163,6 @@ const layoutPresets: Array<{
 ];
 const defaultOrbitVerticalRatio = 0.365;
 const orbitDepthRatio = 0.11;
-const outerOrbitRadius = layoutPresets[0].radius;
-const desktopCameraZoom = 100;
-const compactCameraZoom = 75;
 function normalizeAngle(angle: number) {
   return ((angle % twoPi) + twoPi) % twoPi;
 }
@@ -880,6 +879,7 @@ function InitialsPlane({
 }
 
 function ToolPlanet({
+  tapGesture,
   activeCategory,
   compact,
   detailPanelRef,
@@ -895,6 +895,7 @@ function ToolPlanet({
   onReleaseSettled,
   onSelectTool,
 }: {
+  tapGesture: ReturnType<typeof createToolTapGesture>;
   activeCategory: ToolCategory | null;
   compact: boolean;
   detailPanelRef: MutableRefObject<HTMLElement | null>;
@@ -1108,6 +1109,25 @@ function ToolPlanet({
     tool,
     transitionToken,
   ]);
+
+  // A settled morph must relinquish its old pixel dimensions before measuring
+  // the new CSS target on rotation. Keep the open tool and its content intact.
+  useLayoutEffect(() => {
+    if (!focused || interactionPhase !== "focused") return;
+    const panel = detailPanelRef.current;
+    if (!panel) return;
+    ["left", "right", "top", "bottom", "width", "height", "padding", "border-radius"]
+      .forEach(property => panel.style.removeProperty(property));
+    const target = measureMorphPanelTarget(panel, gl.domElement);
+    if (!target) return;
+    panelTargetRef.current = target;
+    writeMorphPanelFrame(panel, target, groupRef.current?.position ?? tempPosition,
+      camera, size.width, size.height, 1, compact, false);
+    const bounds = panel.getBoundingClientRect();
+    if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
+      panel.scrollIntoView({ block: "nearest", behavior: "instant" });
+    }
+  }, [camera, compact, detailPanelRef, focused, gl.domElement, interactionPhase, size.width, size.height]);
 
   useFrame((_, delta) => {
     const hovered = hoveredRef.current;
@@ -1372,17 +1392,6 @@ function ToolPlanet({
   return (
     <group
       ref={groupRef}
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
-      onPointerDown={(event) => {
-        event.stopPropagation();
-        markInteractionStart();
-        if (!interactionReady) return;
-        onSelectTool(tool, true);
-      }}
-      onClick={(event) => {
-        event.stopPropagation();
-      }}
       userData={{
         toolId: tool.id,
         visualRole: "planet-main",
@@ -1408,6 +1417,7 @@ function ToolPlanet({
         <button
           type="button"
           className="tool-galaxy-a11y-button"
+          data-tool-id={tool.id}
           aria-label={`${tool.name}，${tool.category}，${tool.tags.join("，")}`}
           aria-pressed={selected}
           aria-busy={!interactionReady}
@@ -1424,22 +1434,15 @@ function ToolPlanet({
           onPointerDown={(event) => {
             event.stopPropagation();
             markInteractionStart();
-            if (!interactionReady) return;
-            onSelectTool(tool, true);
           }}
           onClick={(event) => {
             event.stopPropagation();
-          }}
-          onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              event.preventDefault();
-              if (!interactionReady) return;
-              markInteractionStart();
+            if (interactionReady && tapGesture.consume(tool.id, event.detail === 0)) {
               onSelectTool(tool, true);
             }
           }}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
         />
       </Html>
     </group>
@@ -1584,11 +1587,11 @@ function ResponsiveCamera() {
   useEffect(() => {
     if (!(camera instanceof THREE.OrthographicCamera)) return;
 
-    camera.zoom = size.width < 520 ? compactCameraZoom : desktopCameraZoom;
+    camera.zoom = galaxyCameraZoom(size.width);
     camera.position.set(0, 0, 10);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
-  }, [camera, size.width]);
+  }, [camera, size.width, size.height]);
 
   return null;
 }
@@ -2057,29 +2060,26 @@ function GalaxyScene({
 }) {
   const { size } = useThree();
   const occlusionState = useMemo(createPlanetOcclusionState, []);
-  const projectionSpread = useMemo(() => {
-    const compact = size.width < 520;
-    const zoom = compact ? compactCameraZoom : desktopCameraZoom;
-    const horizontalMargin = compact ? 46 : 76;
-    const availableWidth = Math.max(
-      0,
-      size.width - horizontalMargin * 2,
-    );
-    const safeHorizontalScale =
-      availableWidth / (outerOrbitRadius * 2 * zoom);
-
-    return {
-      x: THREE.MathUtils.clamp(
-        safeHorizontalScale,
-        compact ? 0.32 : 0.4,
-        1,
-      ),
-      y: compact ? 1.35 : 1,
-      z: 0.9,
+  const tapGesture = useMemo(createToolTapGesture, []);
+  useEffect(() => {
+    const down = (event: PointerEvent) => tapGesture.down(event,
+      event.target instanceof Element ? event.target.closest<HTMLElement>(".tool-galaxy-a11y-button")?.dataset.toolId ?? null : null);
+    const cancel = () => tapGesture.reset();
+    document.addEventListener("pointerdown", down, true);
+    document.addEventListener("pointermove", tapGesture.move, true);
+    document.addEventListener("pointerup", tapGesture.up, true);
+    document.addEventListener("pointercancel", tapGesture.cancelPointer, true);
+    window.addEventListener("blur", cancel);
+    return () => {
+      document.removeEventListener("pointerdown", down, true);
+      document.removeEventListener("pointermove", tapGesture.move, true);
+      document.removeEventListener("pointerup", tapGesture.up, true);
+      document.removeEventListener("pointercancel", tapGesture.cancelPointer, true);
+      window.removeEventListener("blur", cancel);
+      tapGesture.reset();
     };
-  },
-    [size.width],
-  );
+  }, [tapGesture]);
+  const projectionSpread = useMemo(() => galaxyProjection(tools, size.width, size.height), [tools, size.width, size.height]);
   const orbitConfigs = useMemo(
     () =>
       [...new Map(tools.map((tool) => [tool.orbitIndex, tool])).values()]
@@ -2146,6 +2146,7 @@ function GalaxyScene({
         {tools.map((tool) => (
           <ToolPlanet
             key={tool.id}
+            tapGesture={tapGesture}
             activeCategory={activeCategory}
             compact={size.width < 520}
             detailPanelRef={detailPanelRef}

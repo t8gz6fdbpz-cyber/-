@@ -1,15 +1,18 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { MingmingMedia } from "../../data/mingmingCase";
 import DepthCarousel, { type DepthCarouselHandle } from "./depth-carousel/DepthCarousel";
 import "./TrainingDepthGallery.css";
+import { OriginalImageViewerProvider, useOriginalImages } from "./OriginalImageViewer";
 
 export function TrainingDepthGallery({ items }: { items: readonly MingmingMedia[] }) {
+  return <OriginalImageViewerProvider><TrainingDepthContent items={items} /></OriginalImageViewerProvider>;
+}
+function TrainingDepthContent({ items }: { items: readonly MingmingMedia[] }) {
+  const open = useOriginalImages();
   const hostRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<DepthCarouselHandle>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const [active, setActive] = useState(0);
-  const [opened, setOpened] = useState(false);
   const [size, setSize] = useState({ width: 240, spread: 24 });
   const slides = useMemo(() => items.map(item => ({ image: item.src ?? "", alt: item.alt })), [items]);
   const current = items[active];
@@ -31,20 +34,6 @@ export function TrainingDepthGallery({ items }: { items: readonly MingmingMedia[
     return () => { observer.disconnect(); window.removeEventListener("resize", measure); };
   }, []);
 
-  useEffect(() => {
-    if (!opened || !dialogRef.current) return;
-    const dialog = dialogRef.current;
-    const previousFocus = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    dialog.showModal();
-    document.body.style.overflow = "hidden";
-    return () => {
-      dialog.close();
-      document.body.style.overflow = previousOverflow;
-      previousFocus?.focus({ preventScroll: true });
-    };
-  }, [opened]);
-
   if (!current) return null;
 
   return (
@@ -52,7 +41,7 @@ export function TrainingDepthGallery({ items }: { items: readonly MingmingMedia[
       "--training-stage-height": `${size.width * .75 + 24}px`,
       "--training-card-width": `${size.width}px`,
     } as CSSProperties} onKeyDown={e => {
-      if (e.defaultPrevented || opened) return;
+      if (e.defaultPrevented) return;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         e.preventDefault();
         if (e.key === "ArrowLeft") carouselRef.current?.previous();
@@ -80,7 +69,7 @@ export function TrainingDepthGallery({ items }: { items: readonly MingmingMedia[
         showIndicators={false}
         ariaLabel="训练营景深相册，左右方向键切换照片"
         onChange={setActive}
-        onOpen={() => setOpened(true)}
+        onOpen={index => open(items.map(item => ({ id: item.id, src: item.src ?? "", alt: item.alt, label: item.title, width: item.width, height: item.height })), index)}
       />
       <div className="mm-training-depth__footer">
         <div className="mm-training-depth__caption" aria-live="polite" aria-atomic="true">
@@ -93,13 +82,6 @@ export function TrainingDepthGallery({ items }: { items: readonly MingmingMedia[
           <button type="button" aria-label="下一张训练营照片" onClick={() => carouselRef.current?.next()}><ChevronRight size={20} aria-hidden="true" /></button>
         </div>
       </div>
-      <dialog ref={dialogRef} className="mm-training-lightbox" aria-label={`${current.title}大图`} onCancel={e => { e.preventDefault(); setOpened(false); }} onClose={() => setOpened(false)} onClick={e => { if (e.target === e.currentTarget) setOpened(false); }}>
-        <div className="mm-training-lightbox__content">
-          <button type="button" className="mm-training-lightbox__close" aria-label="关闭大图" autoFocus onClick={() => setOpened(false)}><X size={24} aria-hidden="true" /></button>
-          <img src={current.src} alt={current.alt} width={current.width} height={current.height} />
-          <div className="mm-training-lightbox__caption"><span>{current.title}</span><span>{progress}</span></div>
-        </div>
-      </dialog>
     </div>
   );
 }

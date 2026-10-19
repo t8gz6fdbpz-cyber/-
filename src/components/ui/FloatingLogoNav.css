@@ -121,7 +121,7 @@
   transform: translateX(0);
 }
 
-@media (max-width: 479px) {
+@media (max-width: 767px) {
   .floating-logo-nav.floating-logo-nav--reference {
     top: max(8px, env(safe-area-inset-top));
     left: max(8px, env(safe-area-inset-left));
@@ -157,5 +157,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floating-logo-nav-arrow { transition: none; }
+  :where(html:not([data-motion])) .floating-logo-nav-arrow { transition: none; }
 }
+
+:where(html[data-motion="reduce"]) .floating-logo-nav-arrow { transition: none; }

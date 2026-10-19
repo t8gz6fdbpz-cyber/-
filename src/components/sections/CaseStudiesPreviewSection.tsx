@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { PortfolioLink } from "../../routing";
 import { caseStudies } from "../../utils/caseStudies";
 import { FadeIn } from "../ui/FadeIn";
@@ -32,6 +33,17 @@ const companyDetails = {
 };
 
 export function CaseStudiesPreviewSection() {
+  const railRef = useRef<HTMLDivElement>(null);
+  const [canScroll, setCanScroll] = useState(false);
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const measure = () => setCanScroll(rail.scrollWidth > rail.clientWidth + 1);
+    const observer = new ResizeObserver(measure);
+    observer.observe(rail);
+    measure();
+    return () => observer.disconnect();
+  }, []);
   return (
     <section
       id="case-studies"
@@ -48,7 +60,8 @@ export function CaseStudiesPreviewSection() {
           </div>
         </FadeIn>
 
-        <div className="experience-card-grid">
+        {canScroll && <p className="experience-swipe-hint">左右滑动，浏览两段履历</p>}
+        <div ref={railRef} className="experience-card-grid" role="region" aria-label={canScroll ? "工作履历，可左右滑动" : "工作履历"} tabIndex={canScroll ? 0 : -1}>
           {caseStudies.map((item, index) => (
             <FadeIn key={item.slug} className="experience-card-slot" delay={index * 0.08} y={12}>
               <PortfolioLink

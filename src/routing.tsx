@@ -148,6 +148,8 @@ export function RouteEffects() {
   }, []);
 
   useLayoutEffect(() => {
+    // Changing only the motion control must not scroll away from the reader.
+    if (navigationType === "REPLACE" && location.state?.motionPreferenceOnly) return;
     let frameId = 0;
     const savedHomeScroll = homeScrollPositions.get(location.key);
 

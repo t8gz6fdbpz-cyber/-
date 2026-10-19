@@ -32,5 +32,6 @@
   .mm-training-lightbox { padding: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mm-training-depth button { transition: none; }
+  :where(html:not([data-motion])) .mm-training-depth button { transition: none; }
 }
+:where(html[data-motion="reduce"]) .mm-training-depth button { transition: none; }

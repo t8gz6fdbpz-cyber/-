@@ -1,5 +1,6 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, } from "framer-motion";
 import { useLocation } from "react-router-dom";
 
 import { PortfolioLink } from "../../routing";
@@ -30,7 +31,7 @@ export function FloatingLogoNav() {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLElement | null>(null);
   const linksRef = useRef<HTMLDivElement | null>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
   const [extent, setExtent] = useState({ width: 80, height: 80, compact: false });
   const location = useLocation();
   const markTone = useHengqianLogoTone(location.pathname.replace(/\/$/, "") === "/cases/hengqian", navRef);
@@ -39,7 +40,7 @@ export function FloatingLogoNav() {
     const links = linksRef.current;
     if (!links) return;
     const measure = () => {
-      const compact = window.matchMedia("(max-width: 479px)").matches;
+      const compact = window.matchMedia("(max-width: 767px)").matches;
       const width = compact ? 200 : Math.min(links.scrollWidth + 80, window.innerWidth - 40);
       const height = compact ? links.scrollHeight + 100 : 80;
       setExtent(previous => previous.width === width && previous.height === height && previous.compact === compact

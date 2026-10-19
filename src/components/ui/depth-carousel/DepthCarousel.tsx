@@ -19,6 +19,7 @@ import {
   KeyboardEvent as ReactKeyboardEvent
 } from 'react';
 import gsap from 'gsap';
+import { useSiteReducedMotion } from '../../../motion/MotionPreference';
 import './DepthCarousel.css';
 
 export type DepthCarouselItem = string | { image: string; alt?: string };
@@ -138,7 +139,15 @@ const DepthCarousel = forwardRef<DepthCarouselHandle, DepthCarouselProps>(({
   const dragRef = useRef<DragState | null>(null);
   const suppressClickUntilRef = useRef(0);
   const autoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const reducedRef = useRef(false);
+  const reducedMotion = useSiteReducedMotion();
+  const reducedRef = useRef(reducedMotion);
+  useLayoutEffect(() => {
+    reducedRef.current = reducedMotion;
+    if (reducedMotion && tweenRef.current) {
+      tweenRef.current.progress(1);
+      tweenRef.current.kill();
+    }
+  }, [reducedMotion]);
 
   const [active, setActive] = useState(0);
 
@@ -376,7 +385,6 @@ const DepthCarousel = forwardRef<DepthCarouselHandle, DepthCarouselProps>(({
   );
 
   useEffect(() => {
-    reducedRef.current = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!autoplay || reducedRef.current || count < 2) return;
     const root = rootRef.current;
     let hovered = false;
@@ -418,7 +426,7 @@ const DepthCarousel = forwardRef<DepthCarouselHandle, DepthCarouselProps>(({
       root?.removeEventListener('focusin', onFocusIn);
       root?.removeEventListener('focusout', onFocusOut);
     };
-  }, [autoplay, autoplayDelay, count, navigateBy]);
+  }, [autoplay, autoplayDelay, count, navigateBy, reducedMotion]);
 
   useLayoutEffect(() => {
     layout(posRef.current);

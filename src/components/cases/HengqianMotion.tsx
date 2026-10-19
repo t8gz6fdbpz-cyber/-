@@ -1,13 +1,12 @@
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
 import { Children, createContext, isValidElement, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { MotionConfig, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const editorialEase = [0.22, 1, 0.36, 1] as const;
 const MotionPreference = createContext({ reduce: false, compact: false, short: false });
 
 export function HengqianMotionProvider({ children }: { children: ReactNode }) {
-  const systemReduce = useReducedMotion();
-  // A bookmarkable static reading mode also makes the same reduced branch testable.
-  const override = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("motion") === "reduce";
+  const reduce = useSiteReducedMotion();
   const [compact, setCompact] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 820px)").matches);
   const [short, setShort] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-height: 699px)").matches);
   useEffect(() => {
@@ -22,9 +21,7 @@ export function HengqianMotionProvider({ children }: { children: ReactNode }) {
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
   }, []);
-  return <MotionPreference.Provider value={{ reduce: !!systemReduce || override, compact, short }}>
-    <MotionConfig reducedMotion={override ? "always" : "user"}>{children}</MotionConfig>
-  </MotionPreference.Provider>;
+  return <MotionPreference.Provider value={{ reduce, compact, short }}>{children}</MotionPreference.Provider>;
 }
 
 export const useHengqianMotion = () => useContext(MotionPreference);

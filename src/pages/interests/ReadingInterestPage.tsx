@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useSiteReducedMotion } from "../../motion/MotionPreference";
+import { motion, } from "framer-motion";
 
 import {
   learningFlow,
@@ -9,7 +10,7 @@ import {
 import { InterestPageFrame } from "./InterestPageFrame";
 
 export function ReadingInterestPage() {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSiteReducedMotion();
 
   return (
     <InterestPageFrame active="reading">
@@ -80,8 +81,8 @@ export function ReadingInterestPage() {
 function ProofPlaceholder({ item }: { item: PlaceholderRecord; index: number }) {
   return (
     <figure>
-      <div className={`life-photo life-photo--${item.photo.ratio}`}>
-        <img src={item.photo.src} alt={item.photo.alt} loading="lazy" />
+      <div className="life-photo reading-proof-image" style={{ aspectRatio: `${item.photo.width} / ${item.photo.height}` }}>
+        <img src={item.photo.src} alt={item.photo.alt} width={item.photo.width} height={item.photo.height} loading="lazy" />
       </div>
       <figcaption>
         <strong>{item.label}</strong>
